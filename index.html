@@ -1,0 +1,329 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Poemas</title>
+  <meta name="description" content="Colección de poemas" />
+  <style>
+    :root{
+      --bg: #fafafa;
+      --paper: #ffffff;
+      --text: #111;
+      --muted: #666;
+      --accent: #2b6cb0;
+      --maxw: 800px;
+      --radius: 12px;
+      --line: 1.75;
+    }
+
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{
+      font-family: "Georgia", serif;
+      background: var(--bg);
+      color: var(--text);
+      -webkit-font-smoothing: antialiased;
+      padding: 2rem 1rem;
+      display:flex;
+      justify-content:center;
+    }
+
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      padding: 1rem 0;
+      background: var(--paper);
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      text-align: center;
+      font-family: system-ui, sans-serif;
+      font-weight: 600;
+    }
+
+    main{
+      margin-top: 120px;
+      max-width: var(--maxw);
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+    }
+
+    h1{
+      text-align: center;
+      font-family: system-ui, sans-serif;
+      font-weight: 600;
+      margin: 10px auto;
+      margin-bottom: 2rem;
+      color: var(--accent);
+    }
+
+    .poems {
+      display: grid;
+      grid-template-columns: repeat(2, auto);
+      gap: 16px;
+    }
+
+    article.poem{
+      background: var(--paper);
+      padding: 2rem;
+      border-radius: var(--radius);
+      box-shadow: 0 3px 12px rgba(0,0,0,0.05);
+      line-height: var(--line);
+      white-space: pre-wrap;
+      word-wrap: break-word;
+    }
+
+    article.poem .info {
+      margin-top: -80px;
+      margin-bottom: -85px;
+      line-height: 1.1;
+    }
+
+    article.poem .info h2 {
+      font-size: 1.5rem;
+      margin-bottom: 0px;
+    }
+
+    article.poem .info .author {
+      color: var(--muted);
+      font-size: 1rem;
+      margin-top: -30px;
+      margin-bottom: 0;
+    }
+
+    article.poem p{
+      font-size: 15px;
+      margin-bottom: -80px;
+    }
+
+		.txt {
+			margin-left: 40px;
+		}
+
+    footer{
+      text-align:center;
+      color:var(--muted);
+      font-size:.85rem;
+      margin-top:2rem;
+    }
+
+    @media (max-width:900px){
+      .poems {
+        display: grid;
+        grid-template-columns: repeat(2, auto);
+        gap: 16px;
+      }
+    }
+
+    @media (max-width:600px){
+      .poems {
+        display: grid;
+        grid-template-columns: repeat(1, auto);
+        gap: 16px;
+      }
+      article.poem{
+        padding:1.5rem;
+      }
+      article.poem p {
+        font-size: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Colección de Poemas</h1>
+  </header>
+  <main>
+    <div class="poems">
+      <article class="poem">
+        <div class="info">
+          <h2>Amor en Redes</h2>
+          <p class="author">por Hugo Elias</p>
+        </div>
+        <p class="txt">
+Te conocí en redes sociales, 
+Caí en tus redes virtuales. 
+Desde entonces, a deshora, 
+Miro tu chat cada hora. 
+
+Ahora, ahora en vos, 
+Confío demasiado como, 
+Para lo que me tomo, 
+En pronunciar adiós. 
+
+Ojalá nos conociéramos, 
+Frente a frente, donde, 
+En vez de la boca, los ojos, 
+Hablen y hablen sin fin. 
+
+¿Por qué, por qué será, 
+Que está tan hermosa, 
+Será que vendrá,
+De una realidad preciosa? 
+
+Lamentablemente hay un pero, 
+Es que lo único que espero, 
+Es no ilusionarme a mi mismo, 
+Y mantener un rumbo sincero. 
+
+Solo que yo no creo, 
+Que fuera capaz, capaz, 
+De solo usarme y yo, 
+Como un idiota dejarme. 
+
+Vaya, resulta que me estabas, 
+Ligando, y eso yo no lo esperaba, 
+Tal vez si lo intentemos, 
+Solo sea para que nos divirtamos. 
+
+A pesar de nuestras diferencias, 
+Tenemos algunos intereses, 
+Por nuestras experiencias, 
+Y por nuestros peses. 
+
+Gracias por tu fabulosa amistad, 
+Me encanta, me encanta en verdad, 
+Deseo por favor nos podamos, 
+Ver frente a frente, solo esperemos.
+        </p>
+      </article>
+
+			<article class="poem">
+        <div class="info">
+          <h2>𝑳𝒂 𝑪𝒂𝒏𝒄𝒊𝒐𝒏</h2>
+          <p class="author">por Hugo Elias
+7/10/2025</p>
+        </div>
+        <p class="txt">
+Él te dedicó,
+Esa hermosa canción,
+La cual algún día salió,
+Del fondo de mi corazón.
+
+De mi novia a,
+Una gran parte de mi corazón.
+Es por eso que este poema,
+Lo escribo desde el corazón.
+
+Eres una niña que vale millones,
+Porque tenía muchas visiones,
+Contigo en un futuro,
+Olvidando mi pasado obscuro.
+
+Eres una princesa,
+Que necesita ser amada,
+Porque está hermosa,
+Y es muy disciplinada.
+
+Mi lado enamorado,
+Fue muy romántico,
+Pero ya conmigo has terminado,
+Por ser intensamente romántico.
+
+Planeaba cuidarte,
+Quería amarte,
+Deseaba besarte,
+Y solo quería tenerte.
+
+Ahora debo conformarme,
+Con ser solo amigos,
+Aunque seguiré amándote,
+Y quedarnos como desconocidos.
+
+Para muchos,
+Una niña X,
+Pero para mi,
+La reina de mi vida.
+
+Tienes una sonrisa encantadora,
+Un alma que me enamora.
+Me pregunto cada día,
+¿En verdad quería ser mi novia?
+        </p>
+      </article>
+
+			<article class="poem">
+        <div class="info">
+          <h2>𝑳𝒂 𝑷𝒐𝒆𝒔𝒊𝒂</h2>
+          <p class="author">por Hugo Elias
+1/11/2025</p>
+        </div>
+        <p class="txt">
+Empezó como pasatiempo,
+Pero al paso del tiempo,
+Se volvió un talento,
+En ocasiones un sentimiento.
+
+La poesía es algo rara,
+Pues si se aclamara,
+Todos la practicaran,
+Y por dentro la crearan.
+
+Hoy cada rima la usan mal,
+Para escribir sobre maldad,
+Puro contenido vulgar,
+El cual todos suelen apoyar.
+
+La poesía sigue siendo un arte,
+Con la que puedes expresarte,
+Puede ser con el corazón,
+Hasta con una oración.
+
+Pertenezco a esa rareza,
+Aunque no les parezca,
+Que sigue escribiendo poesía,
+De la que antes se hacía.
+        </p>
+      </article>
+
+			<article class="poem">
+        <div class="info">
+          <h2>𝑴𝒂𝒓𝒄𝒉𝒊𝒕𝒂 🥀</h2>
+          <p class="author">por Hugo Elias
+10/10/2025</p>
+        </div>
+        <p class="txt">
+Ya me da igual,
+Si en mí, piensas o no,
+Mi amor no es visual,
+Es a tu alma, un camino.
+
+Perdón que vuelva a llamar,
+Solo quería decirte que tus fotos,
+No he podido borrar,
+Aún pienso en nosotros.
+
+Es por eso que todos,
+Los poemas que te escribo,
+Absolutamente todos,
+Con mi corazón los escribo.
+
+En mi cabeza repito siempre,
+Ese verso que escribí,
+En ese mes de diciembre,
+Dije la verdad, y la ví.
+
+Pero yo habría de ser otro,
+Y tú otra, para que fuera,
+Distinto nuestro amor;
+Y no quiero que sea distinto.
+
+Mejor confío en su voz,
+Que escuche mi agonía,
+Pongo mis cargas en manos de Dios,
+Y su paz guardará mi alma.
+(felipenses 4:6-7)					
+        </p>
+      </article>
+    </div>
+    <footer>
+			<p>Colección de Poemas</p>
+      <p><a href="https://hugoed2106.github.io/poemas/dai/">Poemas a Daiana</a></p>
+			<p><a href="https://hugoed2106.github.io/poemas/yes/">Poemas a Yeseli</a></p>
+    </footer>
+  </main>
+</body>
+</html>
