@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Poemas a Yeseli</title>
-  <meta name="description" content="Colección de poemas a Yeseli" />
+  <title>Poemas</title>
+  <meta name="description" content="Colección de poemas" />
   <style>
     :root{
       --bg: #fafafa;
@@ -41,7 +41,7 @@
       font-weight: 600;
     }
 
-    .lista {
+    main{
       margin-top: 120px;
       max-width: var(--maxw);
       width: 100%;
@@ -50,23 +50,6 @@
       gap: 2rem;
     }
 
-    /* estilo para la pantalla de bloqueo */
-    .screen-block{
-      position: fixed;
-      top:0;
-      left:0;
-      width:100%;
-      height:100%;
-      background: rgba(255,255,255,0.95);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      z-index: 1000;
-      flex-direction: column;
-      gap: 1rem;
-    }
-
-    /* estilo para la pantalla de poemas */
     h1{
       text-align: center;
       font-family: system-ui, sans-serif;
@@ -78,7 +61,7 @@
 
     .poems {
       display: grid;
-      grid-template-columns: repeat(1, auto);
+      grid-template-columns: repeat(2, auto);
       gap: 16px;
     }
 
@@ -114,6 +97,10 @@
       font-size: 15px;
       margin-bottom: -80px;
     }
+
+		.txt {
+			margin-left: 40px;
+		}
 
 		a {
 			color: var(--accent);
@@ -189,103 +176,317 @@
       font-size:.85rem;
       margin-top:2rem;
     }
+
+    @media (max-width:900px){
+      .poems {
+        display: grid;
+        grid-template-columns: repeat(2, auto);
+        gap: 16px;
+      }
+    }
+
+    @media (max-width:600px){
+      .poems {
+        display: grid;
+        grid-template-columns: repeat(1, auto);
+        gap: 16px;
+      }
+      article.poem{
+        padding:1.5rem;
+      }
+      article.poem p {
+        font-size: 10px;
+      }
+    }
   </style>
 </head>
 <body>
   <header>
-    <h1>Colección de Poemas a Yeseli</h1>
+    <h1>Colección de Poemas</h1>
   </header>
-  <main class="screen-block" id="screenBlock">
-    <div class="lock-card" role="dialog" aria-labelledby="lockTitle" aria-modal="true">
-      <h2 id="lockTitle">Acceso restringido</h2>
-      <p>Introduce la contraseña para visualizar los poemas.</p>
-
-      <form id="passForm" autocomplete="off">
-        <input id="passInput" type="password" placeholder="Contraseña" required
-          style="padding:.6rem .8rem;border-radius:8px;border:1px solid #ddd;width:100%;max-width:320px;font-size:1rem;" />
-        <div style="margin-top:.6rem;display:flex;gap:.5rem;align-items:center;justify-content:center;">
-          <button type="submit" style="padding:.5rem .8rem;background:var(--accent);color:#fff;border:none;border-radius:8px;cursor:pointer;font-weight:600;">
-            Entrar
-          </button>
-          <button type="button" id="clearBtn" style="padding:.5rem .8rem;background:#eee;border:none;border-radius:8px;cursor:pointer;">
-            Borrar
-          </button>
-        </div>
-
-        <p id="passError" style="color:#c00;margin-top:.6rem;display:none;">Contraseña incorrecta</p>
-
-        <label style="display:none;margin-top:.6rem;color:var(--muted);font-size:.9rem;">
-          <input id="remember" type="checkbox" /> Recordar en este equipo
-        </label>
-      </form>
-
-      <small style="display:block;margin-top:1rem;color:var(--muted);">Si no tienes la contraseña, contacta al autor.</small>
-    </div>
-  </main>
-  <main class="lista" id="poemList">
-
+  <main>
     <div class="poems">
-
       <article class="poem">
         <div class="info">
-          <h2>Me atrevo</h2>
+          <h2>Amor en Redes</h2>
           <p class="author">por Hugo Elias</p>
         </div>
+        <p class="txt">
+Te conocí en redes sociales, 
+Caí en tus redes virtuales. 
+Desde entonces, a deshora, 
+Miro tu chat cada hora. 
 
+Ahora, ahora en vos, 
+Confío demasiado como, 
+Para lo que me tomo, 
+En pronunciar adiós. 
+
+Ojalá nos conociéramos, 
+Frente a frente, donde, 
+En vez de la boca, los ojos, 
+Hablen y hablen sin fin. 
+
+¿Por qué, por qué será, 
+Que está tan hermosa, 
+Será que vendrá,
+De una realidad preciosa? 
+
+Lamentablemente hay un pero, 
+Es que lo único que espero, 
+Es no ilusionarme a mi mismo, 
+Y mantener un rumbo sincero. 
+
+Solo que yo no creo, 
+Que fuera capaz, capaz, 
+De solo usarme y yo, 
+Como un idiota dejarme. 
+
+Vaya, resulta que me estabas, 
+Ligando, y eso yo no lo esperaba, 
+Tal vez si lo intentemos, 
+Solo sea para que nos divirtamos. 
+
+A pesar de nuestras diferencias, 
+Tenemos algunos intereses, 
+Por nuestras experiencias, 
+Y por nuestros peses. 
+
+Gracias por tu fabulosa amistad, 
+Me encanta, me encanta en verdad, 
+Deseo por favor nos podamos, 
+Ver frente a frente, solo esperemos.
+        </p>
+      </article>
+
+			<article class="poem">
+        <div class="info">
+          <h2>𝑳𝒂 𝑪𝒂𝒏𝒄𝒊𝒐𝒏</h2>
+          <p class="author">por Hugo Elias
+7/10/2025</p>
+        </div>
+        <p class="txt">
+Él te dedicó,
+Esa hermosa canción,
+La cual algún día salió,
+Del fondo de mi corazón.
+
+De mi novia a,
+Una gran parte de mi corazón.
+Es por eso que este poema,
+Lo escribo desde el corazón.
+
+Eres una niña que vale millones,
+Porque tenía muchas visiones,
+Contigo en un futuro,
+Olvidando mi pasado obscuro.
+
+Eres una princesa,
+Que necesita ser amada,
+Porque está hermosa,
+Y es muy disciplinada.
+
+Mi lado enamorado,
+Fue muy romántico,
+Pero ya conmigo has terminado,
+Por ser intensamente romántico.
+
+Planeaba cuidarte,
+Quería amarte,
+Deseaba besarte,
+Y solo quería tenerte.
+
+Ahora debo conformarme,
+Con ser solo amigos,
+Aunque seguiré amándote,
+Y quedarnos como desconocidos.
+
+Para muchos,
+Una niña X,
+Pero para mi,
+La reina de mi vida.
+
+Tienes una sonrisa encantadora,
+Un alma que me enamora.
+Me pregunto cada día,
+¿En verdad quería ser mi novia?
+        </p>
+      </article>
+
+			<article class="poem">
+        <div class="info">
+          <h2>𝑳𝒂 𝑷𝒐𝒆𝒔𝒊𝒂</h2>
+          <p class="author">por Hugo Elias
+1/11/2025</p>
+        </div>
+        <p class="txt">
+Empezó como pasatiempo,
+Pero al paso del tiempo,
+Se volvió un talento,
+En ocasiones un sentimiento.
+
+La poesía es algo rara,
+Pues si se aclamara,
+Todos la practicaran,
+Y por dentro la crearan.
+
+Hoy cada rima la usan mal,
+Para escribir sobre maldad,
+Puro contenido vulgar,
+El cual todos suelen apoyar.
+
+La poesía sigue siendo un arte,
+Con la que puedes expresarte,
+Puede ser con el corazón,
+Hasta con una oración.
+
+Pertenezco a esa rareza,
+Aunque no les parezca,
+Que sigue escribiendo poesía,
+De la que antes se hacía.
+        </p>
+      </article>
+
+			<article class="poem">
+        <div class="info">
+          <h2>𝑴𝒂𝒓𝒄𝒉𝒊𝒕𝒂 🥀</h2>
+          <p class="author">por Hugo Elias
+10/10/2025</p>
+        </div>
+        <p class="txt">
+Ya me da igual,
+Si en mí, piensas o no,
+Mi amor no es visual,
+Es a tu alma, un camino.
+
+Perdón que vuelva a llamar,
+Solo quería decirte que tus fotos,
+No he podido borrar,
+Aún pienso en nosotros.
+
+Es por eso que todos,
+Los poemas que te escribo,
+Absolutamente todos,
+Con mi corazón los escribo.
+
+En mi cabeza repito siempre,
+Ese verso que escribí,
+En ese mes de diciembre,
+Dije la verdad, y la ví.
+
+Pero yo habría de ser otro,
+Y tú otra, para que fuera,
+Distinto nuestro amor;
+Y no quiero que sea distinto.
+
+Mejor confío en su voz,
+Que escuche mi agonía,
+Pongo mis cargas en manos de Dios,
+Y su paz guardará mi alma.
+(felipenses 4:6-7)					
+        </p>
+      </article>
+      
+      <article class="poem">
+        <div class="info">
+          <h2>Año Especial</h2>
+          <p class="author">por Hugo Elias</p>
+        </div>
         <div class="pdf-viewer" id="pdf1">
           <div class="pdf-controls">
             <button class="prev">◄</button>
             <span><span class="current">1</span> / <span class="total">0</span></span>
             <button class="next">►</button>
           </div>
-
           <div class="loading"><div class="spinner"></div><p>Cargando PDF...</p></div>
           <div class="viewer-container hidden"><canvas></canvas></div>
         </div>
       </article>
-
+      
       <article class="poem">
         <div class="info">
-          <h2>Una Diosa</h2>
+          <h2>Bella Rosa</h2>
           <p class="author">por Hugo Elias</p>
         </div>
-
         <div class="pdf-viewer" id="pdf2">
           <div class="pdf-controls">
             <button class="prev">◄</button>
             <span><span class="current">1</span> / <span class="total">0</span></span>
             <button class="next">►</button>
           </div>
-
           <div class="loading"><div class="spinner"></div><p>Cargando PDF...</p></div>
           <div class="viewer-container hidden"><canvas></canvas></div>
         </div>
       </article>
-
+      
       <article class="poem">
         <div class="info">
-          <h2>Oportunidad</h2>
+          <h2>Ilusiones</h2>
           <p class="author">por Hugo Elias</p>
         </div>
-
         <div class="pdf-viewer" id="pdf3">
           <div class="pdf-controls">
             <button class="prev">◄</button>
             <span><span class="current">1</span> / <span class="total">0</span></span>
             <button class="next">►</button>
           </div>
-
           <div class="loading"><div class="spinner"></div><p>Cargando PDF...</p></div>
           <div class="viewer-container hidden"><canvas></canvas></div>
         </div>
       </article>
-
+      
+      <article class="poem">
+        <div class="info">
+          <h2>Quisiera</h2>
+          <p class="author">por Hugo Elias</p>
+        </div>
+        <div class="pdf-viewer" id="pdf4">
+          <div class="pdf-controls">
+            <button class="prev">◄</button>
+            <span><span class="current">1</span> / <span class="total">0</span></span>
+            <button class="next">►</button>
+          </div>
+          <div class="loading"><div class="spinner"></div><p>Cargando PDF...</p></div>
+          <div class="viewer-container hidden"><canvas></canvas></div>
+        </div>
+      </article>
+      
+      <article class="poem">
+        <div class="info">
+          <h2>Sueño con Vos</h2>
+          <p class="author">por Hugo Elias</p>
+        </div>
+        <div class="pdf-viewer" id="pdf5">
+          <div class="pdf-controls">
+            <button class="prev">◄</button>
+            <span><span class="current">1</span> / <span class="total">0</span></span>
+            <button class="next">►</button>
+          </div>
+          <div class="loading"><div class="spinner"></div><p>Cargando PDF...</p></div>
+          <div class="viewer-container hidden"><canvas></canvas></div>
+        </div>
+      </article>
+      
+      <article class="poem">
+        <div class="info">
+          <h2>Ya Fue</h2>
+          <p class="author">por Hugo Elias</p>
+        </div>
+        <div class="pdf-viewer" id="pdf6">
+          <div class="pdf-controls">
+            <button class="prev">◄</button>
+            <span><span class="current">1</span> / <span class="total">0</span></span>
+            <button class="next">►</button>
+          </div>
+          <div class="loading"><div class="spinner"></div><p>Cargando PDF...</p></div>
+          <div class="viewer-container hidden"><canvas></canvas></div>
+        </div>
+      </article>
     </div>
-
     <footer>
-      <p>Colección de Poemas a Yeseli</p>
-      <p><a href="https://hugoed2106.github.io/poemas/">Más poemas</a></p>
+			<p>Colección de Poemas</p>
       <p><a href="https://hugoed2106.github.io/poemas/dai/">Poemas a Daiana</a></p>
+			<p><a href="https://hugoed2106.github.io/poemas/yes/">Poemas a Yeseli</a></p>
     </footer>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
@@ -371,13 +572,14 @@
         load();
       }
 
-      createViewer("pdf1", "https://github.com/dev-bit-oficial/poemas/blob/main/para-yesita/Me%20atrevo.pdf");
-      createViewer("pdf2", "https://github.com/dev-bit-oficial/poemas/blob/main/para-yesita/Una%20Diosa.pdf");
-      createViewer("pdf3", "https://github.com/dev-bit-oficial/poemas/blob/main/para-yesita/Oportunidad.pdf");
+      createViewer("pdf1", "https://github.com/dev-bit-oficial/poemas/blob/main/hugo-elias/%26A%C3%B1o%20Especial%26%20por%20Hugo%20Elias.pdf");
+      createViewer("pdf2", "https://github.com/dev-bit-oficial/poemas/blob/main/hugo-elias/%26Bella%20Rosa%26%20por%20Hugo%20Elias.pdf");
+      createViewer("pdf3", "https://github.com/dev-bit-oficial/poemas/blob/main/hugo-elias/%26Ilusiones%26%20por%20Hugo%20Elias.pdf");
+      createViewer("pdf4", "https://github.com/dev-bit-oficial/poemas/blob/main/hugo-elias/%26Quisiera%26%20por%20Hugo%20Elias.pdf");
+      createViewer("pdf5", "https://github.com/dev-bit-oficial/poemas/blob/main/hugo-elias/%26Sue%C3%B1o%20con%20Vos%26%20por%20Hugo%20Elias.pdf");
+      createViewer("pdf6", "https://github.com/dev-bit-oficial/poemas/blob/main/hugo-elias/%26Ya%20Fue%26%20por%20Hugo%20Elias.pdf");
     </script>
 
   </main>
-  <style src="yes.css"></style>
-  <script src="yes.js"></script>
 </body>
 </html>
