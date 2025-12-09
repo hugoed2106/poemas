@@ -153,6 +153,44 @@
 			cursor: pointer;
 		}
 
+    article.special-poem {
+      background: linear-gradient(135deg, #f1f1f1ff 0%, #c0c0c0 25%, #f1f1f1ff 50%, #c0c0c0 75%, #f1f1f1ff 100%);
+      padding: 2rem;
+      border-radius: var(--radius);
+      box-shadow: 0 3px 12px rgba(0,0,0,0.05);
+      line-height: var(--line);
+      white-space: pre-wrap;
+      word-wrap: break-word;
+    }
+
+    article.special-poem .info {
+      margin-top: -80px;
+      margin-bottom: -85px;
+      line-height: 1.1;
+    }
+
+    article.special-poem .info h2 {
+      font-size: 1.5rem;
+      margin-bottom: 0px;
+    }
+
+    article.special-poem .info .author {
+      color: var(--muted);
+      font-size: 1rem;
+      margin-top: -30px;
+      margin-bottom: 0;
+    }
+
+    article.special-poem p{
+      font-size: 15px;
+      margin-bottom: -80px;
+    }
+
+    article.special-poem .author .→ {
+      font-size: 1.5rem;
+      font-weight: bold;
+    }
+
     footer{
       text-align:center;
       color:var(--muted);
@@ -233,7 +271,7 @@
 
         <p id="passError" style="color:#c00;margin-top:.6rem;display:none;">Contraseña incorrecta</p>
 
-        <label style="display:none;margin-top:.6rem;color:var(--muted);font-size:.9rem;">
+        <label style="margin-top:.6rem;color:var(--muted);font-size:.9rem;">
           <input id="remember" type="checkbox" /> Recordar en este equipo
         </label>
       </form>
@@ -267,7 +305,7 @@
         </p>
       </article>
 
-      <article class="poem">
+      <article class="special-poem">
         <div class="info">
           <h2>Carta de Cumpleaños</h2>
           <p class="author">por Hugo Elias
@@ -304,6 +342,9 @@
 
   Te ama mucho,
   Tu novio Hugo.
+        </p>
+        <p class="author">
+          <a class="→" href="https://hugoed2106.github.io/my-princess/#9">→</a>
         </p>
       </article>
 
@@ -543,7 +584,7 @@
         </p>
       </article>
 
-      <article class="poem">
+      <article class="special-poem">
         <div class="info">
           <h2>Poema 6</h2>
           <p class="author">por Hugo Elias</p>
@@ -597,6 +638,9 @@
           Fue un placer,
           Estar con tan,
           Bella mujer.
+        </p>        
+        <p class="author">
+          <a class="→" href="https://hugoed2106.github.io/my-princess/#8">→</a>
         </p>
       </article>
 
@@ -649,7 +693,7 @@
         </p>
       </article>
 
-      <article class="poem">
+      <article class="special-poem">
         <div class="info">
           <h2>Poema 8</h2>
           <p class="author">por Hugo Elias</p>
@@ -694,6 +738,9 @@
           Porque sos distinta y díficil de igualar.
           Mi musa sin calma, sin pretensión,
           Ya llevas en vos la admiración.
+        </p>
+        <p class="author">
+          <a class="→" href="https://hugoed2106.github.io/my-princess/#4">→</a>
         </p>
       </article>
 
@@ -865,7 +912,7 @@
         </p>
       </article>
 
-      <article class="poem">
+      <article class="special-poem">
         <div class="info">
           <h2>Poema 14</h2>
           <p class="author">por Hugo Elias
@@ -911,6 +958,9 @@
           Les digo que ya somos otros,
           Que nuestros caminos ya son otros,
           Y que ya no hay más de nosotros.
+        </p>
+        <p class="author">
+          <a class="→" href="https://hugoed2106.github.io/my-princess/#12">→</a>
         </p>
       </article>
     </div>
