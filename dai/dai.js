@@ -1,3 +1,16 @@
+function mostrarPorFecha(id, mesInicio, diaInicio, mesFin, diaFin) {
+  const hoy = new Date();
+  const año = hoy.getFullYear();
+
+  const inicio = new Date(año, mesInicio - 1, diaInicio);
+  const fin = new Date(año, mesFin - 1, diaFin, 23, 59, 59);
+
+  const dic = document.getElementById("mensaje-dic");
+
+  if (hoy >= inicio && hoy <= fin) {
+    dic.classList.remove("hidden");
+  }
+}
 (function () {
     const PASSWORD = "231224"; // Cambia aquí la contraseña si lo deseas
     const STORAGE_KEY = "poemas-unlocked-v1";
