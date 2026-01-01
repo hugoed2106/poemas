@@ -30,6 +30,7 @@
 
     header {
       position: fixed;
+      z-index: 1000;
       top: 0;
       left: 0;
       width: 100%;
@@ -39,6 +40,138 @@
       text-align: center;
       font-family: system-ui, sans-serif;
       font-weight: 600;
+    }
+
+    .ad {
+      position: absolute;
+      top: 8px;
+      right: 70px;
+      color: #d4af37;
+      font-weight: bold;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transform: rotate(25deg);
+    }
+
+    /* Botón hamburguesa */
+    .hm {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 1200;
+      height: auto;
+    }
+
+    .hamburger {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      width: 35px;
+      height: 25px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      cursor: pointer;
+    }
+
+    .hamburger span {
+      display: block;
+      height: 4px;
+      background: #000;
+      border-radius: 2px;
+      transition: 0.3s;
+    }
+
+    .hamburger-x {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      width: 35px;
+      height: 35px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+
+    .hamburger-x span {
+      position: absolute;
+      width: 70%;
+      height: 4px;
+      background: #000;
+      border-radius: 2px;
+      transition: transform 0.2s ease;
+      transform-origin: center;
+    }
+
+    .hamburger-x .span1 { transform: rotate(45deg); }
+    .hamburger-x .span2 { transform: rotate(-45deg); }
+
+    /* Menu oculto */
+    .menu {
+      background: rgba(255, 255, 255, 1);
+      border: var(--accent) 2px solid;
+      border-radius: 5px;
+      display: none;
+      max-height: calc(100vh - 140px);
+      -webkit-overflow-scrolling: touch;
+      overflow-y: auto;
+      padding: 15px;
+      position: fixed;
+      right: 20px;
+      top: 25px;
+      width: auto;
+      max-width: 20%;
+      z-index: 1050;
+    }
+
+    .menu .poems-list {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      color: var(--accent);
+      font-weight: bold;
+      height: 35px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .menu ul {
+      list-style: none;
+      margin-top: 32.5px;
+      padding: 0;
+    }
+
+    .menu li {
+      border-top: rgba(0, 0, 0, 0.25) 1px solid;
+      padding-top: 5px;
+      margin: 10px 0;
+    }
+
+    .menu li.last-one {
+      border-bottom: rgba(0, 0, 0, 0.25) 1px solid;
+      padding-bottom: 5px;
+    }
+
+    .menu a {
+      text-decoration: none;
+      color: var(--text);
+    }
+
+    .menu a .news-icon {
+      position: absolute;
+      right: 15px;
+      color: var(--accent);
+      font-style: oblique;
+      font-weight: bold;
+      font-size: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
     }
 
     main{
@@ -67,6 +200,7 @@
 
     article.poem{
       background: var(--paper);
+      width: 388px;
       padding: 2rem;
       border-radius: var(--radius);
       box-shadow: 0 3px 12px rgba(0,0,0,0.05);
@@ -110,8 +244,10 @@
 
     .pdf-viewer{
       display: flex;
+      height: 440px;
       flex-direction: column;
       gap: 1rem;
+      margin-bottom: 10px;
     }
 
     .pdf-controls{
@@ -166,6 +302,90 @@
 
     .hidden{ display: none; }
 
+    .new1 {
+      position: absolute;
+      z-index: 100;
+      top: 4480px;                      
+      right: 700px;
+      height: 2rem;
+      font-family: system-ui, sans-serif;
+      width: min-content;
+      background-color: #2b6cb0;
+      border-radius: 5px;
+      padding: 5px 10px;
+      display: flex;
+    }
+
+    .new1 h3 {
+      color: white;
+      font-size: 1rem;
+      margin-top: 0px;
+      margin-left: 0px;
+    }
+
+    .new2 {
+      position: absolute;
+      z-index: 100;
+      top: 4480px;
+      right: 300px;
+      height: 2rem;
+      font-family: system-ui, sans-serif;
+      width: min-content;
+      background-color: #2b6cb0;
+      border-radius: 5px;
+      padding: 5px 10px;
+      display: flex;
+    }
+
+    .new2 h3 {
+      color: white;
+      font-size: 1rem;
+      margin-top: 0px;
+      margin-left: 0px;
+    }
+    
+    .new3 {
+      position: absolute;
+      z-index: 100;
+      top: 5165px;
+      right: 700px;
+      height: 2rem;
+      font-family: system-ui, sans-serif;
+      width: min-content;
+      background-color: #2b6cb0;
+      border-radius: 5px;
+      padding: 5px 10px;
+      display: flex;
+    }
+
+    .new3 h3 {
+      color: white;
+      font-size: 1rem;
+      margin-top: 0px;
+      margin-left: 0px;
+    }
+    
+    .new4 {
+      position: absolute;
+      z-index: 100;
+      top: 5165px;
+      right: 285px;
+      height: 2rem;
+      font-family: system-ui, sans-serif;
+      width: min-content;
+      background-color: #2b6cb0;
+      border-radius: 5px;
+      padding: 5px 10px;
+      display: flex;
+    }
+
+    .new4 h3 {
+      color: white;
+      font-size: 1rem;
+      margin-top: 0px;
+      margin-left: 0px;
+    }
+    
     @keyframes spin {
       to{ transform: rotate(360deg); }
     }
@@ -197,21 +417,188 @@
       article.poem p {
         font-size: 10px;
       }
+      .ad{
+        position: absolute;
+        top: 50px;
+        right: 1px;
+        color: #d4af37;
+        font-weight: bold;
+        font-size: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transform: rotate(-25deg);
+      }
+      .hm {
+        position: fixed;
+        top: 15px;
+        right: 5px;
+        z-index: 1200;
+        height: auto;
+      }
+      .hamburger {
+        position: absolute;
+        top: 15px;
+        right: 5px;
+        width: 25px;
+        height: 18px;
+      }
+      .hamburger span {
+        height: 4px;
+      }
+      .menu {   
+        background: rgba(255, 255, 255, 1);
+        border: var(--accent) 2px solid;
+        border-radius: 5px;
+        max-height: calc(100vh - 140px);
+        -webkit-overflow-scrolling: touch;
+        overflow-y: auto;
+        padding: 15px;
+        position: fixed;
+        right: 20px;
+        top: 25px;
+        width: auto;
+        max-width: 80%;
+        z-index: 1050;
+      }
+      
+      .new1 {
+        position: absolute;
+        z-index: 100;
+        top: 7100px;                      
+        right: 40px;
+        height: 2rem;
+        font-family: system-ui, sans-serif;
+        width: min-content;
+        background-color: #2b6cb0;
+        border-radius: 5px;
+        padding: 5px 10px;
+        display: flex;
+      }
+
+      .new1 h3 {
+        color: white;
+        font-size: 1rem;
+        margin-top: 0px;
+        margin-left: 0px;
+      }
+
+      .new2 {
+        position: absolute;
+        z-index: 100;
+        top: 7600px;
+        right: 40px;
+        height: 2rem;
+        font-family: system-ui, sans-serif;
+        width: min-content;
+        background-color: #2b6cb0;
+        border-radius: 5px;
+        padding: 5px 10px;
+        display: flex;
+      }
+
+      .new2 h3 {
+        color: white;
+        font-size: 1rem;
+        margin-top: 0px;
+        margin-left: 0px;
+      }
+      
+      .new3 {
+        position: absolute;
+        z-index: 100;
+        top: 8090px;
+        right: 40px;
+        height: 2rem;
+        font-family: system-ui, sans-serif;
+        width: min-content;
+        background-color: #2b6cb0;
+        border-radius: 5px;
+        padding: 5px 10px;
+        display: flex;
+      }
+
+      .new3 h3 {
+        color: white;
+        font-size: 1rem;
+        margin-top: 0px;
+        margin-left: 0px;
+      }
+      
+      .new4 {
+        position: absolute;
+        z-index: 100;
+        top: 8490px;
+        right: 40px;
+        height: 2rem;
+        font-family: system-ui, sans-serif;
+        width: min-content;
+        background-color: #2b6cb0;
+        border-radius: 5px;
+        padding: 5px 10px;
+        display: flex;
+      }
+
+      .new4 h3 {
+        color: white;
+        font-size: 1rem;
+        margin-top: 0px;
+        margin-left: 0px;
+      }
     }
   </style>
 </head>
 <body>
   <header>
     <h1>Colección de Poemas</h1>
+    <p class="ad">------><br> Revisa los nuevos<br> poemas aquí!!!</p>
+    <section id="hm" class="hm">
+      <div class="hamburger" onclick="toggleMenu()">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+      <nav id="menu" class="menu">
+        <div class="hamburger-x" onclick="toggleMenu()">
+          <span class="span1"></span>
+          <span class="span2"></span>
+        </div>
+        <p class="poems-list">POEMAS</p>
+        <ul>
+          <li><a href="#1">Amor en Redes</a></li>
+          <li><a href="#2">𝑳𝒂 𝑪𝒂𝒏𝒄𝒊𝒐𝒏</a></li>
+          <li><a href="#3">𝑳𝒂 𝑷𝒐𝒆𝒔𝒊𝒂</a></li>
+          <li><a href="#4">𝑴𝒂𝒓𝒄𝒉𝒊𝒕𝒂 🥀</a></li>
+          <li><a href="#5">Año Especial</a></li>
+          <li><a href="#6">Bella Rosa</a></li>
+          <li><a href="#7">Ilusiones</a></li>
+          <li><a href="#8">Quisiera</a></li>
+          <li><a href="#9">Sueño con Vos</a></li>
+          <li><a href="#10">Ya Fue</a></li>
+          <!-- <li class="last-one"><a href="#"></a></li> -->
+          <li><a href="#11">𝑬𝒍 𝒂𝒎𝒐𝒓 <p class="news-icon" style="top: 425px;">NUEVO</p></a></li>
+          <li><a href="#12">𝑺𝒖𝒑𝒆𝒓𝒂𝒓 <p class="news-icon" style="top: 465px;">NUEVO</p></a></li>
+          <li><a href="#13">𝑻𝒖𝒔 𝒐𝒋𝒐𝒔 <p class="news-icon" style="top: 505px;">NUEVO</p></a></li>
+          <li><a href="#14">𝑭𝒂𝒄𝒊𝒍, 𝒑𝒆𝒓𝒐 𝒅𝒊𝒇𝒊𝒄𝒊𝒍 <p class="news-icon" style="top: 540px;">NUEVO</p></a></li>
+        </ul>
+      </nav>
+      <script>
+        function toggleMenu() {
+          const menu = document.getElementById("menu");
+          menu.style.display = menu.style.display === "block" ? "none" : "block";
+        }
+      </script>
+    </section>
   </header>
   <main>
     <div class="poems">
-      <article class="poem">
-        <div class="info">
-          <h2>Amor en Redes</h2>
-          <p class="author">por Hugo Elias</p>
-        </div>
-        <p class="txt">
+      <section id="1">
+        <article class="poem">
+          <div class="info">
+            <h2>Amor en Redes</h2>
+            <p class="author">por Hugo Elias</p>
+          </div>
+          <p class="txt">
 Te conocí en redes sociales, 
 Caí en tus redes virtuales. 
 Desde entonces, a deshora, 
@@ -256,16 +643,18 @@ Gracias por tu fabulosa amistad,
 Me encanta, me encanta en verdad, 
 Deseo por favor nos podamos, 
 Ver frente a frente, solo esperemos.
-        </p>
-      </article>
+          </p>
+        </article>
+      </section>
 
-			<article class="poem">
-        <div class="info">
-          <h2>𝑳𝒂 𝑪𝒂𝒏𝒄𝒊𝒐𝒏</h2>
-          <p class="author">por Hugo Elias
+      <section id="2">
+        <article class="poem">
+          <div class="info">
+            <h2>𝑳𝒂 𝑪𝒂𝒏𝒄𝒊𝒐𝒏</h2>
+            <p class="author">por Hugo Elias
 7/10/2025</p>
-        </div>
-        <p class="txt">
+          </div>
+          <p class="txt">
 Él te dedicó,
 Esa hermosa canción,
 La cual algún día salió,
@@ -310,16 +699,18 @@ Tienes una sonrisa encantadora,
 Un alma que me enamora.
 Me pregunto cada día,
 ¿En verdad quería ser mi novia?
-        </p>
-      </article>
+          </p>
+        </article>
+      </section>
 
-			<article class="poem">
-        <div class="info">
-          <h2>𝑳𝒂 𝑷𝒐𝒆𝒔𝒊𝒂</h2>
-          <p class="author">por Hugo Elias
+      <section id="3">
+        <article class="poem">
+          <div class="info">
+            <h2>𝑳𝒂 𝑷𝒐𝒆𝒔𝒊𝒂</h2>
+            <p class="author">por Hugo Elias
 1/11/2025</p>
-        </div>
-        <p class="txt">
+          </div>
+          <p class="txt">
 Empezó como pasatiempo,
 Pero al paso del tiempo,
 Se volvió un talento,
@@ -344,9 +735,11 @@ Pertenezco a esa rareza,
 Aunque no les parezca,
 Que sigue escribiendo poesía,
 De la que antes se hacía.
-        </p>
-      </article>
+          </p>
+        </article>
+      </section>
 
+      <section id="4">
 			<article class="poem">
         <div class="info">
           <h2>𝑴𝒂𝒓𝒄𝒉𝒊𝒕𝒂 🥀</h2>
@@ -386,102 +779,226 @@ Y su paz guardará mi alma.
 (felipenses 4:6-7)					
         </p>
       </article>
-      
-      <article class="poem">
-        <div class="info">
-          <h2>Año Especial</h2>
-          <p class="author">por Hugo Elias</p>
-        </div>
-        <div class="pdf-viewer" id="pdf1">
-          <div class="pdf-controls">
-            <button class="prev">◄</button>
-            <span><span class="current">1</span> / <span class="total">0</span></span>
-            <button class="next">►</button>
+      </section>
+
+      <section id="5">
+        <article class="poem">
+          <div class="info">
+            <h2>Año Especial</h2>
+            <p class="author">por Hugo Elias</p>
+            </div>
+          <div class="pdf-viewer" id="pdf1">
+            <div class="pdf-controls">
+              <button class="prev">◄</button>
+              <span><span class="current">1</span> / <span class="total">0</span></span>
+              <button class="next">►</button>
+            </div>
+            <div class="loading"><div class="spinner"></div><p>Cargando PDF...</p></div>
+            <div class="viewer-container hidden"><canvas></canvas></div>
           </div>
-          <div class="loading"><div class="spinner"></div><p>Cargando PDF...</p></div>
-          <div class="viewer-container hidden"><canvas></canvas></div>
-        </div>
-      </article>
+        </article>
+      </section>
       
-      <article class="poem">
-        <div class="info">
-          <h2>Bella Rosa</h2>
-          <p class="author">por Hugo Elias</p>
-        </div>
-        <div class="pdf-viewer" id="pdf2">
-          <div class="pdf-controls">
-            <button class="prev">◄</button>
-            <span><span class="current">1</span> / <span class="total">0</span></span>
-            <button class="next">►</button>
+      <section id="6">
+        <article class="poem">
+          <div class="info">
+            <h2>Bella Rosa</h2>
+            <p class="author">por Hugo Elias</p>
           </div>
-          <div class="loading"><div class="spinner"></div><p>Cargando PDF...</p></div>
-          <div class="viewer-container hidden"><canvas></canvas></div>
-        </div>
-      </article>
+          <div class="pdf-viewer" id="pdf2">
+            <div class="pdf-controls">
+              <button class="prev">◄</button>
+              <span><span class="current">1</span> / <span class="total">0</span></span>
+              <button class="next">►</button>
+            </div>
+            <div class="loading"><div class="spinner"></div><p>Cargando PDF...</p></div>
+            <div class="viewer-container hidden"><canvas></canvas></div>
+          </div>
+        </article>
+      </section>
       
-      <article class="poem">
-        <div class="info">
-          <h2>Ilusiones</h2>
-          <p class="author">por Hugo Elias</p>
-        </div>
-        <div class="pdf-viewer" id="pdf3">
-          <div class="pdf-controls">
-            <button class="prev">◄</button>
-            <span><span class="current">1</span> / <span class="total">0</span></span>
-            <button class="next">►</button>
+      <section id="7">
+        <article class="poem">
+          <div class="info">
+            <h2>Ilusiones</h2>
+            <p class="author">por Hugo Elias</p>
           </div>
-          <div class="loading"><div class="spinner"></div><p>Cargando PDF...</p></div>
-          <div class="viewer-container hidden"><canvas></canvas></div>
-        </div>
-      </article>
+          <div class="pdf-viewer" id="pdf3">
+            <div class="pdf-controls">
+              <button class="prev">◄</button>
+              <span><span class="current">1</span> / <span class="total">0</span></span>
+              <button class="next">►</button>
+            </div>
+            <div class="loading"><div class="spinner"></div><p>Cargando PDF...</p></div>
+            <div class="viewer-container hidden"><canvas></canvas></div>
+          </div>
+        </article>
+      </section>
       
-      <article class="poem">
-        <div class="info">
-          <h2>Quisiera</h2>
-          <p class="author">por Hugo Elias</p>
-        </div>
-        <div class="pdf-viewer" id="pdf4">
-          <div class="pdf-controls">
-            <button class="prev">◄</button>
-            <span><span class="current">1</span> / <span class="total">0</span></span>
-            <button class="next">►</button>
+      <section id="8">
+        <article class="poem">
+          <div class="info">
+            <h2>Quisiera</h2>
+            <p class="author">por Hugo Elias</p>
           </div>
-          <div class="loading"><div class="spinner"></div><p>Cargando PDF...</p></div>
-          <div class="viewer-container hidden"><canvas></canvas></div>
-        </div>
-      </article>
+          <div class="pdf-viewer" id="pdf4">
+            <div class="pdf-controls">
+              <button class="prev">◄</button>
+              <span><span class="current">1</span> / <span class="total">2</span></span>
+              <button class="next">►</button>
+            </div>
+            <div class="loading"><div class="spinner"></div><p>Cargando PDF...</p></div>
+            <div class="viewer-container hidden"><canvas></canvas></div>
+          </div>
+        </article>
+      </section>
       
-      <article class="poem">
-        <div class="info">
-          <h2>Sueño con Vos</h2>
-          <p class="author">por Hugo Elias</p>
-        </div>
-        <div class="pdf-viewer" id="pdf5">
-          <div class="pdf-controls">
-            <button class="prev">◄</button>
-            <span><span class="current">1</span> / <span class="total">0</span></span>
-            <button class="next">►</button>
+      <section id="9">
+        <article class="poem">
+          <div class="info">
+            <h2>Sueño con Vos</h2>
+            <p class="author">por Hugo Elias</p>
           </div>
-          <div class="loading"><div class="spinner"></div><p>Cargando PDF...</p></div>
-          <div class="viewer-container hidden"><canvas></canvas></div>
-        </div>
-      </article>
-      
-      <article class="poem">
-        <div class="info">
-          <h2>Ya Fue</h2>
-          <p class="author">por Hugo Elias</p>
-        </div>
-        <div class="pdf-viewer" id="pdf6">
-          <div class="pdf-controls">
-            <button class="prev">◄</button>
-            <span><span class="current">1</span> / <span class="total">0</span></span>
-            <button class="next">►</button>
+          <div class="pdf-viewer" id="pdf5">
+            <div class="pdf-controls">
+              <button class="prev">◄</button>
+              <span><span class="current">1</span> / <span class="total">0</span></span>
+              <button class="next">►</button>
+            </div>
+            <div class="loading"><div class="spinner"></div><p>Cargando PDF...</p></div>
+            <div class="viewer-container hidden"><canvas></canvas></div>
           </div>
-          <div class="loading"><div class="spinner"></div><p>Cargando PDF...</p></div>
-          <div class="viewer-container hidden"><canvas></canvas></div>
-        </div>
-      </article>
+        </article>
+      </section>
+
+      <section id="10">
+        <article class="poem">
+          <div class="info">
+            <h2>Ya Fue</h2>
+            <p class="author">por Hugo Elias</p>
+          </div>
+          <div class="pdf-viewer" id="pdf6">
+            <div class="pdf-controls">
+              <button class="prev">◄</button>
+              <span><span class="current">1</span> / <span class="total">0</span></span>
+              <button class="next">►</button>
+            </div>
+            <div class="loading"><div class="spinner"></div><p>Cargando PDF...</p></div>
+            <div class="viewer-container hidden"><canvas></canvas></div>
+          </div>
+        </article>
+      </section>
+
+      <section id="11">
+        <article class="poem">
+          <div class="info">
+            <h2>𝑬𝒍 𝒂𝒎𝒐𝒓 💖</h2>
+            <p class="author">por Hugo Elias
+8/11/2025</p>
+          </div>
+          <p class="txt">
+Siempre nos preguntamos,
+Lo que significa el amor,
+Lo que se siente cuando amamos,
+Y no es en la cama cualquier clamor.
+
+Es un grandioso sentimiento,
+Que te hace sentir miles de cosas,
+Que hoy en día ya no siento,
+Pues me enfoco en mis metas.
+
+Pero el amor te debilita,
+Pues cuando te enamoras todo lo das,
+A veces también te limita,
+Y en ocasiones ya no hay paradas.
+
+Este sentimiento te llega al alma,
+Siempre les dará mucha calma,
+A pesar de uno que otro problema,
+Llegan a tener su propio lema.
+            </p>
+          </article>
+          <nav class="new1">
+            <h3>NUEVO</h3>
+          </nav>
+      </section>
+
+      <section id="12">
+        <article class="poem">
+          <div class="info">
+            <h2>𝑺𝒖𝒑𝒆𝒓𝒂𝒓 ❤️‍🩹</h2>
+            <p class="author">por Hugo Elias
+14/11/2025</p>
+          </div>
+          <p class="txt">
+Tal vez nunca te logre superar,
+Pero nunca te voy a esperar,
+Me pregunto cómo es que llegaste,
+No sé cómo a mi vida entraste.
+
+Tal vez si te vuelvo a encontrar,
+Aunque no te tenga que esperar,
+Te diré lo feliz que me hiciste,
+Cuando conmigo ni estuviste.
+
+Tal vez aún me puedas enamorar,
+Aunque ya sea difícil de lograr,
+Y si ahora ya me reemplazaste,
+Te preguntarás lo que lograste.
+
+Tal vez mis cartas vayas a guardar,
+Espero no las vayas a quemar.
+Pues la carta que una vez hiciste,
+Megamente feliz me hiciste.
+            </p>
+          </article>
+          <nav class="new2">
+            <h3>NUEVO</h3>
+          </nav>
+      </section>
+
+      <section id="13">
+        <article class="poem">
+          <div class="info">
+            <h2>𝑻𝒖𝒔 𝒐𝒋𝒐𝒔 👁️</h2>
+            <p class="author">por Hugo Elias
+19/11/2025</p>
+          </div>
+          <p class="txt">
+Cuando me miraste a los ojos,
+Es como si me hubieras enamorado,
+Algo que no pasa con ojos cualquiera,
+Tal vez tú, podrías quitarme lo tarado.
+
+Al ver esos hermosos ojos,
+Me di cuenta de lo hermosa,
+Que sos, me hiciste verlo en tus ojos,
+De forma similar a una diosa.
+
+Yo sé que tengo mala fama,
+Pero por ti yo podría cambiar,
+Solo si me das una oportunidad,
+Te podría por siempre amar.
+            </p>
+          </article>
+          <nav class="new3">
+            <h3>NUEVO</h3>
+          </nav>
+      </section>
+
+      <section id="14">
+        <article class="poem">
+          <div class="info">
+            <h2>𝑭𝒂𝒄𝒊𝒍, 𝒑𝒆𝒓𝒐 𝒅𝒊𝒇𝒊𝒄𝒊𝒍 🍃</h2>
+            <p class="author">por Hugo Elias
+26/11/2025</p>
+          </div>
+          <p class="txt" style="margin-bottom: 5px;">El arte de amarte, es tan fuerte que adorarte es para motivarte y siempre amarte, por qué tenerte es fácil para otro, pero difícil amarte, y para mí complicado tenerte, pero muy simple amarte.</p>
+          </article>
+          <nav class="new4">
+            <h3>NUEVO</h3>
+          </nav>
+      </section>
     </div>
     <footer>
 			<p>Colección de Poemas</p>
@@ -493,83 +1010,127 @@ Y su paz guardará mi alma.
     <script>
       const pdfjsLib = window["pdfjs-dist/build/pdf"];
       pdfjsLib.GlobalWorkerOptions.workerSrc =
-        "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+      "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
 
       function autoScale() {
-        const w = window.innerWidth;
-        if (w < 600) return 0.9;
-        if (w < 900) return 1.2;
-        return 1.6;
+      const w = window.innerWidth;
+      if (w < 600) return 0.9;
+      if (w < 900) return 1.2;
+      return 1.6;
       }
 
       function createViewer(containerId, url){
-        let scale = autoScale();
-        let pageNum = 1;
-        let pdfDoc = null;
-        let pageRendering = false;
-        let pending = null;
+      let scale = autoScale();
+      let pageNum = 1;
+      let pdfDoc = null;
+      let pageRendering = false;
+      let pending = null;
 
-        const container = document.getElementById(containerId);
-        const canvas = container.querySelector("canvas");
-        const ctx = canvas.getContext("2d");
+      const container = document.getElementById(containerId);
+      const canvas = container.querySelector("canvas");
+      const ctx = canvas.getContext("2d");
 
-        const loading = container.querySelector(".loading");
-        const viewer = container.querySelector(".viewer-container");
+      const loading = container.querySelector(".loading");
+      const viewer = container.querySelector(".viewer-container");
 
-        const prevBtn = container.querySelector(".prev");
-        const nextBtn = container.querySelector(".next");
+      const prevBtn = container.querySelector(".prev");
+      const nextBtn = container.querySelector(".next");
 
-        const pageNow = container.querySelector(".current");
-        const pageTotal = container.querySelector(".total");
+      const pageNow = container.querySelector(".current");
+      const pageTotal = container.querySelector(".total");
 
-        function renderPage(num){
-          pageRendering = true;
+      // Bloquea el acceso a la página 3
+      function isForbidden(n){ return n === 3; }
+      function nearestAllowed(n){
+        if (!pdfDoc) return n;
+        if (!isForbidden(n)) return n;
+        // intenta avanzar primero, si no retroceder
+        for (let i = n+1; i <= pdfDoc.numPages; i++) if (!isForbidden(i)) return i;
+        for (let i = n-1; i >= 1; i--) if (!isForbidden(i)) return i;
+        return n; // sin alternativa
+      }
 
-          pdfDoc.getPage(num).then(page=>{
-            const viewport = page.getViewport({ scale });
-            canvas.height = viewport.height;
-            canvas.width = viewport.width;
-
-            const task = page.render({ canvasContext: ctx, viewport });
-            task.promise.then(()=>{
-              pageRendering = false;
-              if (pending !== null){
-                renderPage(pending);
-                pending = null;
-              }
-            });
-          });
-
-          pageNow.textContent = num;
-          prevBtn.disabled = num <= 1;
-          nextBtn.disabled = num >= pdfDoc.numPages;
+      function renderPage(num){
+        // prevenir render de página prohibida
+        const allowed = nearestAllowed(num);
+        if (allowed !== num){
+        pageNum = allowed;
+        num = allowed;
         }
 
-        function queue(num){
-          if(pageRendering) pending = num;
-          else renderPage(num);
+        pageRendering = true;
+
+        pdfDoc.getPage(num).then(page=>{
+        const viewport = page.getViewport({ scale });
+        canvas.height = viewport.height;
+        canvas.width = viewport.width;
+
+        const task = page.render({ canvasContext: ctx, viewport });
+        task.promise.then(()=>{
+          pageRendering = false;
+          if (pending !== null){
+          const p = pending; pending = null;
+          queue(p);
+          }
+        });
+        });
+
+        pageNow.textContent = num;
+        prevBtn.disabled = num <= 1;
+        nextBtn.disabled = num >= pdfDoc.numPages;
+      }
+
+      function queue(num){
+        // interceptar intentos de ir a la página 3
+        const allowed = nearestAllowed(num);
+        if (allowed !== num){
+        // opcional: mostrar aviso breve en consola
+        console.warn("Acceso a la página 3 bloqueado, redirigiendo a página", allowed);
+        num = allowed;
+        pageNum = num;
         }
+        if(pageRendering) pending = num;
+        else renderPage(num);
+      }
 
-        prevBtn.onclick = ()=>{ if (pageNum > 1) { pageNum--; queue(pageNum); }};
-        nextBtn.onclick = ()=>{ if (pageNum < pdfDoc.numPages){ pageNum++; queue(pageNum); }};
+      prevBtn.onclick = ()=>{
+        let target = pageNum - 1;
+        target = nearestAllowed(target);
+        if (target < 1) return;
+        pageNum = target;
+        queue(pageNum);
+      };
+      nextBtn.onclick = ()=>{
+        let target = pageNum + 1;
+        target = nearestAllowed(target);
+        if (target > (pdfDoc ? pdfDoc.numPages : Infinity)) return;
+        pageNum = target;
+        queue(pageNum);
+      };
 
-        function load(){
-          loading.classList.remove("hidden");
-          viewer.classList.add("hidden");
+      function load(){
+        loading.classList.remove("hidden");
+        viewer.classList.add("hidden");
 
-          const raw = url.replace("github.com","raw.githubusercontent.com").replace("/blob/","/");
-          pdfjsLib.getDocument(raw).promise.then(pdf=>{
-            pdfDoc = pdf;
-            pageTotal.textContent = pdf.numPages;
+        const raw = url.replace("github.com","raw.githubusercontent.com").replace("/blob/","/");
+        pdfjsLib.getDocument(raw).promise.then(pdf=>{
+        pdfDoc = pdf;
+        pageTotal.textContent = pdf.numPages;
 
-            loading.classList.add("hidden");
-            viewer.classList.remove("hidden");
+        // asegurar que la página inicial no sea la 3
+        pageNum = nearestAllowed(pageNum);
 
-            renderPage(pageNum);
-          });
-        }
+        loading.classList.add("hidden");
+        viewer.classList.remove("hidden");
 
-        load();
+        renderPage(pageNum);
+        }).catch(err=>{
+        loading.innerHTML = "<p>Error cargando PDF</p>";
+        console.error(err);
+        });
+      }
+
+      load();
       }
 
       createViewer("pdf1", "https://github.com/dev-bit-oficial/poemas/blob/main/hugo-elias/%26A%C3%B1o%20Especial%26%20por%20Hugo%20Elias.pdf");
