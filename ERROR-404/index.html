@@ -1,0 +1,103 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Error 404 (That’s an error)</title>
+    <link rel="icon" href="icon.png" type="image/x-icon">
+    <style>
+        body {
+            font-family: arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        p {
+            color: black;
+        }
+      
+        p span {
+            color: #5f6368;
+        }
+
+        .icon {
+            height: 50px;
+            width: 50px;
+            border-radius: 25%;
+        }
+
+        .logo {
+            margin-bottom: 20px;
+        }
+
+        .content {
+            display: flex;
+            align-items: flex-start;
+            gap: 50px;
+            padding: 20px;
+        }
+
+        .error-text h1 {
+            font-size: 20px;
+            font-weight: normal;
+            margin-bottom: 16px;
+        }
+
+        .error-text h1 span {
+            color: #5f6368;
+            margin-left: 8px;
+        }
+
+        .error-text p {
+            color: black;
+            margin: 0;
+            line-height: 1.5;
+        }
+
+        .error-text p span {
+            color: #5f6368;
+            margin: 0;
+            line-height: 1.5;
+        }
+
+        .robot-image {
+            width: 200px;
+            height: 200px;
+        }
+
+        @media (max-width: 768px) {
+            .content {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
+
+            .robot-image {
+                width: 150px;
+                height: 150px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="content">
+        <div class="error-text">
+            <img src="icon.png" class="icon">
+            <h1>404. <span>That’s an error</span></h1>
+            <p>The page you are looking for does not exist.</p>
+            <p><span>It may have been moved or deleted.</span></p>
+        </div>
+
+        <img src="robot.png" alt="Robot illustration" class="robot-image">
+    </div>
+    <footer>
+        <p>Go back to the homepage <span>or contact me.</span></p>
+    </footer>
+</body>
+</html>
