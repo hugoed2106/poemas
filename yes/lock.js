@@ -1,5 +1,5 @@
 (function () {
-  var PASSWORD = "130425", KEY = "poemas-yes-unlocked-v1";
+  var PASSWORD = "130425", KEY = "poemas-unlocked-v1";
   var screen = document.getElementById("screenBlock"), form = document.getElementById("passForm"),
       input = document.getElementById("passInput"), err = document.getElementById("passError"),
       remember = document.getElementById("remember"), clearBtn = document.getElementById("clearBtn");
