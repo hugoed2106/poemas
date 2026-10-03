@@ -114,6 +114,11 @@
                     <span class="new">nuevo</span>
                     <span class="d">9/09/2026</span>
                 </li>
+                <li>
+                    <a href="#p22">JL (Acróstico)</a>
+                    <span class="new">nuevo</span>
+                    <span class="d">29/09/2026</span>
+                </li>
             </ol>
         </nav>
         <div class="poems">
@@ -286,7 +291,7 @@
                         Que escuche mi agonía,<br>
                         Pongo mis cargas en manos de Dios,<br>
                         Y su paz guardará mi alma.<br>
-                        (felipenses 4:6-7)
+                        (felipenses 4:6-73)
                     </p>
                 </div>
             </article>
@@ -896,60 +901,47 @@
                     <p class="meta">
                         <time>29/09/2026</time>
                         <span class="new">nuevo</span>
+                        <span class="special">especial</span>
                     </p>
                 </header>
                 <div class="poem-body jariel">
                 <p>
-                    Jamás pensé que,<br>
+                    <strong>J</strong>amás pensé que,<br>
                     Fueses mi mejor amiga,<br>
                     Pues nunca hablamos,<br>
                     Hasta que conocí a tu amiga.
                 </p>
                 <p>
-                    Ahora admiro tu ser,<br>
+                    <strong>A</strong>hora admiro tu ser,<br>
                     Tu forma del mundo ver,<br>
                     Incluso lo bella que eres,<br>
                     Como si tuvieses poderes.
                 </p>
                 <p>
-                    Rodea mi mente esta emoción,<br> 
+                    <strong>R</strong>odea mi mente esta emoción,<br> 
                     Es como de amor una canción,<br>
                     Tomé una gran decisión,<br>
                     La de meterte a mi corazón.
                 </p>
                 <p>
-                    Irónica mi apariencia de apatía,<br>
+                    <strong>I</strong>rónica mi apariencia de apatía,<br>
                     Pues por ti la cambiaría,<br>
                     Si te recuestas como ese día,<br>
                     Mi corazón no aguantaría.
                 </p>
                 <p>
-                    Es raro sentir todo esto,<br>
+                    <strong>E</strong>s raro sentir todo esto,<br>
                     Con mi corazón dispuesto,<br>
                     Espero sientas lo que siento,<br>
                     Ya tenemos un sentimiento. 
                 </p>
                 <p>
-                    Lo que pasa por mi mente,<br>
+                    <strong>L</strong>o que pasa por mi mente,<br>
                     La posibilidad de amarte,<br> 
                     Incluso pienso en besarte,<br> 
                     Estoy a punto de preguntarte.
                 </p>
-                </div>
-                <script>
-                    //Cada letra de la palabra "JARIEL" es el inicio de cada estrofa del poema, formando un acróstico. Por lo que debe estar en negrita.
-                    (function() {
-                        const poemBody = document.querySelector('.poem-body.jariel');
-                        const paragraphs = poemBody.querySelectorAll('p');
-                        const acronym = 'JARIEL';
-                        paragraphs.forEach((paragraph, index) => {
-                            const firstLetter = paragraph.textContent.trim().charAt(0);
-                            if (firstLetter.toUpperCase() === acronym[index]) {
-                                paragraph.innerHTML = `<strong>${firstLetter}</strong>${paragraph.innerHTML.slice(1)}`;
-                            }
-                        });
-                    })();
-                </script>
+            </div>
         </div>
         <footer class="foot">
             <p>
