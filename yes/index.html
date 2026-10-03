@@ -14,8 +14,11 @@
     <body>
         <div class="lock" id="screenBlock" role="dialog" aria-modal="true" aria-labelledby="lockTitle">
             <form id="passForm" autocomplete="off">
-                <h2 id="lockTitle">Acceso restringido</h2>
-                <p>Escribe la contraseña para leer estos poemas. Si no la tienes, pídesela al autor.</p>
+                <h2 id="lockTitle">Acceso exclusivo</h2>
+                <p>
+                    Escribe la contraseña para leer estos poemas. <br>
+                    Si no la tienes, regresa a la página principal: <a href="../index.html">Poemas</a>.
+                </p>
                 <input id="passInput" type="password" placeholder="Contraseña" aria-label="Contraseña" required>
                 <p id="passError" role="alert" hidden>Contraseña incorrecta.</p>
                 <div class="row">
@@ -26,8 +29,38 @@
             </form>
         </div>
         <div class="bar">
-            <a href="#top" class="brand">Poemas</a>
-            <a href="#indice">Índice</a>
+            <div>
+                <a href="#top" class="brand">Poemas</a>
+            </div>
+            <div>
+                <div class="nav-links" id="nav-links">
+                    <a href="#indice">Índice</a>
+                    <a href="#" id="more">Más</a>
+                </div>
+                <div class="more-menu" id="more-menu">
+                    <a href="../index.html">Inicio</a>
+                    <a href="../dai/index.html">Dai</a>
+                    <a class="close" id="close-menu-btn">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor" class="close-btn"><path d="M205.66,194.34a8,8,0,0,1-11.32,11.32L128,139.31,61.66,205.66a8,8,0,0,1-11.32-11.32L116.69,128,50.34,61.66A8,8,0,0,1,61.66,50.34L128,116.69l66.34-66.35a8,8,0,0,1,11.32,11.32L139.31,128Z"/></svg>
+                    </a>
+                </div>
+            </div>
+            <script>
+                const nav = document.getElementById('nav-links');
+                const moreBtn = document.getElementById('more');
+                const moreMenu = document.getElementById('more-menu');
+                const closeMenuBtn = document.getElementById('close-menu-btn');
+
+                moreBtn.addEventListener('click', () => {
+                    nav.style.display = 'none';
+                    moreMenu.style.display = 'flex';
+                });
+
+                closeMenuBtn.addEventListener('click', () => {
+                    nav.style.display = 'flex';
+                    moreMenu.style.display = 'none';
+                });
+            </script>
         </div>
         <main id="top" class="wrap">
             <header class="hero">

@@ -13,8 +13,38 @@
     </head>
 <body>
     <div class="bar">
-        <a href="#top" class="brand">Poemas</a>
-        <a href="#indice">Índice</a>
+        <div>
+            <a href="#top" class="brand">Poemas</a>
+        </div>
+        <div>
+            <div class="nav-links" id="nav-links">
+                <a href="#indice">Índice</a>
+                <a href="#" id="more">Más</a>
+            </div>
+            <div class="more-menu" id="more-menu">
+                <a href="dai/index.html">Dai</a>
+                <a href="yes/index.html">Yes</a>
+                <a class="close" id="close-menu-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor" class="close-btn"><path d="M205.66,194.34a8,8,0,0,1-11.32,11.32L128,139.31,61.66,205.66a8,8,0,0,1-11.32-11.32L116.69,128,50.34,61.66A8,8,0,0,1,61.66,50.34L128,116.69l66.34-66.35a8,8,0,0,1,11.32,11.32L139.31,128Z"/></svg>
+                </a>
+            </div>
+        </div>
+        <script>
+            const nav = document.getElementById('nav-links');
+            const moreBtn = document.getElementById('more');
+            const moreMenu = document.getElementById('more-menu');
+            const closeMenuBtn = document.getElementById('close-menu-btn');
+
+            moreBtn.addEventListener('click', () => {
+                nav.style.display = 'none';
+                moreMenu.style.display = 'flex';
+            });
+
+            closeMenuBtn.addEventListener('click', () => {
+                nav.style.display = 'flex';
+                moreMenu.style.display = 'none';
+            });
+        </script>
     </div>
     <main id="top" class="wrap">
         <header class="hero">
@@ -81,32 +111,28 @@
                 </li>
                 <li>
                     <a href="#p15">Melodía de Flor de Primavera</a>
-                    <span class="new">nuevo</span>
+                    <span class="special">especial</span>
                     <span class="d">28/01/2026</span>
                 </li>
                 <li>
                     <a href="#p16">Bosque Irreal</a>
-                    <span class="new">nuevo</span>
                     <span class="d">1/02/2026</span>
                 </li>
                 <li>
                     <a href="#p17">El Chico Desamparado</a>
-                    <span class="new">nuevo</span>
                     <span class="d">20/02/2026</span>
                 </li>
                 <li>
                     <a href="#p18">Paradójica</a>
-                    <span class="new">nuevo</span>
                     <span class="d">9/03/2026</span>
                 </li>
                 <li>
                     <a href="#p19">Mariana (Acróstico)</a>
-                    <span class="new">nuevo</span>
+                    <span class="special">especial</span>
                     <span class="d">29/04/26</span>
                 </li>
                 <li>
                     <a href="#p20">Sin título</a>
-                    <span class="new">nuevo</span>
                     <span class="d">11/06/2026</span>
                 </li>
                 <li>
@@ -117,6 +143,7 @@
                 <li>
                     <a href="#p22">JL (Acróstico)</a>
                     <span class="new">nuevo</span>
+                    <span class="special">especial</span>
                     <span class="d">29/09/2026</span>
                 </li>
             </ol>
@@ -563,7 +590,7 @@
                     <h2>Melodía de Flor de Primavera</h2>
                     <p class="meta">
                         <time>28/01/2026</time>
-                        <span class="new">nuevo</span>
+                        <span class="special">especial</span>
                     </p>
                 </header>
                 <div class="poem-body">
@@ -634,7 +661,6 @@
                     <h2>Bosque Irreal</h2>
                     <p class="meta">
                         <time>1/02/2026</time>
-                        <span class="new">nuevo</span>
                     </p>
                 </header>
                 <div class="poem-body">
@@ -672,7 +698,6 @@
                     <h2>El Chico Desamparado</h2>
                     <p class="meta">
                         <time>20/02/2026</time>
-                        <span class="new">nuevo</span>
                     </p>
                 </header>
                 <div class="poem-body">
@@ -710,7 +735,6 @@
                     <h2>Paradójica</h2>
                     <p class="meta">
                         <time>9/03/2026</time>
-                        <span class="new">nuevo</span>
                     </p>
                 </header>
                 <div class="poem-body">
@@ -756,7 +780,7 @@
                     <h2>Mariana (Acróstico P/verso)</h2>
                     <p class="meta">
                         <time>29/04/26</time>
-                        <span class="new">nuevo</span>
+                        <span class="special">especial</span>
                     </p>
                 </header>
                 <div class="poem-body mariana">
@@ -806,7 +830,6 @@
                     <h2></h2>
                     <p class="meta">
                         <time>11/06/2026</time>
-                        <span class="new">nuevo</span>
                     </p>
                 </header>
                 <div class="poem-body">
