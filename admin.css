@@ -1,0 +1,105 @@
+
+  :root {
+    --fondo: #14171c;
+    --panel: #1a1e25;
+    --linea: #2a303a;
+    --texto: #e8e6e1;
+    --suave: #8b93a0;
+    --acento: #f5b301;
+    --error: #e5705f;
+    --ok: #7fb88a;
+    --serif: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+    --sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+  [hidden] { display: none !important; }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--fondo);
+    color: var(--texto);
+    font: 16px/1.5 var(--sans);
+  }
+  a { color: var(--suave); }
+  a:hover { color: var(--texto); }
+  :focus-visible { outline: 2px solid var(--acento); outline-offset: 2px; }
+
+  .contenedor { max-width: 880px; margin: 0 auto; padding: 1.5rem 1.25rem 6rem; }
+
+  .cabecera {
+    display: flex; flex-wrap: wrap; gap: 1rem;
+    align-items: baseline; justify-content: space-between;
+    padding-bottom: 1.25rem; border-bottom: 1px solid var(--linea);
+  }
+  h1 { font: 400 1.9rem/1.2 var(--serif); margin: 0; }
+  .volver { font-size: .9rem; display: inline-block; margin-bottom: .5rem; }
+  .usuario { display: flex; align-items: center; gap: .75rem; font-size: .9rem; color: var(--suave); }
+
+  button {
+    font: inherit; font-size: .9rem; cursor: pointer;
+    padding: .45rem .9rem; border-radius: 6px;
+    border: 1px solid var(--linea); background: transparent; color: var(--texto);
+  }
+  button:hover:not(:disabled) { border-color: var(--suave); }
+  button:disabled { opacity: .4; cursor: default; }
+  button.primario { background: var(--acento); border-color: var(--acento); color: #1a1405; font-weight: 600; }
+  button.primario:hover:not(:disabled) { filter: brightness(1.08); border-color: var(--acento); }
+  button.peligro { color: var(--error); }
+  button.peligro:hover:not(:disabled) { border-color: var(--error); }
+
+  .sesion { padding: 4rem 0; max-width: 28rem; }
+  .sesion p { color: var(--suave); margin: 0 0 1.25rem; }
+
+  .barra { display: flex; justify-content: space-between; align-items: center; margin: 1.5rem 0 .75rem; color: var(--suave); font-size: .9rem; }
+
+  ul.lista { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--linea); }
+  .fila {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 5.5rem 5.5rem 4.5rem auto;
+    gap: .75rem 1rem; align-items: end;
+    padding: .9rem 1rem .9rem .85rem;
+    border-bottom: 1px solid var(--linea);
+    border-left: 3px solid transparent;
+  }
+  .fila.cambiado { border-left-color: var(--acento); background: var(--panel); }
+  .datosPoema { font: 400 1.15rem/1.3 var(--serif); overflow-wrap: anywhere; align-self: center; }
+  .nombre { font-weight: 600; }
+  .id { font-variant-numeric: tabular-nums; color: var(--suave); }
+  .celda { display: flex; flex-direction: column; gap: .2rem; min-width: 0; }
+  .rotulo { font-size: .78rem; color: var(--suave); }
+  .promedio { font-variant-numeric: tabular-nums; padding: .4rem 0; }
+  .acciones { display: flex; gap: .5rem; }
+
+  input {
+    font: inherit; width: 100%;
+    padding: .4rem .5rem; border-radius: 6px;
+    border: 1px solid var(--linea); background: var(--fondo); color: var(--texto);
+  }
+  input:hover { border-color: var(--suave); }
+
+  .vacio { color: var(--suave); padding: 2rem 0; }
+
+  .nuevo { margin-top: 2.5rem; }
+  .nuevo h2 { font: 400 1.25rem/1.3 var(--serif); margin: 0 0 .25rem; }
+  .nuevo p { color: var(--suave); font-size: .9rem; margin: 0 0 1rem; }
+  .nuevo form { display: grid; grid-template-columns: minmax(0, 1fr) 5.5rem 5.5rem auto; gap: .75rem 1rem; align-items: end; }
+
+  .estado {
+    position: fixed; left: 50%; bottom: 1.25rem; transform: translateX(-50%);
+    max-width: min(32rem, calc(100vw - 2rem));
+    padding: .7rem 1rem; border-radius: 8px;
+    background: var(--panel); border: 1px solid var(--linea);
+    font-size: .9rem; box-shadow: 0 6px 24px rgba(0, 0, 0, .45);
+  }
+  .estado.ok { border-color: var(--ok); }
+  .estado.error { border-color: var(--error); }
+
+  @media (max-width: 680px) {
+    .fila { grid-template-columns: 1fr 1fr 1fr; }
+    .datosPoema { grid-column: 1 / -1; }
+    .nombre { font-size: 1rem; }
+    .id { font-size: .8rem; }
+    .acciones { grid-column: 1 / -1; }
+    .nuevo form { grid-template-columns: 1fr 1fr; }
+    .nuevo form .celda:first-child { grid-column: 1 / -1; }
+    .nuevo form button { grid-column: 1 / -1; }
+  }
