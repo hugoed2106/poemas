@@ -383,3 +383,23 @@ h1{
 .e404 p{
   margin-bottom:.75rem
 }
+
+.calificacion{
+  text-align:center;
+  margin:1rem 0
+}
+.calificacion button{
+  background:none;
+  border:none;
+  font-size:2rem;
+  cursor:pointer;
+  color:#ccc;
+  padding:0 2px
+}
+.calificacion button.activa{
+  color:#f5b301
+}
+.calificacion .info{
+  font-size:.9rem;
+  color:#666
+}

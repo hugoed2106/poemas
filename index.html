@@ -999,6 +999,80 @@
             </p>
         </footer>
     </main>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/13.0.0/firebase-app.js";
+        import { getFirestore, doc, getDoc, setDoc, increment }
+            from "https://www.gstatic.com/firebasejs/13.0.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyABCBRZeT0DH9TVChUwC1f2sUiPKYspCTU",
+            authDomain: "poemas-jg.firebaseapp.com",
+            projectId: "poemas-jg",
+            storageBucket: "poemas-jg.firebasestorage.app",
+            messagingSenderId: "619654028698",
+            appId: "1:619654028698:web:2d59e97d07a7efd643ee23"
+        };
+
+        const db = getFirestore(initializeApp(firebaseConfig));
+
+        async function iniciar(contenedor) {
+            const id = contenedor.dataset.poema;
+            const clave = "voto-" + id;
+            const miVoto = Number(localStorage.getItem(clave)) || 0;
+
+            contenedor.innerHTML = `
+            <div class="estrellas">
+                ${[1, 2, 3, 4, 5].map(n => `<button data-valor="${n}" aria-label="${n} estrellas">★</button>`).join("")}
+            </div>
+            <div class="info">Cargando...</div>`;
+
+            const botones = contenedor.querySelectorAll("button");
+            const info = contenedor.querySelector(".info");
+
+            function pintar(valor) {
+            botones.forEach(b => b.classList.toggle("activa", Number(b.dataset.valor) <= valor));
+            }
+
+            async function actualizarPromedio() {
+            try {
+                const snap = await getDoc(doc(db, "poemas", id));
+                if (snap.exists()) {
+                const { suma, votos } = snap.data();
+                info.textContent = `${(suma / votos).toFixed(1)} / 5 (${votos} ${votos === 1 ? "voto" : "votos"})`;
+                } else {
+                info.textContent = "Sé el primero en calificar";
+                }
+            } catch (e) {
+                info.textContent = "";
+                console.error(e);
+            }
+            }
+
+            pintar(miVoto);
+            actualizarPromedio();
+
+            botones.forEach(b => b.addEventListener("click", async () => {
+            if (localStorage.getItem(clave)) return;
+            const valor = Number(b.dataset.valor);
+            try {
+                await setDoc(
+                doc(db, "poemas", id),
+                { suma: increment(valor), votos: increment(1) },
+                { merge: true }
+                );
+                localStorage.setItem(clave, valor);
+                pintar(valor);
+                actualizarPromedio();
+            } catch (e) {
+                info.textContent = "No se pudo guardar tu voto";
+                console.error(e);
+            }
+            }));
+        }
+
+        document.querySelectorAll(".calificacion").forEach(iniciar);
+    </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
     <script src="viewer.js"></script>
 </body>
