@@ -156,12 +156,6 @@
     fila.className = "fila";
     fila.dataset.id = id;
 
-    const nombre = document.createElement("span");
-    nombre.className = "datosPoema";
-    nombre.textContent = datosPoema;
-
-    const datosPoema = poemaNombre && poemaId;
-    
     const poemaNombre = document.createElement("p");
     poemaNombre.className = "nombre";
     poemaNombre.textContent = id.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
@@ -169,6 +163,10 @@
     const poemaId = document.createElement("p");
     poemaId.className = "id";
     poemaId.textContent = id;
+
+    const datosPoema = document.createElement("div");
+    datosPoema.className = "datosPoema";
+    datosPoema.append(poemaNombre, poemaId);
 
     const s = campoNumero("Suma", guardado.suma);
     const v = campoNumero("Votos", guardado.votos);
@@ -229,7 +227,7 @@
       }
     });
 
-    fila.append(nombre, s.celda, v.celda, p, acciones);
+    fila.append(datosPoema, s.celda, v.celda, p, acciones);
     refrescar();
     return fila;
   }
@@ -253,13 +251,14 @@
   /* ---------- Agregar ---------- */
   $("#formNuevo").addEventListener("submit", async (evento) => {
     evento.preventDefault();
-    const id = $("#nuevoId").value.trim();
+    const id = $("#nuevoId").value
+      .trim()
+      .toLowerCase()
+      .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+      .replace(/\s+/g, "-")
+      .replace(/[^a-z0-9_-]/g, "");
     const suma = numero($("#nuevoSuma").value);
     const votos = numero($("#nuevoVotos").value);
-
-    (function correctId() {
-      return id.replace(/[^a-z0-9_-]/gi, "").toLowerCase();
-    })();
 
     if (!id || id.includes("/") || id === "." || id === "..") {
       return estado("El identificador no puede estar vacío ni contener «/».", "error");
