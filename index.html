@@ -1014,7 +1014,7 @@
             measurementId: "G-QHE41GVRSH"
         };
 
-        const db = getFirestore(initializeApp(firebaseConfig));
+        const db = getFirestore(initializeApp(firebaseConfig), "default");
 
         async function iniciar(contenedor) {
             const id = contenedor.dataset.poema;
