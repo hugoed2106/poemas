@@ -1002,8 +1002,7 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/13.0.0/firebase-app.js";
-        import { getFirestore, doc, getDoc, setDoc, increment }
-            from "https://www.gstatic.com/firebasejs/13.0.0/firebase-firestore.js";
+        import { getFirestore, doc, getDoc, setDoc, increment } from "https://www.gstatic.com/firebasejs/13.0.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyABCBRZeT0DH9TVChUwC1f2sUiPKYspCTU",
@@ -1011,7 +1010,8 @@
             projectId: "poemas-jg",
             storageBucket: "poemas-jg.firebasestorage.app",
             messagingSenderId: "619654028698",
-            appId: "1:619654028698:web:2d59e97d07a7efd643ee23"
+            appId: "1:619654028698:web:2d59e97d07a7efd643ee23",
+            measurementId: "G-QHE41GVRSH"
         };
 
         const db = getFirestore(initializeApp(firebaseConfig));
