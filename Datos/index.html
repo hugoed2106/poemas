@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Administrar votos - Poemas</title>
+<style>
+  :root {
+    --fondo: #14171c;
+    --panel: #1a1e25;
+    --linea: #2a303a;
+    --texto: #e8e6e1;
+    --suave: #8b93a0;
+    --acento: #f5b301;
+    --error: #e5705f;
+    --ok: #7fb88a;
+    --serif: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+    --sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+  [hidden] { display: none !important; }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--fondo);
+    color: var(--texto);
+    font: 16px/1.5 var(--sans);
+  }
+  a { color: var(--suave); }
+  a:hover { color: var(--texto); }
+  :focus-visible { outline: 2px solid var(--acento); outline-offset: 2px; }
+
+  .contenedor { max-width: 880px; margin: 0 auto; padding: 1.5rem 1.25rem 6rem; }
+
+  .cabecera {
+    display: flex; flex-wrap: wrap; gap: 1rem;
+    align-items: baseline; justify-content: space-between;
+    padding-bottom: 1.25rem; border-bottom: 1px solid var(--linea);
+  }
+  h1 { font: 400 1.9rem/1.2 var(--serif); margin: 0; }
+  .volver { font-size: .9rem; display: inline-block; margin-bottom: .5rem; }
+  .usuario { display: flex; align-items: center; gap: .75rem; font-size: .9rem; color: var(--suave); }
+
+  button {
+    font: inherit; font-size: .9rem; cursor: pointer;
+    padding: .45rem .9rem; border-radius: 6px;
+    border: 1px solid var(--linea); background: transparent; color: var(--texto);
+  }
+  button:hover:not(:disabled) { border-color: var(--suave); }
+  button:disabled { opacity: .4; cursor: default; }
+  button.primario { background: var(--acento); border-color: var(--acento); color: #1a1405; font-weight: 600; }
+  button.primario:hover:not(:disabled) { filter: brightness(1.08); border-color: var(--acento); }
+  button.peligro { color: var(--error); }
+  button.peligro:hover:not(:disabled) { border-color: var(--error); }
+
+  .sesion { padding: 4rem 0; max-width: 28rem; }
+  .sesion p { color: var(--suave); margin: 0 0 1.25rem; }
+
+  .barra { display: flex; justify-content: space-between; align-items: center; margin: 1.5rem 0 .75rem; color: var(--suave); font-size: .9rem; }
+
+  ul.lista { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--linea); }
+  .fila {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 5.5rem 5.5rem 4.5rem auto;
+    gap: .75rem 1rem; align-items: end;
+    padding: .9rem 1rem .9rem .85rem;
+    border-bottom: 1px solid var(--linea);
+    border-left: 3px solid transparent;
+  }
+  .fila.cambiado { border-left-color: var(--acento); background: var(--panel); }
+  .nombre { font: 400 1.15rem/1.3 var(--serif); overflow-wrap: anywhere; align-self: center; }
+  .celda { display: flex; flex-direction: column; gap: .2rem; min-width: 0; }
+  .rotulo { font-size: .78rem; color: var(--suave); }
+  .promedio { font-variant-numeric: tabular-nums; padding: .4rem 0; }
+  .acciones { display: flex; gap: .5rem; }
+
+  input {
+    font: inherit; width: 100%;
+    padding: .4rem .5rem; border-radius: 6px;
+    border: 1px solid var(--linea); background: var(--fondo); color: var(--texto);
+  }
+  input:hover { border-color: var(--suave); }
+
+  .vacio { color: var(--suave); padding: 2rem 0; }
+
+  .nuevo { margin-top: 2.5rem; }
+  .nuevo h2 { font: 400 1.25rem/1.3 var(--serif); margin: 0 0 .25rem; }
+  .nuevo p { color: var(--suave); font-size: .9rem; margin: 0 0 1rem; }
+  .nuevo form { display: grid; grid-template-columns: minmax(0, 1fr) 5.5rem 5.5rem auto; gap: .75rem 1rem; align-items: end; }
+
+  .estado {
+    position: fixed; left: 50%; bottom: 1.25rem; transform: translateX(-50%);
+    max-width: min(32rem, calc(100vw - 2rem));
+    padding: .7rem 1rem; border-radius: 8px;
+    background: var(--panel); border: 1px solid var(--linea);
+    font-size: .9rem; box-shadow: 0 6px 24px rgba(0, 0, 0, .45);
+  }
+  .estado.ok { border-color: var(--ok); }
+  .estado.error { border-color: var(--error); }
+
+  @media (max-width: 680px) {
+    .fila { grid-template-columns: 1fr 1fr 1fr; }
+    .nombre { grid-column: 1 / -1; }
+    .acciones { grid-column: 1 / -1; }
+    .nuevo form { grid-template-columns: 1fr 1fr; }
+    .nuevo form .celda:first-child { grid-column: 1 / -1; }
+    .nuevo form button { grid-column: 1 / -1; }
+  }
+</style>
+</head>
+<body>
+<div class="contenedor">
+
+  <header class="cabecera">
+    <div>
+      <a class="volver" href="./">Volver a los poemas</a>
+      <h1>Administrar votos</h1>
+    </div>
+    <div class="usuario" id="usuario" hidden>
+      <span id="correo"></span>
+      <button type="button" id="salir">Cerrar sesión</button>
+    </div>
+  </header>
+
+  <section class="sesion" id="sesion">
+    <p>Inicia sesión con la cuenta de Google que registraste como administrador para editar los votos.</p>
+    <button type="button" class="primario" id="entrar">Iniciar sesión con Google</button>
+  </section>
+
+  <main id="panel" hidden>
+    <div class="barra">
+      <span>Edita la suma y los votos de cada poema. El promedio se calcula solo.</span>
+      <button type="button" id="recargar">Recargar</button>
+    </div>
+
+    <ul class="lista" id="lista"></ul>
+    <p class="vacio" id="vacio" hidden>Todavía no hay poemas con votos. Agrega uno abajo o espera el primer voto en tu página.</p>
+
+    <section class="nuevo">
+      <h2>Agregar un poema</h2>
+      <p>Usa el mismo identificador que pusiste en <code>data-poema</code>.</p>
+      <form id="formNuevo" autocomplete="off">
+        <label class="celda">
+          <span class="rotulo">Identificador</span>
+          <input type="text" id="nuevoId" required maxlength="100" placeholder="amor-en-redes">
+        </label>
+        <label class="celda">
+          <span class="rotulo">Suma</span>
+          <input type="number" id="nuevoSuma" min="0" step="1" value="0" required>
+        </label>
+        <label class="celda">
+          <span class="rotulo">Votos</span>
+          <input type="number" id="nuevoVotos" min="0" step="1" value="0" required>
+        </label>
+        <button type="submit" class="primario">Agregar poema</button>
+      </form>
+    </section>
+  </main>
+</div>
+
+<div class="estado" id="estado" role="status" aria-live="polite" hidden></div>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/13.0.0/firebase-app.js";
+  import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut }
+    from "https://www.gstatic.com/firebasejs/13.0.0/firebase-auth.js";
+  import { getFirestore, collection, getDocs, doc, setDoc, deleteDoc }
+    from "https://www.gstatic.com/firebasejs/13.0.0/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyABCBRZeT0DH9TVChUwC1f2sUiPKYspCTU",
+    authDomain: "poemas-jg.firebaseapp.com",
+    projectId: "poemas-jg",
+    storageBucket: "poemas-jg.firebasestorage.app",
+    messagingSenderId: "619654028698",
+    appId: "1:619654028698:web:2d59e97d07a7efd643ee23"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app, "default");
+
+  const $ = (selector) => document.querySelector(selector);
+  const lista = $("#lista");
+
+  /* ---------- Mensajes ---------- */
+  let temporizador;
+  function estado(texto, tipo = "") {
+    const el = $("#estado");
+    el.textContent = texto;
+    el.className = "estado " + tipo;
+    el.hidden = !texto;
+    clearTimeout(temporizador);
+    if (texto && tipo === "ok") temporizador = setTimeout(() => { el.hidden = true; }, 3000);
+  }
+
+  function errorFirestore(e) {
+    console.error(e);
+    if (e.code === "permission-denied") {
+      const correo = auth.currentUser?.email || "";
+      estado(`Firestore rechazó la acción. Comprueba que tu correo (${correo}) sea el que pusiste en las reglas y que las publicaste.`, "error");
+    } else {
+      estado("No se pudo completar la acción: " + (e.message || e.code), "error");
+    }
+  }
+
+  /* ---------- Validación ---------- */
+  const numero = (texto) => (String(texto).trim() === "" ? NaN : Number(texto));
+
+  function validar(suma, votos) {
+    if (!Number.isInteger(suma) || !Number.isInteger(votos) || suma < 0 || votos < 0) {
+      return "La suma y los votos deben ser números enteros, de 0 en adelante.";
+    }
+    if (votos === 0 && suma !== 0) return "Con 0 votos, la suma debe ser 0.";
+    if (votos > 0 && (suma < votos || suma > votos * 5)) {
+      return `Con ${votos} ${votos === 1 ? "voto" : "votos"}, la suma debe estar entre ${votos} y ${votos * 5}.`;
+    }
+    return "";
+  }
+
+  /* ---------- Filas ---------- */
+  function campoNumero(rotulo, valor) {
+    const celda = document.createElement("label");
+    celda.className = "celda";
+    const r = document.createElement("span");
+    r.className = "rotulo";
+    r.textContent = rotulo;
+    const input = document.createElement("input");
+    input.type = "number";
+    input.min = "0";
+    input.step = "1";
+    input.inputMode = "numeric";
+    input.value = valor;
+    celda.append(r, input);
+    return { celda, input };
+  }
+
+  function boton(texto, clase) {
+    const b = document.createElement("button");
+    b.type = "button";
+    b.className = clase;
+    b.textContent = texto;
+    return b;
+  }
+
+  function actualizarVacio() {
+    $("#vacio").hidden = lista.children.length > 0;
+  }
+
+  function crearFila(id, datos) {
+    let guardado = { suma: Number(datos.suma) || 0, votos: Number(datos.votos) || 0 };
+
+    const fila = document.createElement("li");
+    fila.className = "fila";
+    fila.dataset.id = id;
+
+    const nombre = document.createElement("span");
+    nombre.className = "nombre";
+    nombre.textContent = id;
+
+    const s = campoNumero("Suma", guardado.suma);
+    const v = campoNumero("Votos", guardado.votos);
+
+    const p = document.createElement("div");
+    p.className = "celda";
+    const pr = document.createElement("span");
+    pr.className = "rotulo";
+    pr.textContent = "Promedio";
+    const pv = document.createElement("span");
+    pv.className = "promedio";
+    p.append(pr, pv);
+
+    const acciones = document.createElement("div");
+    acciones.className = "acciones";
+    const bGuardar = boton("Guardar cambios", "primario");
+    const bBorrar = boton("Borrar", "peligro");
+    acciones.append(bGuardar, bBorrar);
+
+    const actual = () => ({ suma: numero(s.input.value), votos: numero(v.input.value) });
+
+    function refrescar() {
+      const a = actual();
+      const cambio = s.input.value !== String(guardado.suma) || v.input.value !== String(guardado.votos);
+      fila.classList.toggle("cambiado", cambio);
+      bGuardar.disabled = !cambio;
+      pv.textContent = a.votos > 0 && Number.isFinite(a.suma) ? (a.suma / a.votos).toFixed(2) : "-";
+    }
+
+    s.input.addEventListener("input", refrescar);
+    v.input.addEventListener("input", refrescar);
+
+    bGuardar.addEventListener("click", async () => {
+      const a = actual();
+      const error = validar(a.suma, a.votos);
+      if (error) return estado(error, "error");
+      bGuardar.disabled = true;
+      try {
+        await setDoc(doc(db, "poemas", id), a);
+        guardado = a;
+        refrescar();
+        estado(`Guardado: ${id}`, "ok");
+      } catch (e) {
+        refrescar();
+        errorFirestore(e);
+      }
+    });
+
+    bBorrar.addEventListener("click", async () => {
+      if (!confirm(`¿Borrar "${id}"? Se perderán sus ${guardado.votos} votos.`)) return;
+      try {
+        await deleteDoc(doc(db, "poemas", id));
+        fila.remove();
+        actualizarVacio();
+        estado(`Borrado: ${id}`, "ok");
+      } catch (e) {
+        errorFirestore(e);
+      }
+    });
+
+    fila.append(nombre, s.celda, v.celda, p, acciones);
+    refrescar();
+    return fila;
+  }
+
+  /* ---------- Cargar ---------- */
+  async function cargar() {
+    estado("Cargando...");
+    try {
+      const snap = await getDocs(collection(db, "poemas"));
+      lista.replaceChildren();
+      snap.docs
+        .sort((a, b) => a.id.localeCompare(b.id, "es"))
+        .forEach((d) => lista.append(crearFila(d.id, d.data())));
+      actualizarVacio();
+      estado("");
+    } catch (e) {
+      errorFirestore(e);
+    }
+  }
+
+  /* ---------- Agregar ---------- */
+  $("#formNuevo").addEventListener("submit", async (evento) => {
+    evento.preventDefault();
+    const id = $("#nuevoId").value.trim();
+    const suma = numero($("#nuevoSuma").value);
+    const votos = numero($("#nuevoVotos").value);
+
+    if (!id || id.includes("/") || id === "." || id === "..") {
+      return estado("El identificador no puede estar vacío ni contener «/».", "error");
+    }
+    if ([...lista.children].some((f) => f.dataset.id === id)) {
+      return estado("Ya existe un poema con ese identificador. Edítalo en la lista.", "error");
+    }
+    const error = validar(suma, votos);
+    if (error) return estado(error, "error");
+
+    try {
+      await setDoc(doc(db, "poemas", id), { suma, votos });
+      $("#formNuevo").reset();
+      await cargar();
+      estado(`Agregado: ${id}`, "ok");
+    } catch (e) {
+      errorFirestore(e);
+    }
+  });
+
+  /* ---------- Sesión ---------- */
+  $("#entrar").addEventListener("click", async () => {
+    try {
+      await signInWithPopup(auth, new GoogleAuthProvider());
+    } catch (e) {
+      if (e.code === "auth/popup-closed-by-user" || e.code === "auth/cancelled-popup-request") return;
+      console.error(e);
+      if (e.code === "auth/unauthorized-domain") {
+        estado("Este dominio no está autorizado. En Firebase ve a Authentication > Settings > Authorized domains y agrega hugoed2106.github.io.", "error");
+      } else if (e.code === "auth/operation-not-allowed") {
+        estado("El acceso con Google no está activado. En Firebase ve a Authentication > Sign-in method y actívalo.", "error");
+      } else {
+        estado("No se pudo iniciar sesión: " + (e.message || e.code), "error");
+      }
+    }
+  });
+
+  $("#salir").addEventListener("click", () => signOut(auth));
+  $("#recargar").addEventListener("click", cargar);
+
+  onAuthStateChanged(auth, (user) => {
+    $("#sesion").hidden = !!user;
+    $("#panel").hidden = !user;
+    $("#usuario").hidden = !user;
+    if (user) {
+      $("#correo").textContent = user.email;
+      cargar();
+    } else {
+      lista.replaceChildren();
+    }
+  });
+</script>
+</body>
+</html>
