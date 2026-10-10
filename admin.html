@@ -59,6 +59,12 @@
         <p>Si quieres ser administrador da click aquí: <a>Solicitud de administrador</a></p>
     </section>
 
+    <section class="sesion" id="correoInstitucional" hidden>
+        <p>Sesión iniciada como alumno/maestro. Esta página de edición de votos es solo para administradores.</p>
+        <p>Si quieres visualizar el código o la estructura de la página da click aquí: <a href="files-explorer/index.html">Backend de la página</a></p>
+        <p>Si quieres ser administrador da click aquí: <a>Solicitud de administrador</a></p>
+    </section>
+
     <main id="panel" hidden>
         <div class="barra">
             <span>Edita la suma y los votos de cada poema. El promedio se calcula solo.</span>
@@ -421,8 +427,9 @@
                 const nombre = user.email.split("@")[0];
                 const dom = user.email.split("@")[1];
                 history.replaceState(null, "", "admin." + encodeURIComponent(nombre) + "/" + encodeURIComponent(dom));
-                $("#soloUsuario").hidden = false;
+                $("#correoInstitucional").hidden = false;
             } else {
+                const nombre = user.email.split("@")[0];
                 history.replaceState(null, "", "admin." + encodeURIComponent(nombre));
                 $("#soloUsuario").hidden = false;
             }
