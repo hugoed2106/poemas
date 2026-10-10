@@ -1040,6 +1040,19 @@
             const clave = "voto-" + id;
             const miVoto = Number(localStorage.getItem(clave)) || 0;
 
+            function pintar(valor) {
+                const promedio = Math.max(0, Math.min(5, Math.round(valor * 10) / 10));
+                const enteras = Math.floor(promedio);
+                const decimas = Math.round((promedio - enteras) * 10);
+                botones.forEach(b => {
+                    b.classList.toggle("activa", Number(b.dataset.valor) <= valor);
+                    b.classList.remove("semiactiva");
+                    for (let decima = 1; decima <= 9; decima++) {
+                        b.classList.remove(`semiactiva${decima}`);
+                    }
+                });
+            }
+
             contenedor.innerHTML = `
             <style>
                 .estrellas button.semiactiva {
@@ -1139,19 +1152,6 @@
                     b.classList.toggle("semiactiva", numero <= enteras);
                     for (let decima = 1; decima <= 9; decima++) {
                         b.classList.toggle(`semiactiva${decima}`, decimas === decima && numero === enteras + 1);
-                    }
-                });
-            }
-
-            function pintar(valor) {
-                const promedio = Math.max(0, Math.min(5, Math.round(valor * 10) / 10));
-                const enteras = Math.floor(promedio);
-                const decimas = Math.round((promedio - enteras) * 10);
-                botones.forEach(b => {
-                    b.classList.toggle("activa", Number(b.dataset.valor) <= valor);
-                    b.classList.remove("semiactiva");
-                    for (let decima = 1; decima <= 9; decima++) {
-                        b.classList.remove(`semiactiva${decima}`);
                     }
                 });
             }
