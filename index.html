@@ -1144,7 +1144,16 @@
             }
 
             function pintar(valor) {
-            botones.forEach(b => b.classList.toggle("activa", Number(b.dataset.valor) <= valor));
+                const promedio = Math.max(0, Math.min(5, Math.round(valor * 10) / 10));
+                const enteras = Math.floor(promedio);
+                const decimas = Math.round((promedio - enteras) * 10);
+                botones.forEach(b => {
+                    b.classList.toggle("activa", Number(b.dataset.valor) <= valor);
+                    b.classList.remove("semiactiva");
+                    for (let decima = 1; decima <= 9; decima++) {
+                        b.classList.remove(`semiactiva${decima}`);
+                    }
+                });
             }
 
             async function actualizarPromedio() {
