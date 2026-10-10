@@ -1053,112 +1053,107 @@
                 });
             }
 
-            if (!pintar(miVoto)) {
-                contenedor.innerHTML = `
-                <style>
-                    .estrellas button.semiactiva {
-                        background:  linear-gradient(to right, gray 100%, transparent 100%);
-                        -webkit-background-clip: text;
-                        background-clip: text;
-                        color: transparent;
-                        -webkit-text-fill-color: transparent;
-                    }
-
-                    .estrellas button.semiactiva1 {
-                        background: linear-gradient(to right, gray 10%, transparent 10%);
-                        -webkit-background-clip: text;
-                        background-clip: text;
-                        color: transparent;
-                        -webkit-text-fill-color: transparent;
-                    }
-
-                    .estrellas button.semiactiva2 {
-                        background: linear-gradient(to right, gray 20%, transparent 20%);
-                        -webkit-background-clip: text;
-                        background-clip: text;
-                        color: transparent;
-                        -webkit-text-fill-color: transparent;
-                    }
-
-                    .estrellas button.semiactiva3 {
-                        background: linear-gradient(to right, gray 30%, transparent 30%);
-                        -webkit-background-clip: text;
-                        background-clip: text;
-                        color: transparent;
-                        -webkit-text-fill-color: transparent;
-                    }
-
-                    .estrellas button.semiactiva4 {
-                        background: linear-gradient(to right, gray 40%, transparent 40%);
-                        -webkit-background-clip: text;
-                        background-clip: text;
-                        color: transparent;
-                        -webkit-text-fill-color: transparent;
-                    }
-
-                    .estrellas button.semiactiva5 {
-                        background: linear-gradient(to right, gray 50%, transparent 50%);
-                        -webkit-background-clip: text;
-                        background-clip: text;
-                        color: transparent;
-                        -webkit-text-fill-color: transparent;
-                    }
-
-                    .estrellas button.semiactiva6 {
-                        background: linear-gradient(to right, gray 60%, transparent 60%);
-                        -webkit-background-clip: text;
-                        background-clip: text;
-                        color: transparent;
-                        -webkit-text-fill-color: transparent;
-                    }
-
-                    .estrellas button.semiactiva7 {
-                        background: linear-gradient(to right, gray 70%, transparent 70%);
-                        -webkit-background-clip: text;
-                        background-clip: text;
-                        color: transparent;
-                        -webkit-text-fill-color: transparent;
-                    }
-
-                    .estrellas button.semiactiva8 {
-                        background: linear-gradient(to right, gray 80%, transparent 80%);
-                        -webkit-background-clip: text;
-                        background-clip: text;
-                        color: transparent;
-                        -webkit-text-fill-color: transparent;
-                    }
-
-                    .estrellas button.semiactiva9 {
-                        background: linear-gradient(to right, gray 90%, transparent 90%);
-                        -webkit-background-clip: text;
-                        background-clip: text;
-                        color: transparent;
-                        -webkit-text-fill-color: transparent;
-                    }
-                </style>
-                <div class="estrellas">
-                    ${[1, 2, 3, 4, 5].map(n => `<button data-valor="${n}" aria-label="${n} estrellas">★</button>`).join("")}
-                </div>
-                <div class="info">Cargando...</div>`;
-
-                const botones = contenedor.querySelectorAll("button");
-                const info = contenedor.querySelector(".info");
-
-                function pintarAntesDeVotar(valor) {
-                    const promedio = Math.max(0, Math.min(5, Math.round(valor * 10) / 10));
-                    const enteras = Math.floor(promedio);
-                    const decimas = Math.round((promedio - enteras) * 10);
-
-                    botones.forEach(b => {
-                        const numero = Number(b.dataset.valor);
-                        b.classList.toggle("semiactiva", numero <= enteras);
-                        for (let decima = 1; decima <= 9; decima++) {
-                            b.classList.toggle(`semiactiva${decima}`, decimas === decima && numero === enteras + 1);
-                        }
-                    });
+            contenedor.innerHTML = `
+            <style>
+                .estrellas button.semiactiva {
+                    background:  linear-gradient(to right, gray 100%, transparent 100%);
+                    -webkit-background-clip: text;
+                    background-clip: text;
+                    color: transparent;
+                    -webkit-text-fill-color: transparent;
                 }
-            } else {
-                pintar(miVoto);
+
+                .estrellas button.semiactiva1 {
+                    background: linear-gradient(to right, gray 10%, transparent 10%);
+                    -webkit-background-clip: text;
+                    background-clip: text;
+                    color: transparent;
+                    -webkit-text-fill-color: transparent;
+                }
+
+                .estrellas button.semiactiva2 {
+                    background: linear-gradient(to right, gray 20%, transparent 20%);
+                    -webkit-background-clip: text;
+                    background-clip: text;
+                    color: transparent;
+                    -webkit-text-fill-color: transparent;
+                }
+
+                .estrellas button.semiactiva3 {
+                    background: linear-gradient(to right, gray 30%, transparent 30%);
+                    -webkit-background-clip: text;
+                    background-clip: text;
+                    color: transparent;
+                    -webkit-text-fill-color: transparent;
+                }
+
+                .estrellas button.semiactiva4 {
+                    background: linear-gradient(to right, gray 40%, transparent 40%);
+                    -webkit-background-clip: text;
+                    background-clip: text;
+                    color: transparent;
+                    -webkit-text-fill-color: transparent;
+                }
+
+                .estrellas button.semiactiva5 {
+                    background: linear-gradient(to right, gray 50%, transparent 50%);
+                    -webkit-background-clip: text;
+                    background-clip: text;
+                    color: transparent;
+                    -webkit-text-fill-color: transparent;
+                }
+
+                .estrellas button.semiactiva6 {
+                    background: linear-gradient(to right, gray 60%, transparent 60%);
+                    -webkit-background-clip: text;
+                    background-clip: text;
+                    color: transparent;
+                    -webkit-text-fill-color: transparent;
+                }
+
+                .estrellas button.semiactiva7 {
+                    background: linear-gradient(to right, gray 70%, transparent 70%);
+                    -webkit-background-clip: text;
+                    background-clip: text;
+                    color: transparent;
+                    -webkit-text-fill-color: transparent;
+                }
+
+                .estrellas button.semiactiva8 {
+                    background: linear-gradient(to right, gray 80%, transparent 80%);
+                    -webkit-background-clip: text;
+                    background-clip: text;
+                    color: transparent;
+                    -webkit-text-fill-color: transparent;
+                }
+
+                .estrellas button.semiactiva9 {
+                    background: linear-gradient(to right, gray 90%, transparent 90%);
+                    -webkit-background-clip: text;
+                    background-clip: text;
+                    color: transparent;
+                    -webkit-text-fill-color: transparent;
+                }
+            </style>
+            <div class="estrellas">
+                ${[1, 2, 3, 4, 5].map(n => `<button data-valor="${n}" aria-label="${n} estrellas">★</button>`).join("")}
+            </div>
+            <div class="info">Cargando...</div>`;
+
+            const botones = contenedor.querySelectorAll("button");
+            const info = contenedor.querySelector(".info");
+
+            function pintarAntesDeVotar(valor) {
+                const promedio = Math.max(0, Math.min(5, Math.round(valor * 10) / 10));
+                const enteras = Math.floor(promedio);
+                const decimas = Math.round((promedio - enteras) * 10);
+                botones.forEach(b => {
+                    const numero = Number(b.dataset.valor);
+                    b.classList.toggle("semiactiva", numero <= enteras);
+                    for (let decima = 1; decima <= 9; decima++) {
+                        b.classList.toggle(`semiactiva${decima}`, decimas === decima && numero === enteras + 1);
+                    }
+                });
             }
 
             async function actualizarPromedio() {
