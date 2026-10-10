@@ -1,6 +1,9 @@
 <!doctype html>
 <html lang="es">
     <head>
+        <script>
+            history.replaceState(null, "", "");
+        </script>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width,initial-scale=1">
         <title>Poemas</title>
@@ -1022,6 +1025,87 @@
             const miVoto = Number(localStorage.getItem(clave)) || 0;
 
             contenedor.innerHTML = `
+            <style>
+                .estrellas button.semiactiva {
+                    background:  linear-gradient(to right, gray 100%, transparent 100%);
+                    -webkit-background-clip: text;
+                    background-clip: text;
+                    color: transparent;
+                    -webkit-text-fill-color: transparent;
+                }
+
+                .estrellas button.semiactiva1 {
+                    background: linear-gradient(to right, gray 10%, transparent 10%);
+                    -webkit-background-clip: text;
+                    background-clip: text;
+                    color: transparent;
+                    -webkit-text-fill-color: transparent;
+                }
+
+                .estrellas button.semiactiva2 {
+                    background: linear-gradient(to right, gray 20%, transparent 20%);
+                    -webkit-background-clip: text;
+                    background-clip: text;
+                    color: transparent;
+                    -webkit-text-fill-color: transparent;
+                }
+
+                .estrellas button.semiactiva3 {
+                    background: linear-gradient(to right, gray 30%, transparent 30%);
+                    -webkit-background-clip: text;
+                    background-clip: text;
+                    color: transparent;
+                    -webkit-text-fill-color: transparent;
+                }
+
+                .estrellas button.semiactiva4 {
+                    background: linear-gradient(to right, gray 40%, transparent 40%);
+                    -webkit-background-clip: text;
+                    background-clip: text;
+                    color: transparent;
+                    -webkit-text-fill-color: transparent;
+                }
+
+                .estrellas button.semiactiva5 {
+                    background: linear-gradient(to right, gray 50%, transparent 50%);
+                    -webkit-background-clip: text;
+                    background-clip: text;
+                    color: transparent;
+                    -webkit-text-fill-color: transparent;
+                }
+
+                .estrellas button.semiactiva6 {
+                    background: linear-gradient(to right, gray 60%, transparent 60%);
+                    -webkit-background-clip: text;
+                    background-clip: text;
+                    color: transparent;
+                    -webkit-text-fill-color: transparent;
+                }
+
+                .estrellas button.semiactiva7 {
+                    background: linear-gradient(to right, gray 70%, transparent 70%);
+                    -webkit-background-clip: text;
+                    background-clip: text;
+                    color: transparent;
+                    -webkit-text-fill-color: transparent;
+                }
+
+                .estrellas button.semiactiva8 {
+                    background: linear-gradient(to right, gray 80%, transparent 80%);
+                    -webkit-background-clip: text;
+                    background-clip: text;
+                    color: transparent;
+                    -webkit-text-fill-color: transparent;
+                }
+
+                .estrellas button.semiactiva9 {
+                    background: linear-gradient(to right, gray 90%, transparent 90%);
+                    -webkit-background-clip: text;
+                    background-clip: text;
+                    color: transparent;
+                    -webkit-text-fill-color: transparent;
+                }
+            </style>
             <div class="estrellas">
                 ${[1, 2, 3, 4, 5].map(n => `<button data-valor="${n}" aria-label="${n} estrellas">★</button>`).join("")}
             </div>
@@ -1029,6 +1113,32 @@
 
             const botones = contenedor.querySelectorAll("button");
             const info = contenedor.querySelector(".info");
+
+            function pintarAntesDeVotar(valor) {
+                const enteras = Math.floor(valor);
+                const tieneDiezPorCiento = Math.round((valor - enteras) * 10) === 1;
+                const tieneVeintePorCiento = Math.round((valor - enteras) * 20) === 2;
+                const tieneTreintaPorCiento = Math.round((valor - enteras) * 30) === 3;
+                const tieneCuarentaPorCiento = Math.round((valor - enteras) * 40) === 4;
+                const tieneCincuentaPorCiento = Math.round((valor - enteras) * 50) === 5;
+                const tieneSesentaPorCiento = Math.round((valor - enteras) * 60) === 6;
+                const tieneSetentaPorCiento = Math.round((valor - enteras) * 70) === 7;
+                const tieneOchentaPorCiento = Math.round((valor - enteras) * 80) === 8;
+                const tieneNoventaPorCiento = Math.round((valor - enteras) * 90) === 9;
+                botones.forEach(b => {
+                    const numero = Number(b.dataset.valor);
+                    b.classList.toggle("semiactiva", numero <= enteras);
+                    b.classList.toggle("semiactiva1", tieneDiezPorCiento && numero === enteras + 1);
+                    b.classList.toggle("semiactiva2", tieneVeintePorCiento && numero === enteras + 2);
+                    b.classList.toggle("semiactiva3", tieneTreintaPorCiento && numero === enteras + 3);
+                    b.classList.toggle("semiactiva4", tieneCuarentaPorCiento && numero === enteras + 4);
+                    b.classList.toggle("semiactiva5", tieneCincuentaPorCiento && numero === enteras + 5);
+                    b.classList.toggle("semiactiva6", tieneSesentaPorCiento && numero === enteras + 6);
+                    b.classList.toggle("semiactiva7", tieneSetentaPorCiento && numero === enteras + 7);
+                    b.classList.toggle("semiactiva8", tieneOchentaPorCiento && numero === enteras + 8);
+                    b.classList.toggle("semiactiva9", tieneNoventaPorCiento && numero === enteras + 9);
+                });
+            }
 
             function pintar(valor) {
             botones.forEach(b => b.classList.toggle("activa", Number(b.dataset.valor) <= valor));
@@ -1039,7 +1149,9 @@
                 const snap = await getDoc(doc(db, "poemas", id));
                 if (snap.exists()) {
                 const { suma, votos } = snap.data();
-                info.textContent = `${(suma / votos).toFixed(1)} / 5 (${votos} ${votos === 1 ? "voto" : "votos"})`;
+                const promedio = suma / votos;
+                info.textContent = `${promedio.toFixed(1)} / 5 (${votos} ${votos === 1 ? "voto" : "votos"})`;
+                if (!miVoto) pintarAntesDeVotar(promedio);
                 } else {
                 info.textContent = "Sé el primero en calificar";
                 }
