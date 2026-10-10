@@ -1147,6 +1147,7 @@
                 const promedio = Math.max(0, Math.min(5, Math.round(valor * 10) / 10));
                 const enteras = Math.floor(promedio);
                 const decimas = Math.round((promedio - enteras) * 10);
+
                 botones.forEach(b => {
                     const numero = Number(b.dataset.valor);
                     b.classList.toggle("semiactiva", numero <= enteras);
@@ -1154,6 +1155,9 @@
                         b.classList.toggle(`semiactiva${decima}`, decimas === decima && numero === enteras + 1);
                     }
                 });
+                botones.forEach( b => b.addEventListener("click", () => {
+                    window.location.reload();
+                }))
             }
 
             async function actualizarPromedio() {
