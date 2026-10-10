@@ -55,7 +55,7 @@
     </section>
 
     <section class="sesion" id="soloUsuario" hidden>
-        <p>Tu cuenta de usuario está verificada. Esta página de edición de votos es solo para administradores.</p>
+        <p>Sesión iniciada como usuario. Esta página de edición de votos es solo para administradores.</p>
     </section>
 
     <main id="panel" hidden>
@@ -402,12 +402,15 @@
         }
         $("#usuario").hidden = false;
         $("#correo").textContent = user.email;
-        if (!user.emailVerified) {
+        const admin = await esAdminCliente(user.email);
+        // Los administradores sí deben verificar su correo (las reglas lo exigen).
+        // Los usuarios normales entran sin verificar.
+        if (admin && !user.emailVerified) {
             $("#verCorreo").textContent = user.email;
             $("#verificar").hidden = false;
             return;
         }
-        if (await esAdminCliente(user.email)) {
+        if (admin) {
             $("#panel").hidden = false;
             const nombre = user.email.split("@")[0];
             history.replaceState(null, "", "admin." + encodeURIComponent(nombre));
