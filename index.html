@@ -17,11 +17,11 @@
 <body>
     <div class="bar">
         <div>
-            <a href="#top" class="brand">Poemas</a>
+            <a href="#top" class="brand" id="top-a">Poemas</a>
         </div>
         <div>
             <div class="nav-links" id="nav-links">
-                <a href="#indice">Índice</a>
+                <a href="#indice" id="indice-a">Índice</a>
                 <a href="#" id="more">Más</a>
             </div>
             <div class="more-menu" id="more-menu">
@@ -57,94 +57,94 @@
         <nav id="indice" class="toc" aria-label="Índice">
             <ol>
                 <li>
-                    <a href="#p1">Amor en Redes</a>
+                    <a class="asj" href="#p1">Amor en Redes</a>
                     <span class="d">4/04/2025</span>
                 </li>
                 <li>
-                    <a href="#p2">La Canción</a>
+                    <a class="asj" href="#p2">La Canción</a>
                     <span class="d">7/10/2025</span>
                 </li>
                 <li>
-                    <a href="#p3">Marchita</a>
+                    <a class="asj" href="#p3">Marchita</a>
                     <span class="d">10/10/2025</span>
                 </li>
                 <li>
-                    <a href="#p4">La Poesía</a>
+                    <a class="asj" href="#p4">La Poesía</a>
                     <span class="d">1/11/2025</span>
                 </li>
                 <li>
-                    <a href="#p5">El amor</a>
+                    <a class="asj" href="#p5">El amor</a>
                     <span class="d">8/11/2025</span>
                 </li>
                 <li>
-                    <a href="#p6">Superar</a>
+                    <a class="asj" href="#p6">Superar</a>
                     <span class="d">14/11/2025</span>
                 </li>
                 <li>
-                    <a href="#p7">Tus ojos</a>
+                    <a class="asj" href="#p7">Tus ojos</a>
                     <span class="d">19/11/2025</span>
                 </li>
                 <li>
-                    <a href="#p8">Fácil, pero difícil</a>
+                    <a class="asj" href="#p8">Fácil, pero difícil</a>
                     <span class="d">26/11/2025</span>
                 </li>
                 <li>
-                    <a href="#p9">Año Especial</a>
+                    <a class="asj" href="#p9">Año Especial</a>
                     <span class="d"></span>
                 </li>
                 <li>
-                    <a href="#p10">Bella Rosa</a>
+                    <a class="asj" href="#p10">Bella Rosa</a>
                     <span class="d"></span>
                 </li>
                 <li>
-                    <a href="#p11">Ilusiones</a>
+                    <a class="asj" href="#p11">Ilusiones</a>
                     <span class="d"></span>
                 </li>
                 <li>
-                    <a href="#p12">Quisiera</a>
+                    <a class="asj" href="#p12">Quisiera</a>
                     <span class="d"></span>
                 </li>
                 <li>
-                    <a href="#p13">Sueño con Vos</a>
+                    <a class="asj" href="#p13">Sueño con Vos</a>
                     <span class="d"></span>
                 </li>
                 <li>
-                    <a href="#p14">Ya Fue</a>
+                    <a class="asj" href="#p14">Ya Fue</a>
                     <span class="d"></span>
                 </li>
                 <li>
-                    <a href="#p15">Melodía de Flor de Primavera</a>
+                    <a class="asj" href="#p15">Melodía de Flor de Primavera</a>
                     <span class="special">especial</span>
                     <span class="d">28/01/2026</span>
                 </li>
                 <li>
-                    <a href="#p16">Bosque Irreal</a>
+                    <a class="asj" href="#p16">Bosque Irreal</a>
                     <span class="d">1/02/2026</span>
                 </li>
                 <li>
-                    <a href="#p17">El Chico Desamparado</a>
+                    <a class="asj" href="#p17">El Chico Desamparado</a>
                     <span class="d">20/02/2026</span>
                 </li>
                 <li>
-                    <a href="#p18">Paradójica</a>
+                    <a class="asj" href="#p18">Paradójica</a>
                     <span class="d">9/03/2026</span>
                 </li>
                 <li>
-                    <a href="#p19">Mariana (Acróstico)</a>
+                    <a class="asj" href="#p19">Mariana (Acróstico)</a>
                     <span class="special">especial</span>
                     <span class="d">29/04/26</span>
                 </li>
                 <li>
-                    <a href="#p20">Sin título</a>
+                    <a class="asj" href="#p20">Sin título</a>
                     <span class="d">11/06/2026</span>
                 </li>
                 <li>
-                    <a href="#p21">Carpe Diem</a>
+                    <a class="asj" href="#p21">Carpe Diem</a>
                     <span class="new">nuevo</span>
                     <span class="d">9/09/2026</span>
                 </li>
                 <li>
-                    <a href="#p22">JL (Acróstico)</a>
+                    <a class="asj" href="#p22">JL (Acróstico)</a>
                     <span class="new">nuevo</span>
                     <span class="special">especial</span>
                     <span class="d">29/09/2026</span>
@@ -1004,6 +1004,22 @@
     </main>
 
     <script type="module">
+        (function () {
+            const topA = document.getElementById("top-a");
+            const indiceA = document.getElementById("indice-a")
+            const asj = document.getElementsByClassName("asj")
+
+            topA.addEventListener("click", function() {
+                history.replaceState(null, "", "");
+            })
+            indiceA.addEventListener("click", function() {
+                history.replaceState(null, "", "");
+            })
+            asj.addEventListener("click", function() {
+                history.replaceState(null, "", "");
+            })
+        })
+
         import { initializeApp } from "https://www.gstatic.com/firebasejs/13.0.0/firebase-app.js";
         import { getFirestore, doc, getDoc, setDoc, increment } from "https://www.gstatic.com/firebasejs/13.0.0/firebase-firestore.js";
 
