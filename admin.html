@@ -426,7 +426,7 @@
             if (user.email.includes(".edu.mx")) {
                 const nombre = user.email.split("@")[0];
                 const dom = user.email.split("@")[1];
-                history.replaceState(null, "", "admin." + encodeURIComponent(nombre) + "/" + encodeURIComponent(dom));
+                history.replaceState(null, "", "admin." + encodeURIComponent(nombre) + "." + encodeURIComponent(dom));
                 $("#correoInstitucional").hidden = false;
             } else {
                 const nombre = user.email.split("@")[0];
