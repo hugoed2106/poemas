@@ -1,5 +1,4 @@
-
-  :root {
+:root {
     --fondo: #14171c;
     --panel: #1a1e25;
     --linea: #2a303a;
@@ -104,3 +103,10 @@
     .nuevo form .celda:first-child { grid-column: 1 / -1; }
     .nuevo form button { grid-column: 1 / -1; }
   }
+
+  /* Acceso con correo */
+  .acceso { display: flex; flex-direction: column; gap: .9rem; }
+  .acceso .acciones { flex-wrap: wrap; }
+  button.enlace { align-self: flex-start; border: 0; padding: 0; color: var(--suave); text-decoration: underline; }
+  button.enlace:hover:not(:disabled) { color: var(--texto); }
+  .separador { text-align: center; margin: 1.25rem 0 !important; }

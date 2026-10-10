@@ -26,8 +26,36 @@
     </header>
 
     <section class="sesion" id="sesion">
-        <p>Inicia sesión con la cuenta de Google que registraste como administrador para editar los votos.</p>
-        <button type="button" class="primario" id="entrar">Iniciar sesión con Google</button>
+        <p id="sesionTexto">Inicia sesión con tu correo y contraseña, o con Google si eres administrador.</p>
+        <form id="formAcceso" autocomplete="on" class="acceso">
+            <label class="celda">
+                <span class="rotulo">Correo</span>
+                <input type="email" id="accCorreo" required autocomplete="email" placeholder="tucorreo@ejemplo.com">
+            </label>
+            <label class="celda">
+                <span class="rotulo">Contraseña (mínimo 6 caracteres)</span>
+                <input type="password" id="accClave" required minlength="6" autocomplete="current-password">
+            </label>
+            <div class="acciones">
+                <button type="submit" class="primario" id="btnEntrar">Iniciar sesión</button>
+                <button type="button" id="btnRegistro">Crear cuenta</button>
+            </div>
+            <button type="button" class="enlace" id="btnOlvide">Olvidé mi contraseña</button>
+        </form>
+        <p class="separador">o</p>
+        <button type="button" id="entrar">Iniciar sesión con Google</button>
+    </section>
+
+    <section class="sesion" id="verificar" hidden>
+        <p>Te enviamos un correo de verificación a <strong id="verCorreo"></strong>. Ábrelo, toca el enlace y vuelve aquí (revisa también spam).</p>
+        <div class="acciones">
+            <button type="button" class="primario" id="btnYaVerifique">Ya verifiqué</button>
+            <button type="button" id="btnReenviar">Reenviar correo</button>
+        </div>
+    </section>
+
+    <section class="sesion" id="soloUsuario" hidden>
+        <p>Tu cuenta de usuario está verificada. Esta página de edición de votos es solo para administradores.</p>
     </section>
 
     <main id="panel" hidden>
@@ -65,7 +93,9 @@
 
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/13.0.0/firebase-app.js";
-    import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut }
+    import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut,
+        createUserWithEmailAndPassword, signInWithEmailAndPassword,
+        sendEmailVerification, sendPasswordResetEmail }
         from "https://www.gstatic.com/firebasejs/13.0.0/firebase-auth.js";
     import { getFirestore, collection, getDocs, doc, setDoc, deleteDoc }
         from "https://www.gstatic.com/firebasejs/13.0.0/firebase-firestore.js";
@@ -281,39 +311,113 @@
     });
 
     /* ---------- Sesión ---------- */
-    $("#entrar").addEventListener("click", async () => {
+    // Solo sirve para decidir qué se muestra. La seguridad real está en las reglas de Firestore.
+    // Se guardan hashes (SHA-256) para no dejar los correos admin a la vista en el repositorio público.
+    const ADMIN_HASHES = [
+        "3653a6f0d32bea8e7d2cd9cc3f3367794dccf198477932bf823b97ec9b45e731",
+        "8d9f2a2da2c92f7bae013a2318bb982589e8667536b30d8a192f606892f5a6d2"
+    ];
+    async function esAdminCliente(correo) {
+        const datos = new TextEncoder().encode(String(correo || "").trim().toLowerCase());
+        const buf = await crypto.subtle.digest("SHA-256", datos);
+        const hex = [...new Uint8Array(buf)].map((b) => b.toString(16).padStart(2, "0")).join("");
+        return ADMIN_HASHES.includes(hex);
+    }
+
+    const mensajesAuth = {
+        "auth/email-already-in-use": "Ese correo ya tiene una cuenta. Inicia sesión.",
+        "auth/invalid-email": "El correo no es válido.",
+        "auth/weak-password": "La contraseña es muy débil (mínimo 6 caracteres).",
+        "auth/invalid-credential": "Correo o contraseña incorrectos.",
+        "auth/user-not-found": "Correo o contraseña incorrectos.",
+        "auth/wrong-password": "Correo o contraseña incorrectos.",
+        "auth/too-many-requests": "Demasiados intentos. Espera un momento e inténtalo de nuevo.",
+        "auth/operation-not-allowed": "Ese método no está activado. En Firebase ve a Authentication > Sign-in method y actívalo.",
+        "auth/unauthorized-domain": "Este dominio no está autorizado. En Firebase ve a Authentication > Settings > Authorized domains y agrega hugoed2106.github.io."
+    };
+    function errorAuth(e) {
+        if (e.code === "auth/popup-closed-by-user" || e.code === "auth/cancelled-popup-request") return;
+        console.error(e);
+        estado(mensajesAuth[e.code] || "No se pudo completar: " + (e.message || e.code), "error");
+    }
+
+    $("#formAcceso").addEventListener("submit", async (ev) => {
+        ev.preventDefault();
         try {
-            await signInWithPopup(auth, new GoogleAuthProvider());
-        } catch (e) {
-            if (e.code === "auth/popup-closed-by-user" || e.code === "auth/cancelled-popup-request") return;
-            console.error(e);
-            if (e.code === "auth/unauthorized-domain") {
-                estado("Este dominio no está autorizado. En Firebase ve a Authentication > Settings > Authorized domains y agrega hugoed2106.github.io.", "error");
-            } else if (e.code === "auth/operation-not-allowed") {
-                estado("El acceso con Google no está activado. En Firebase ve a Authentication > Sign-in method y actívalo.", "error");
-            } else {
-                estado("No se pudo iniciar sesión: " + (e.message || e.code), "error");
-            }
-        }
+            await signInWithEmailAndPassword(auth, $("#accCorreo").value.trim(), $("#accClave").value);
+        } catch (e) { errorAuth(e); }
+    });
+
+    $("#btnRegistro").addEventListener("click", async () => {
+        const form = $("#formAcceso");
+        if (!form.reportValidity()) return;
+        try {
+            const cred = await createUserWithEmailAndPassword(auth, $("#accCorreo").value.trim(), $("#accClave").value);
+            await sendEmailVerification(cred.user);
+            estado("Cuenta creada. Te enviamos un correo de verificación.", "ok");
+        } catch (e) { errorAuth(e); }
+    });
+
+    $("#btnOlvide").addEventListener("click", async () => {
+        const correo = $("#accCorreo").value.trim();
+        if (!correo) return estado("Escribe tu correo arriba y vuelve a tocar el botón.", "error");
+        try {
+            await sendPasswordResetEmail(auth, correo);
+            estado("Si el correo existe, te enviamos un enlace para cambiar la contraseña.", "ok");
+        } catch (e) { errorAuth(e); }
+    });
+
+    $("#entrar").addEventListener("click", async () => {
+        try { await signInWithPopup(auth, new GoogleAuthProvider()); }
+        catch (e) { errorAuth(e); }
+    });
+
+    $("#btnReenviar").addEventListener("click", async () => {
+        try {
+            await sendEmailVerification(auth.currentUser);
+            estado("Correo reenviado.", "ok");
+        } catch (e) { errorAuth(e); }
+    });
+
+    $("#btnYaVerifique").addEventListener("click", async () => {
+        try {
+            await auth.currentUser.reload();
+            await auth.currentUser.getIdToken(true); // refresca email_verified para las reglas
+            await mostrarSegunUsuario(auth.currentUser);
+            if (!auth.currentUser.emailVerified) estado("Todavía no aparece verificado. Abre el enlace del correo y vuelve a intentar.", "error");
+        } catch (e) { errorAuth(e); }
     });
 
     $("#salir").addEventListener("click", () => signOut(auth));
     $("#recargar").addEventListener("click", cargar);
 
-    onAuthStateChanged(auth, (user) => {
-        $("#sesion").hidden = !!user;
-        $("#panel").hidden = !user;
-        $("#usuario").hidden = !user;
-        if (user) {
-            $("#correo").textContent = user.email;
+    async function mostrarSegunUsuario(user) {
+        const ocultarTodo = () => ["#sesion", "#verificar", "#soloUsuario", "#panel", "#usuario"].forEach((q) => { $(q).hidden = true; });
+        ocultarTodo();
+        if (!user) {
+            $("#sesion").hidden = false;
+            history.replaceState(null, "", "admin.page");
+            lista.replaceChildren();
+            return;
+        }
+        $("#usuario").hidden = false;
+        $("#correo").textContent = user.email;
+        if (!user.emailVerified) {
+            $("#verCorreo").textContent = user.email;
+            $("#verificar").hidden = false;
+            return;
+        }
+        if (await esAdminCliente(user.email)) {
+            $("#panel").hidden = false;
             const nombre = user.email.split("@")[0];
             history.replaceState(null, "", "admin." + encodeURIComponent(nombre));
             cargar();
         } else {
-            history.replaceState(null, "", "admin.page");
-            lista.replaceChildren();
+            $("#soloUsuario").hidden = false;
         }
-    });
+    }
+
+    onAuthStateChanged(auth, mostrarSegunUsuario);
 </script>
 </body>
 </html>
