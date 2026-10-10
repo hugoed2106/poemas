@@ -1115,28 +1115,15 @@
             const info = contenedor.querySelector(".info");
 
             function pintarAntesDeVotar(valor) {
-                const enteras = Math.floor(valor);
-                const tieneDiezPorCiento = Math.round((valor - enteras) * 10) === 1;
-                const tieneVeintePorCiento = Math.round((valor - enteras) * 20) === 2;
-                const tieneTreintaPorCiento = Math.round((valor - enteras) * 30) === 3;
-                const tieneCuarentaPorCiento = Math.round((valor - enteras) * 40) === 4;
-                const tieneCincuentaPorCiento = Math.round((valor - enteras) * 50) === 5;
-                const tieneSesentaPorCiento = Math.round((valor - enteras) * 60) === 6;
-                const tieneSetentaPorCiento = Math.round((valor - enteras) * 70) === 7;
-                const tieneOchentaPorCiento = Math.round((valor - enteras) * 80) === 8;
-                const tieneNoventaPorCiento = Math.round((valor - enteras) * 90) === 9;
+                const promedio = Math.max(0, Math.min(5, Math.round(valor * 10) / 10));
+                const enteras = Math.floor(promedio);
+                const decimas = Math.round((promedio - enteras) * 10);
                 botones.forEach(b => {
                     const numero = Number(b.dataset.valor);
                     b.classList.toggle("semiactiva", numero <= enteras);
-                    b.classList.toggle("semiactiva1", tieneDiezPorCiento && numero === enteras + 1);
-                    b.classList.toggle("semiactiva2", tieneVeintePorCiento && numero === enteras + 2);
-                    b.classList.toggle("semiactiva3", tieneTreintaPorCiento && numero === enteras + 3);
-                    b.classList.toggle("semiactiva4", tieneCuarentaPorCiento && numero === enteras + 4);
-                    b.classList.toggle("semiactiva5", tieneCincuentaPorCiento && numero === enteras + 5);
-                    b.classList.toggle("semiactiva6", tieneSesentaPorCiento && numero === enteras + 6);
-                    b.classList.toggle("semiactiva7", tieneSetentaPorCiento && numero === enteras + 7);
-                    b.classList.toggle("semiactiva8", tieneOchentaPorCiento && numero === enteras + 8);
-                    b.classList.toggle("semiactiva9", tieneNoventaPorCiento && numero === enteras + 9);
+                    for (let decima = 1; decima <= 9; decima++) {
+                        b.classList.toggle(`semiactiva${decima}`, decimas === decima && numero === enteras + 1);
+                    }
                 });
             }
 
