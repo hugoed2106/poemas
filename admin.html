@@ -420,7 +420,7 @@
             if (user.email.querySelectorAll(".edu.mx")) {
                 const nombre = user.email.split("@")[0];
                 const dom = user.email.split("@")[1];
-                history.replaceState(null, "", "admin." + encodeURIComponent(nombre) + "." + encodeURIComponent(dom));
+                history.replaceState(null, "", "admin." + encodeURIComponent(nombre) + "/" + encodeURIComponent(dom));
                 $("#soloUsuario").hidden = false;
             } else {
                 history.replaceState(null, "", "admin." + encodeURIComponent(nombre));
