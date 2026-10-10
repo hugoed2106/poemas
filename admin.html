@@ -417,7 +417,7 @@
             history.replaceState(null, "", "admin." + encodeURIComponent(nombre));
             cargar();
         } else {
-            if (user.email.querySelectorAll(".edu.mx")) {
+            if (user.email.includes(".edu.mx")) {
                 const nombre = user.email.split("@")[0];
                 const dom = user.email.split("@")[1];
                 history.replaceState(null, "", "admin." + encodeURIComponent(nombre) + "/" + encodeURIComponent(dom));
