@@ -411,17 +411,14 @@
             $("#verificar").hidden = false;
             return;
         }
-        if (user) {
-            const nombre = user.email.split("@")[0];
-            history.replaceState(null, "", "admin." + encodeURIComponent(nombre));
-            cargar();
-        }
         if (admin) {
             $("#panel").hidden = false;
             const nombre = user.email.split("@")[0];
             history.replaceState(null, "", "admin." + encodeURIComponent(nombre));
             cargar();
         } else {
+            const nombre = user.email.split("@")[0];
+            history.replaceState(null, "", "admin." + encodeURIComponent(nombre));
             $("#soloUsuario").hidden = false;
         }
     }
