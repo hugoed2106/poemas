@@ -1051,6 +1051,9 @@
                         b.classList.remove(`semiactiva${decima}`);
                     }
                 });
+                botones.forEach( b => b.addEventListener("click", () => {
+                    window.location.reload();
+                }))
             }
 
             contenedor.innerHTML = `
@@ -1155,9 +1158,6 @@
                         b.classList.toggle(`semiactiva${decima}`, decimas === decima && numero === enteras + 1);
                     }
                 });
-                botones.forEach( b => b.addEventListener("click", () => {
-                    window.location.reload();
-                }))
             }
 
             async function actualizarPromedio() {
