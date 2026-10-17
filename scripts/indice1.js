@@ -1,25 +1,28 @@
-const HE = document.getElementById("HE");
-const pH = document.getElementById("pH");
-const poemsH = document.getElementById("poemsH");
+document.addEventListener('DOMContentLoaded', () => {
+    // Cada autor: botón del índice, lista de títulos y contenedor de poemas
+    const autores = [
+        {
+            btn: document.getElementById('HE'),
+            lista: document.getElementById('pH'),
+            poemas: document.getElementById('poemsH')
+        },
+        {
+            btn: document.getElementById('In'),
+            lista: document.getElementById('pI'),
+            poemas: document.getElementById('poemsI')
+        }
+    ];
 
-const In = document.getElementById("In");
-const pI = document.getElementById("pI");
-const poemsI = document.getElementById("poemsI");
+    function mostrar(activo) {
+        autores.forEach((a) => {
+            const visible = a === activo;
+            if (a.lista) a.lista.hidden = !visible;
+            if (a.poemas) a.poemas.hidden = !visible;
+        });
+    }
 
-(function poemasH() {
-    HE.addEventListener('click', () => {
-        pH.hidden = false;
-        poemsH.hidden = false;
-        pI.hidden = true;
-        poemsI.hidden = true;
-    })
-})();
-
-(function poemasI() {
-    In.addEventListener('click', () => {
-        pI.hidden = false;
-        poemsI.hidden = false;
-        pH.hidden = true;
-        poemsH.hidden = true;
-    })
-})();
+    autores.forEach((a) => {
+        if (!a.btn) return; // si falta un elemento, no rompe el resto
+        a.btn.addEventListener('click', () => mostrar(a));
+    });
+});
