@@ -8,18 +8,18 @@ const poemsI = document.getElementById("poemsI");
 
 (function poemasH() {
     HE.addEventListener('click', () => {
-        pH.remove("hidden");
-        poemsH.remove("hidden");
-        pI.add("hidden");
-        poemsI.add("hidden");
+        pH.hidden = false;
+        poemsH.hidden = false;
+        pI.hidden = true;
+        poemsI.hidden = true;
     })
 })();
 
 (function poemasI() {
     In.addEventListener('click', () => {
-        pI.remove("hidden");
-        poemsI.remove("hidden");
-        pH.add("hidden");
-        poemsH.add("hidden");
+        pI.hidden = false;
+        poemsI.hidden = false;
+        pH.hidden = true;
+        poemsH.hidden = true;
     })
 })();
