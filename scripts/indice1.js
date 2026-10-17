@@ -1,5 +1,4 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // Cada autor: botón del índice, lista de títulos y contenedor de poemas
     const autores = [
         {
             btn: document.getElementById('HE'),
@@ -22,7 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     autores.forEach((a) => {
-        if (!a.btn) return; // si falta un elemento, no rompe el resto
+        if (!a.btn) return;
         a.btn.addEventListener('click', () => mostrar(a));
     });
 });
