@@ -32,31 +32,26 @@
                 </a>
             </div>
         </div>
-        <script>
-            const nav = document.getElementById('nav-links');
-            const moreBtn = document.getElementById('more');
-            const moreMenu = document.getElementById('more-menu');
-            const closeMenuBtn = document.getElementById('close-menu-btn');
-
-            moreBtn.addEventListener('click', () => {
-                nav.style.display = 'none';
-                moreMenu.style.display = 'flex';
-            });
-
-            closeMenuBtn.addEventListener('click', () => {
-                nav.style.display = 'flex';
-                moreMenu.style.display = 'none';
-            });
-        </script>
+        <script src="scripts/nav-links.js"></script>
     </div>
     <main id="top" class="wrap">
         <header class="hero">
             <h1>Poemas</h1>
             <p class="by">Hugo Elias</p>
-            <p class="by"></p>
+            <p class="by">???</p>
         </header>
         <nav id="indice" class="toc" aria-label="Índice">
-            <ol id="hugo-elias">
+            <ol>
+                <li>
+                    <a href="#pH" id="#HE" class="asj">Hugo Elias</a>
+                    <span class="d">Poemas: 21</span>
+                </li>
+                <li>
+                    <a href="#pI" id="In" class="asj">???</a>
+                    <span class="d">Poemas: ##</span>
+                </li>
+            </ol>
+            <ol id="pH" hidden>
                 <li>
                     <a class="asj" href="#pH1">Año Especial</a>
                     <span class="d">07/03/2025</span>
@@ -147,8 +142,11 @@
                     <span class="d">29/09/2026</span>
                 </li>
             </ol>
+            <ol id="pI" hidden>
+            </ol>
+            <script src="scripts/indice1.js"></script>
         </nav>
-        <div class="poems">
+        <div class="poems" id="poemsH" hidden>
             <article class="poem" id="pH1">
                 <header class="poem-head">
                     <h2>Año Especial</h2>
@@ -1100,6 +1098,7 @@
                 </div>
             </article>
         </div>
+        <div class="poems" id="poemsI" hidden></div>
         <footer class="foot">
             <p>
                 <a href="https://hugoed2106.github.io/jg/">JG</a>
@@ -1308,6 +1307,6 @@
         document.querySelectorAll(".calificacion").forEach(iniciar);
     </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
-    <script src="viewer.js"></script>
+    <script src="scripts/viewer.js"></script>
 </body>
 </html>
