@@ -1,0 +1,247 @@
+:root{
+    --bg:#F6F7F8; 
+    --ink:#1B1E23; 
+    --muted:#667085; 
+    --rule:#DDE1E6; 
+    --accent:#24477A;
+    --serif:"Newsreader",Georgia,"Times New Roman",serif;
+    --sans:"Hanken Grotesk",system-ui,-apple-system,"Segoe UI",sans-serif;
+    --pad:clamp(1.25rem,5vw,3rem);
+}
+@media (prefers-color-scheme:dark){
+    :root{
+        --bg:#14171C;
+        --ink:#E8EAED;
+        --muted:#9AA3B2;
+        --rule:#2A2F38;
+        --accent:#8FB3E8
+    }
+}
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0
+}
+html{
+    scroll-behavior:smooth;
+    scroll-padding-top:4.5rem
+}
+@media (prefers-reduced-motion:reduce){
+    html{
+        scroll-behavior:auto
+    }
+}
+.hidden {
+    display:none !important
+}
+body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:var(--serif);
+    font-size:1.1875rem;
+    line-height:1.7;
+    -webkit-font-smoothing:antialiased
+}
+main {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: var(--pad);
+    gap: 1rem;
+}
+
+input {
+    background: #141414;
+    color: var(--ink);
+    border: 1px solid var(--accent);
+    border-radius: 8px;
+    padding: .6rem .8rem;
+    font: inherit;
+    font-size: .95rem;
+}
+input:focus {
+    outline: 2px solid var(--accent);
+    outline-offset: 1px;
+}
+
+.form-poem {
+    font-family:var(--sans);
+    display: flex;
+    flex-direction: row;
+    align-content: center;
+    gap: 2rem;
+}
+
+.data {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+.data input {
+    width: 15rem;
+}
+.data button {
+    width: 15rem;
+    background: var(--accent);
+    color: var(--bg);
+    border: none;
+    border-radius: 8px;
+    padding: .6rem .8rem;
+    font: inherit;
+    font-size: .95rem;
+    cursor: pointer;
+}
+
+.data select:focus {
+    outline: 2px solid var(--accent);
+    outline-offset: 1px;
+}
+.data select, ::picker(select) {
+  appearance: base-select;
+}
+.data select {
+    width: 15rem;
+    background: #141414;
+    color: var(--ink);
+    border: 1px solid var(--accent);
+    border-radius: 8px;
+    padding: .6rem .8rem;
+    font: inherit;
+    font-size: .95rem;
+}
+.data select::picker(select) {
+  border: 2px solid var(--accent);
+  background-color: #141414;
+  color: var(--ink);
+  border-radius: 8px;
+  padding: 5px;
+  margin-top: 5px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+select option {
+  padding: 8px 12px;
+  border-radius: 4px;
+}
+select option:hover {
+  background-color: var(--rule);
+}
+
+.data .Checkbox {
+    width: 15rem;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 0.5rem;
+}
+.data .Checkbox p {
+    font-size: 0.9rem;
+    color: var(--muted);
+}
+.data .Checkbox input {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 10px;
+  height: 10px;
+  border: 2px solid #555;
+  border-radius: 50%;
+  outline: none;
+  cursor: pointer;
+  display: inline-block;
+  position: relative;
+}
+.data .Checkbox input:checked {
+  background-color: var(--rule);
+  border-color: var(--accent);
+}
+
+.body {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+.body textarea {
+    width: 30rem;
+    height: 10rem;
+    background: #141414;
+    color: var(--ink);
+    border: 1px solid var(--accent);
+    border-radius: 8px;
+    padding: .6rem .8rem;
+    font: inherit;
+    font-size: .95rem;
+    resize: vertical;
+}
+
+/* ---------- Inicio de sesión ---------- */
+[hidden] {
+    display: none !important;
+}
+.sesion, .usuario {
+    font-family: var(--sans);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    text-align: center;
+    font-size: .95rem;
+    max-width: 24rem;
+}
+.usuario {
+    flex-direction: row;
+    gap: .8rem;
+    max-width: none;
+    color: var(--muted);
+}
+.acceso {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    width: 100%;
+}
+.acciones {
+    display: flex;
+    gap: .6rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+.sesion button, .usuario button {
+    background: transparent;
+    color: var(--ink);
+    border: 1px solid var(--accent);
+    border-radius: 8px;
+    padding: .6rem .8rem;
+    font: inherit;
+    font-size: .95rem;
+    cursor: pointer;
+}
+.sesion button.primario {
+    background: var(--accent);
+    color: var(--bg);
+}
+.sesion button.enlace {
+    border: none;
+    color: var(--muted);
+    text-decoration: underline;
+}
+.separador {
+    color: var(--muted);
+}
+.estado {
+    position: fixed;
+    left: 50%;
+    bottom: 1.5rem;
+    transform: translateX(-50%);
+    font-family: var(--sans);
+    font-size: .9rem;
+    background: var(--ink);
+    color: var(--bg);
+    padding: .6rem 1rem;
+    border-radius: 8px;
+    max-width: 90vw;
+}
+.estado.error {
+    background: #b3261e;
+    color: #fff;
+}

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex">
+    <link rel="stylesheet" href="../styles/publicacion.css">
+    <title>Publicar Poemas</title>
+</head>
+<body>
+    <main>
+        <div class="usuario" id="usuario" hidden>
+            <span id="correo"></span>
+            <button type="button" id="salir">Cerrar sesión</button>
+        </div>
+
+        <section class="sesion" id="sesion">
+            <p>Inicia sesión con tu correo y contraseña, o con Google si eres administrador.</p>
+            <form id="formAcceso" autocomplete="on" class="acceso">
+                <input type="email" id="accCorreo" required autocomplete="email" placeholder="Correo">
+                <input type="password" id="accClave" required minlength="6" autocomplete="current-password" placeholder="Contraseña (mínimo 6 caracteres)">
+                <div class="acciones">
+                    <button type="submit" class="primario" id="btnEntrar">Iniciar sesión</button>
+                    <button type="button" id="btnRegistro">Crear cuenta</button>
+                </div>
+                <button type="button" class="enlace" id="btnOlvide">Olvidé mi contraseña</button>
+            </form>
+            <p class="separador">o</p>
+            <button type="button" id="entrar">Iniciar sesión con Google</button>
+        </section>
+
+        <section class="sesion" id="verificar" hidden>
+            <p>Te enviamos un correo de verificación a <strong id="verCorreo"></strong>. Ábrelo, toca el enlace y vuelve aquí (revisa también spam).</p>
+            <div class="acciones">
+                <button type="button" class="primario" id="btnYaVerifique">Ya verifiqué</button>
+                <button type="button" id="btnReenviar">Reenviar correo</button>
+            </div>
+        </section>
+
+        <section class="sesion" id="soloUsuario" hidden>
+            <p>Sesión iniciada como usuario. Este formulario es solo para administradores.</p>
+        </section>
+
+        <form class="form-poem" id="form" hidden>
+            <div class="data">
+                <input type="text" name="Título" id="title" placeholder="Título">
+                <input type="date" name="Fecha" id="date" placeholder="Fecha" required>
+                <div class="Checkbox">
+                    <input type="checkbox" name="nuevo" id="new">
+                    <p>Nuevo</p>
+                </div>
+                <div class="Checkbox">
+                    <input type="checkbox" name="special" id="special">
+                    <p>Special</p>
+                </div>
+                <select name="opciones" id="authors" required>
+                    <option value="" selected disabled hidden>Selecciona el autor</option>
+                    <option value="HE">JG</option>
+                    <option value="MG">AzDor Lupita</option>
+                </select>
+                <button type="submit">Enviar</button>
+            </div>
+            <div class="body">
+                <textarea id="poem" rows="8" placeholder="Cuerpo del Poema" required></textarea>
+            </div>
+        </form>
+    </main>
+
+    <div class="estado" id="estado" role="status" aria-live="polite" hidden></div>
+
+    <script type="module" src="../scripts/pub.js"></script>
+</body>
+</html>
