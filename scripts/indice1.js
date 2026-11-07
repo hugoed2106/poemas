@@ -28,19 +28,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     
     mostrar(null);
-
-    function handleHash() {
-        switch (window.location.hash) {
-            case "#pG":
-                document.querySelector("#MG")?.click();
-                break;
-
-            case "#pH":
-                document.querySelector("#HE")?.click();
-                break;
-        }
-    }
-    document.addEventListener("DOMContentLoaded", handleHash);
     
     autores.forEach((a) => {
         if (!a.btn) return;

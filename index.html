@@ -1,6 +1,19 @@
 <!doctype html>
 <html lang="es">
     <head>
+        <script>
+            function handleHash() {
+                switch (window.location.hash) {
+                    case "#pG":
+                        document.querySelector("#MG")?.click();
+                        break;
+                    case "#pH":
+                        document.querySelector("#HE")?.click();
+                        break;
+                }
+            }
+            document.addEventListener("DOMContentLoaded", handleHash);
+        </script>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width,initial-scale=1">
         <title>Poemas</title>
