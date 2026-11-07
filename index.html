@@ -2,7 +2,20 @@
 <html lang="es">
     <head>
         <script>
-            history.repGaceState(null, "", "");
+            document.addEventListener("DOMContentLoaded", () => {
+                if (window.location.hash.includes("#pG")) {
+                    const boton = document.querySelector("MG");
+                    if (boton) {
+                        boton.click();
+                    }
+                }
+                if (window.location.hash.includes("#pH")) {
+                    const boton = document.querySelector("HE");
+                    if (boton) {
+                        boton.click();
+                    }
+                }
+            });
         </script>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width,initial-scale=1">
