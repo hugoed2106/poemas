@@ -71,8 +71,44 @@
             <button type="button" id="recargar">Recargar</button>
         </div>
 
+        <div class="controles">
+            <label class="celda">
+                <span class="rotulo">Buscar</span>
+                <input type="search" id="buscar" placeholder="Nombre o id" autocomplete="off">
+            </label>
+            <label class="celda">
+                <span class="rotulo">Autor</span>
+                <select id="filtroAutor">
+                    <option value="todos">Todos</option>
+                    <option value="he">JG Hugo Elias</option>
+                    <option value="mg">AzDor Lupita</option>
+                    <option value="sin">Sin autor</option>
+                </select>
+            </label>
+            <label class="celda">
+                <span class="rotulo">Ordenar por</span>
+                <select id="orden">
+                    <option value="nombre-az">Nombre (A–Z)</option>
+                    <option value="nombre-za">Nombre (Z–A)</option>
+                    <option value="id-az">Id (A–Z)</option>
+                    <option value="id-za">Id (Z–A)</option>
+                    <option value="autor">Autor</option>
+                    <option value="calif-desc">Calificación: mayor a menor</option>
+                    <option value="calif-asc">Calificación: menor a mayor</option>
+                    <option value="votos-desc">Más votos primero</option>
+                    <option value="votos-asc">Menos votos primero</option>
+                </select>
+            </label>
+        </div>
+
+        <div class="seleccion">
+            <label class="marcaTodo"><input type="checkbox" class="marca" id="selTodo"> Seleccionar los que se ven</label>
+            <span id="conteo"></span>
+            <button type="button" class="peligro" id="borrarSel" hidden>Borrar seleccionados</button>
+        </div>
+
         <ul class="lista" id="lista"></ul>
-        <p class="vacio" id="vacio" hidden>Todavía no hay poemas con votos. Agrega uno abajo o espera el primer voto en tu página.</p>
+        <p class="vacio" id="vacio" hidden></p>
 
         <section class="nuevo">
             <h2>Agregar un poema</h2>
@@ -104,7 +140,7 @@
         createUserWithEmailAndPassword, signInWithEmailAndPassword,
         sendEmailVerification, sendPasswordResetEmail }
         from "https://www.gstatic.com/firebasejs/13.0.0/firebase-auth.js";
-    import { getFirestore, collection, getDocs, doc, setDoc, deleteDoc }
+    import { getFirestore, collection, getDocs, doc, setDoc, deleteDoc, writeBatch }
         from "https://www.gstatic.com/firebasejs/13.0.0/firebase-firestore.js";
 
     const firebaseConfig = {
@@ -158,6 +194,49 @@
         return "";
     }
 
+    /* ---------- Estado de la lista ---------- */
+    const AUTORES = { he: "JG Hugo Elias", mg: "AzDor Lupita", sin: "Sin autor" };
+    let items = [];               // { id, suma, votos, borrador? }
+    let enVista = [];             // lo que se ve con el filtro y el orden actuales
+    const seleccion = new Set();  // ids marcados (siempre dentro de lo que se ve)
+    const vista = { autor: "todos", orden: "nombre-az", texto: "" };
+
+    const autorDe = (id) => (id.endsWith("-he") ? "he" : id.endsWith("-mg") ? "mg" : "sin");
+    const nombreDe = (id) => id.replace(/-(he|mg)$/, "").replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
+    const promedioDe = (i) => (i.votos > 0 ? i.suma / i.votos : null);
+    const txt = (x, y) => x.localeCompare(y, "es");
+    const porNombre = (x, y) => txt(nombreDe(x.id), nombreDe(y.id));
+
+    // Los poemas sin votos siempre quedan al final al ordenar por calificación
+    const porCalif = (dir) => (x, y) => {
+        const px = promedioDe(x), py = promedioDe(y);
+        if (px === null && py === null) return porNombre(x, y);
+        if (px === null) return 1;
+        if (py === null) return -1;
+        return (px - py) * dir || porNombre(x, y);
+    };
+    const ORDENES = {
+        "nombre-az": porNombre,
+        "nombre-za": (x, y) => porNombre(y, x),
+        "id-az": (x, y) => txt(x.id, y.id),
+        "id-za": (x, y) => txt(y.id, x.id),
+        "autor": (x, y) => txt(AUTORES[autorDe(x.id)], AUTORES[autorDe(y.id)]) || porNombre(x, y),
+        "calif-desc": porCalif(-1),
+        "calif-asc": porCalif(1),
+        "votos-desc": (x, y) => y.votos - x.votos || porNombre(x, y),
+        "votos-asc": (x, y) => x.votos - y.votos || porNombre(x, y)
+    };
+
+    function calcularVista() {
+        const t = vista.texto.trim().toLowerCase();
+        enVista = items
+            .filter((i) => (vista.autor === "todos" || autorDe(i.id) === vista.autor)
+                && (!t || i.id.includes(t) || nombreDe(i.id).toLowerCase().includes(t)))
+            .sort(ORDENES[vista.orden]);
+        const ids = new Set(enVista.map((i) => i.id));
+        seleccion.forEach((id) => { if (!ids.has(id)) seleccion.delete(id); });
+    }
+
     /* ---------- Filas ---------- */
     function campoNumero(rotulo, valor) {
         const celda = document.createElement("label");
@@ -183,20 +262,50 @@
         return b;
     }
 
-    function actualizarVacio() {
-        $("#vacio").hidden = lista.children.length > 0;
+    function actualizarSeleccion() {
+        const marcados = seleccion.size;
+        const todo = $("#selTodo");
+        todo.checked = enVista.length > 0 && marcados === enVista.length;
+        todo.indeterminate = marcados > 0 && marcados < enVista.length;
+        $("#borrarSel").hidden = marcados === 0;
+        $("#borrarSel").textContent = `Borrar seleccionados (${marcados})`;
+        $("#conteo").textContent = `${marcados ? marcados + " seleccionado" + (marcados === 1 ? "" : "s") + " · " : ""}${enVista.length} de ${items.length} poemas`;
     }
 
-    function crearFila(id, datos) {
-        let guardado = { suma: Number(datos.suma) || 0, votos: Number(datos.votos) || 0 };
+    function pintar() {
+        calcularVista();
+        lista.replaceChildren(...enVista.map(crearFila));
+        const vacio = $("#vacio");
+        vacio.hidden = enVista.length > 0;
+        vacio.textContent = items.length
+            ? "Ningún poema coincide con el filtro."
+            : "Todavía no hay poemas con votos. Agrega uno abajo o espera el primer voto en tu página.";
+        actualizarSeleccion();
+    }
 
+    function crearFila(item) {
+        const id = item.id;
         const fila = document.createElement("li");
         fila.className = "fila";
         fila.dataset.id = id;
 
+        const marca = document.createElement("input");
+        marca.type = "checkbox";
+        marca.className = "marca";
+        marca.checked = seleccion.has(id);
+        marca.setAttribute("aria-label", "Seleccionar " + nombreDe(id));
+        marca.addEventListener("change", () => {
+            if (marca.checked) seleccion.add(id); else seleccion.delete(id);
+            actualizarSeleccion();
+        });
+
         const poemaNombre = document.createElement("p");
         poemaNombre.className = "nombre";
-        poemaNombre.textContent = id.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
+        poemaNombre.textContent = nombreDe(id);
+
+        const etiqueta = document.createElement("span");
+        etiqueta.className = "autor autor-" + autorDe(id);
+        etiqueta.textContent = AUTORES[autorDe(id)];
 
         const poemaId = document.createElement("p");
         poemaId.className = "id";
@@ -204,10 +313,14 @@
 
         const datosPoema = document.createElement("div");
         datosPoema.className = "datosPoema";
-        datosPoema.append(poemaNombre, poemaId);
+        datosPoema.append(poemaNombre, poemaId, etiqueta);
 
-        const s = campoNumero("Suma", guardado.suma);
-        const v = campoNumero("Votos", guardado.votos);
+        const cabeza = document.createElement("div");
+        cabeza.className = "cabezaFila";
+        cabeza.append(marca, datosPoema);
+
+        const s = campoNumero("Suma", item.borrador ? item.borrador.suma : item.suma);
+        const v = campoNumero("Votos", item.borrador ? item.borrador.votos : item.votos);
 
         const p = document.createElement("div");
         p.className = "celda";
@@ -228,7 +341,8 @@
 
         function refrescar() {
             const a = actual();
-            const cambio = s.input.value !== String(guardado.suma) || v.input.value !== String(guardado.votos);
+            const cambio = s.input.value !== String(item.suma) || v.input.value !== String(item.votos);
+            if (cambio) item.borrador = { suma: s.input.value, votos: v.input.value }; else delete item.borrador;
             fila.classList.toggle("cambiado", cambio);
             bGuardar.disabled = !cambio;
             pv.textContent = a.votos > 0 && Number.isFinite(a.suma) ? (a.suma / a.votos).toFixed(2) : "-";
@@ -244,8 +358,10 @@
             bGuardar.disabled = true;
             try {
                 await setDoc(doc(db, "poemas", id), a);
-                guardado = a;
-                refrescar();
+                item.suma = a.suma;
+                item.votos = a.votos;
+                delete item.borrador;
+                pintar();
                 estado(`Guardado: ${id}`, "ok");
             } catch (e) {
                 refrescar();
@@ -254,32 +370,64 @@
         });
 
         bBorrar.addEventListener("click", async () => {
-            if (!confirm(`¿Borrar "${id}"? Se perderán sus ${guardado.votos} votos.`)) return;
+            if (!confirm(`¿Borrar "${id}"? Se perderán sus ${item.votos} votos.`)) return;
             try {
                 await deleteDoc(doc(db, "poemas", id));
-                fila.remove();
-                actualizarVacio();
+                items = items.filter((i) => i.id !== id);
+                seleccion.delete(id);
+                pintar();
                 estado(`Borrado: ${id}`, "ok");
             } catch (e) {
                 errorFirestore(e);
             }
         });
 
-        fila.append(datosPoema, s.celda, v.celda, p, acciones);
+        fila.append(cabeza, s.celda, v.celda, p, acciones);
         refrescar();
         return fila;
     }
+
+    /* ---------- Filtros, orden y selección ---------- */
+    $("#buscar").addEventListener("input", (e) => { vista.texto = e.target.value; pintar(); });
+    $("#filtroAutor").addEventListener("change", (e) => { vista.autor = e.target.value; pintar(); });
+    $("#orden").addEventListener("change", (e) => { vista.orden = e.target.value; pintar(); });
+
+    $("#selTodo").addEventListener("change", (e) => {
+        enVista.forEach((i) => { if (e.target.checked) seleccion.add(i.id); else seleccion.delete(i.id); });
+        pintar();
+    });
+
+    $("#borrarSel").addEventListener("click", async () => {
+        const ids = [...seleccion];
+        if (!ids.length) return;
+        if (!confirm(`¿Borrar ${ids.length} poema${ids.length === 1 ? "" : "s"}? Se perderán sus votos.`)) return;
+        try {
+            for (let i = 0; i < ids.length; i += 400) {
+                const lote = writeBatch(db);
+                ids.slice(i, i + 400).forEach((id) => lote.delete(doc(db, "poemas", id)));
+                await lote.commit();
+            }
+            items = items.filter((i) => !seleccion.has(i.id));
+            seleccion.clear();
+            pintar();
+            estado(`Borrados: ${ids.length}`, "ok");
+        } catch (e) {
+            errorFirestore(e);
+        }
+    });
 
     /* ---------- Cargar ---------- */
     async function cargar() {
         estado("Cargando...");
         try {
             const snap = await getDocs(collection(db, "poemas"));
-            lista.replaceChildren();
-            snap.docs
-                .sort((a, b) => a.id.localeCompare(b.id, "es"))
-                .forEach((d) => lista.append(crearFila(d.id, d.data())));
-            actualizarVacio();
+            items = snap.docs.map((d) => ({
+                id: d.id,
+                suma: Number(d.data().suma) || 0,
+                votos: Number(d.data().votos) || 0
+            }));
+            seleccion.clear();
+            pintar();
             estado("");
         } catch (e) {
             errorFirestore(e);
@@ -301,7 +449,7 @@
         if (!id || id.includes("/") || id === "." || id === "..") {
             return estado("El identificador no puede estar vacío ni contener «/».", "error");
         }
-        if ([...lista.children].some((f) => f.dataset.id === id)) {
+        if (items.some((i) => i.id === id)) {
             return estado("Ya existe un poema con ese identificador. Edítalo en la lista.", "error");
         }
         const error = validar(suma, votos);
