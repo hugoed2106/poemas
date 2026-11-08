@@ -1,8 +1,8 @@
-/* Importa de una sola vez los poemas viejos a Firestore (colección poemas-publicados).
-   Se usa una vez, con sesión de administrador. Si lo pulsas de nuevo, omite los que ya existen. */
+/* Publica TODO de una sola vez: los poemas (colección poemas-publicados) y las calificaciones (colección poemas).
+   Se usa una vez, con sesión de administrador. Si lo pulsas de nuevo, omite lo que ya existe. */
 import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/13.0.0/firebase-app.js";
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/13.0.0/firebase-auth.js";
-import { getFirestore, collection, getDocs, addDoc }
+import { getFirestore, collection, getDocs, addDoc, doc, getDoc, setDoc }
     from "https://www.gstatic.com/firebasejs/13.0.0/firebase-firestore.js";
 
 const firebaseConfig = {
@@ -323,8 +323,108 @@ const POEMAS = [
   "nuevo": true,
   "especial": true,
   "poema": "Aunque una etapa termina,\nUna nueva se origina,\nTantos momentos juntos,\nSe dividen en diversos mundos.\n\nRecordaré cada plática,\nEn todo momento cada risa,\nNuestros abrazos en cinemática,\nLos ratos que parecían con prisa.\n\nTe agradezco esa oportunidad,\nDejarme ser tu amigo especial,\nQue convertía días comunes,\nEn recuerdos inlovidables.\n\nNunca olvidar lo que pasamos,\nUn cuadro los dos pintamos,\nTodos aquellos recuerdos,\nEn mi corazón quedan guardados.\n\nEstamos en caminos diferentes,\nDejan cumplir nuestra promesa,\nSer mejores amigos por siempre,\nPorque para mí eres importante.\n\nOjalá en el futuro nos veamos,\nTal vez en unos cunatos años,\nEso es porque nos amamos,\nIncluso nos separemos.\n\nEn dos años cambió el horizonte,\nCuando supe que lo cuando lo vea,\nTe recuerde y te lea en el sureste,\nIncluso cuando nunca más te vea.\n\nTengo un lugar en tu corazón,\nAsí como tú en el mío,\nY una vida sin ti, sin razón,\nEn mi mundo habría un mal frío.\n\nParece ayer a conocernos empezamos,\nHoy una gran amistad somos,\nSolo sin darnos cuenta la hicimos,\nAsí nunca olvidar nuestros recuerdos.\n\nEscrita por el \"amor de mi vida\",\nCuando nadie nos lo impida.\n\nTítulo hecho con IA"
+ },
+ {
+  "autor": "HE",
+  "titulo": "Año Especial",
+  "fecha": "2025-03-07",
+  "nuevo": false,
+  "especial": false,
+  "poema": "Tengo fe, que en Enero,\nRecibiré lo que quiero,\nMucho dinero, pero,\nTu amor es lo que más quiero.\n\nQuiero que sea Febrero,\nPara darte lo que quiero,\nMucho, mucho amor,\nEn especial todo tu valor.\n\nYa quiero, Marzo,\nPara regalarte flores,\nY huelas sus olores,\nMientras mi amor te esparzo.\n\nEspero más Abril,\nPor el día del beso,\nY me llenes de besos,\nComo yo a ti de versos.\n\nEn el mes de Mayo,\nMejor yo ensayo,\nPara conocer a tu mamá,\nPor el día de la mamá.\n\nEn el mes de junio,\nTe quiero encontrar.\nPor el viernes trece,\nUn regalo te quiero dar.\n\nYa quiero que sea Julio,\nPorque aún queda el vestigio,\nDe nuestra antigua amistad,\nY cuando yo te dije la verdad.\n\nQue hermoso Agosto,\nNo tener ningún costo,\nDe inseguridades,\nNi infidelidades.\n\nSeptiembre llega siempre fresco,\nEl otoño empieza a dar su paso,\nAsí como yo te ofrezco,\nUn gran cálido y tierno abrazo.\n\nEspero siempre Octubre,\nDonde el frío nos descubre,\nMientras mi cuerpo te cubre,\nNo quiero que mi rostro se rubre.\n\nFinalmente en Diciembre,\nQuiero a la vida agradecerle,\nPor juntar nuestros nombres,\nY un mejor año con vos pedirle."
  }
 ];
+
+// id (data-poema) -> { suma, votos }
+const CALIFICACIONES = {
+ "amistad-en-redes-he": {
+  "suma": 25,
+  "votos": 6
+ },
+ "ano-especial-he": {
+  "suma": 16,
+  "votos": 4
+ },
+ "bella-rosa-he": {
+  "suma": 20,
+  "votos": 4
+ },
+ "bosque-irreal-he": {
+  "suma": 20,
+  "votos": 4
+ },
+ "carpe-diem-he": {
+  "suma": 20,
+  "votos": 4
+ },
+ "el-amor-he": {
+  "suma": 19,
+  "votos": 4
+ },
+ "el-chico-desamparado-he": {
+  "suma": 20,
+  "votos": 4
+ },
+ "facil-pero-dificil-he": {
+  "suma": 20,
+  "votos": 4
+ },
+ "jl-acrostico-pestrofa-he": {
+  "suma": 20,
+  "votos": 4
+ },
+ "la-cancion-he": {
+  "suma": 19,
+  "votos": 4
+ },
+ "la-poesia-he": {
+  "suma": 20,
+  "votos": 4
+ },
+ "marchita-he": {
+  "suma": 19,
+  "votos": 4
+ },
+ "mariana-acrostico-pverso-he": {
+  "suma": 20,
+  "votos": 4
+ },
+ "melodia-de-flor-de-primavera-he": {
+  "suma": 20,
+  "votos": 4
+ },
+ "paradojica-he": {
+  "suma": 20,
+  "votos": 4
+ },
+ "quisiera-he": {
+  "suma": 20,
+  "votos": 4
+ },
+ "sueno-con-vos-he": {
+  "suma": 20,
+  "votos": 4
+ },
+ "superar-he": {
+  "suma": 20,
+  "votos": 4
+ },
+ "tus-ojos-he": {
+  "suma": 20,
+  "votos": 4
+ },
+ "sin-titulo-he": {
+  "suma": 20,
+  "votos": 4
+ },
+ "ya-fue-he": {
+  "suma": 20,
+  "votos": 4
+ },
+ "un-hasta-pronto-jamas-un-adios-he": {
+  "suma": 8,
+  "votos": 2
+ }
+};
 
 const clave = (p) => `${p.autor}|${p.fecha}|${p.titulo}`;
 
@@ -333,7 +433,7 @@ caja.hidden = true;
 caja.style.cssText = "margin-top:1.5rem;text-align:center;font-family:sans-serif";
 const boton = document.createElement("button");
 boton.type = "button";
-boton.textContent = `Importar poemas viejos (${POEMAS.length})`;
+boton.textContent = `Publicar todo (${POEMAS.length} poemas y ${Object.keys(CALIFICACIONES).length} calificaciones)`;
 const aviso = document.createElement("p");
 caja.append(boton, aviso);
 (document.querySelector("main") || document.body).append(caja);
@@ -343,9 +443,10 @@ boton.addEventListener("click", async () => {
     try {
         aviso.textContent = "Revisando lo que ya existe...";
         const existentes = new Set((await getDocs(collection(db, "poemas-publicados"))).docs.map((d) => clave(d.data())));
-        let subidos = 0, omitidos = 0;
+
+        let poemasNuevos = 0, poemasOmitidos = 0;
         for (const p of POEMAS) {
-            if (existentes.has(clave(p))) { omitidos++; continue; }
+            if (existentes.has(clave(p))) { poemasOmitidos++; continue; }
             await addDoc(collection(db, "poemas-publicados"), {
                 titulo: p.titulo,
                 fecha: p.fecha,
@@ -354,13 +455,23 @@ boton.addEventListener("click", async () => {
                 autor: p.autor,
                 poema: p.poema
             });
-            subidos++;
-            aviso.textContent = `Subiendo... ${subidos} de ${POEMAS.length - omitidos}`;
+            poemasNuevos++;
+            aviso.textContent = `Subiendo poemas... ${poemasNuevos + poemasOmitidos} de ${POEMAS.length}`;
         }
-        aviso.textContent = `Listo: ${subidos} subidos, ${omitidos} ya existían.`;
+
+        let califNuevas = 0, califOmitidas = 0;
+        for (const [id, datos] of Object.entries(CALIFICACIONES)) {
+            const ref = doc(db, "poemas", id);
+            if ((await getDoc(ref)).exists()) { califOmitidas++; continue; }
+            await setDoc(ref, datos);
+            califNuevas++;
+            aviso.textContent = `Subiendo calificaciones... ${califNuevas + califOmitidas} de ${Object.keys(CALIFICACIONES).length}`;
+        }
+
+        aviso.textContent = `Listo: ${poemasNuevos} poemas y ${califNuevas} calificaciones subidos (${poemasOmitidos} poemas y ${califOmitidas} calificaciones ya existían).`;
     } catch (e) {
         console.error(e);
-        aviso.textContent = "Falló la importación: " + (e.code || e.message);
+        aviso.textContent = "Falló la publicación: " + (e.code || e.message);
         boton.disabled = false;
     }
 });
