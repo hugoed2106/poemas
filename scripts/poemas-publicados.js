@@ -14,6 +14,7 @@ const firebaseConfig = {
 
 const db = getFirestore(initializeApp(firebaseConfig), "default");
 
+/* ---------- Calificación con estrellas ---------- */
 async function iniciar(contenedor) {
     const id = contenedor.dataset.poema;
     const clave = "voto-" + id;
@@ -34,12 +35,14 @@ async function iniciar(contenedor) {
             b.style.removeProperty("--p");
         });
     }
-    
+
+    // Pinta las estrellas del voto del visitante
     function pintar(valor) {
         limpiarParciales();
         botones.forEach(b => b.classList.toggle("activa", Number(b.dataset.valor) <= valor));
     }
-    
+
+    // Pinta el promedio (con estrella parcial) mientras el visitante no ha votado
     function pintarPromedio(valor) {
         const promedio = Math.max(0, Math.min(5, Math.round(valor * 10) / 10));
         const enteras = Math.floor(promedio);
@@ -95,21 +98,26 @@ async function iniciar(contenedor) {
     }));
 }
 
+/* ---------- Poemas desde Firestore ---------- */
 const AUTORES = [
     { codigo: "MG", prefijo: "pG", lista: "#pL", poemas: "#poemsL", conteo: "#MG" },
     { codigo: "HE", prefijo: "pH", lista: "#pH", poemas: "#poemsH", conteo: "#HE" }
 ];
 
+// "Fácil, pero difícil" + "HE" -> "facil-pero-dificil-he" (el NFD también convierte la ñ en n)
 function crearDataPoema(titulo, codigo) {
     const base = titulo
         .toLowerCase()
         .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
         .trim()
         .replace(/\s+/g, "-")
-        .replace(/[^a-z0-9-]/g, "");
-    return `${base}-${codigo}`;
+        .replace(/[^a-z0-9-]/g, "")
+        .replace(/-+/g, "-")
+        .replace(/^-|-$/g, "");
+    return `${base}-${codigo.toLowerCase()}`;
 }
 
+// "2026-11-03" -> "03/11/2026"
 const formatearFecha = (iso) => iso.split("-").reverse().join("/");
 
 function etiqueta(clase, texto) {
@@ -156,7 +164,8 @@ function crearArticulo(p, prefijo, n, codigo) {
     cal.dataset.poema = crearDataPoema(p.titulo, codigo);
 
     head.append(h2, meta, cal);
-    
+
+    // Línea en blanco = nueva estrofa (<p>); salto de línea = <br>
     const body = document.createElement("div");
     body.className = "poem-body";
     p.poema.replace(/\r\n/g, "\n").trim().split(/\n\s*\n/).forEach((estrofa) => {
@@ -198,7 +207,8 @@ async function cargarPoemas() {
         }
 
         document.querySelectorAll(".calificacion").forEach(iniciar);
-        
+
+        // Si entraron con un enlace a un poema (#pG3, #pH12...), ir a él
         if (/^#p[GH]\d+$/.test(location.hash)) {
             document.querySelector(location.hash)?.scrollIntoView();
         }
