@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="noindex">
+    <title>Acceso - Poemas</title>
+    <style>
+        :root {
+            --fondo: #14171c; --panel: #1a1e25; --linea: #2a303a; --texto: #e8e6e1;
+            --suave: #8b93a0; --acento: #f5b301; --error: #e5705f; --ok: #7fb88a;
+            --serif: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+            --sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+        }
+        [hidden] { display: none !important; }
+        * { box-sizing: border-box; }
+        body { margin: 0; background: var(--fondo); color: var(--texto); font: 16px/1.5 var(--sans); }
+        :focus-visible { outline: 2px solid var(--acento); outline-offset: 2px; }
+        .contenedor { max-width: 30rem; margin: 0 auto; padding: 2rem 1.25rem 5rem; }
+        h1 { font: 400 1.9rem/1.2 var(--serif); margin: 0 0 1.5rem; }
+        p { color: var(--suave); margin: 0 0 1.25rem; }
+        .usuario { display: flex; align-items: center; justify-content: space-between; gap: .75rem; margin-bottom: 1.5rem; font-size: .9rem; color: var(--suave); overflow-wrap: anywhere; }
+        input { font: inherit; width: 100%; padding: .55rem .7rem; border-radius: 6px; border: 1px solid var(--linea); background: var(--fondo); color: var(--texto); }
+        input:hover { border-color: var(--suave); }
+        button { font: inherit; font-size: .95rem; cursor: pointer; padding: .55rem 1rem; border-radius: 6px; border: 1px solid var(--linea); background: transparent; color: var(--texto); }
+        button:hover:not(:disabled) { border-color: var(--suave); }
+        button.primario { background: var(--acento); border-color: var(--acento); color: #1a1405; font-weight: 600; }
+        button.enlace { border: 0; padding: 0; color: var(--suave); text-decoration: underline; align-self: flex-start; }
+        .acceso { display: flex; flex-direction: column; gap: .9rem; }
+        .acciones { display: flex; flex-wrap: wrap; gap: .5rem; }
+        .separador { text-align: center; margin: 1.25rem 0; }
+        .menu { display: grid; gap: .75rem; }
+        .tarjeta { display: block; padding: 1rem 1.1rem; border: 1px solid var(--linea); border-radius: 8px; background: var(--panel); color: var(--texto); text-decoration: none; }
+        .tarjeta:hover { border-color: var(--acento); }
+        .tarjeta strong { display: block; font: 400 1.2rem/1.3 var(--serif); }
+        .tarjeta span { color: var(--suave); font-size: .9rem; }
+        .estado { position: fixed; left: 50%; bottom: 1.25rem; transform: translateX(-50%); max-width: min(32rem, calc(100vw - 2rem)); padding: .7rem 1rem; border-radius: 8px; background: var(--panel); border: 1px solid var(--linea); font-size: .9rem; box-shadow: 0 6px 24px rgba(0, 0, 0, .45); }
+        .estado.ok { border-color: var(--ok); }
+        .estado.error { border-color: var(--error); }
+    </style>
+</head>
+<body>
+<div class="contenedor">
+    <h1>Poemas</h1>
+
+    <div class="usuario" id="usuario" hidden>
+        <span id="correo"></span>
+        <button type="button" id="salir">Cerrar sesión</button>
+    </div>
+
+    <section id="sesion">
+        <p>Inicia sesión con tu correo y contraseña, o con Google si eres administrador.</p>
+        <form id="formAcceso" class="acceso" autocomplete="on">
+            <input type="email" id="accCorreo" required autocomplete="email" placeholder="Correo">
+            <input type="password" id="accClave" required minlength="6" autocomplete="current-password" placeholder="Contraseña (mínimo 6 caracteres)">
+            <div class="acciones">
+                <button type="submit" class="primario">Iniciar sesión</button>
+                <button type="button" id="btnRegistro">Crear cuenta</button>
+            </div>
+            <button type="button" class="enlace" id="btnOlvide">Olvidé mi contraseña</button>
+        </form>
+        <p class="separador">o</p>
+        <button type="button" id="entrar">Iniciar sesión con Google</button>
+    </section>
+
+    <section id="verificar" hidden>
+        <p>Te enviamos un correo de verificación a <strong id="verCorreo"></strong>. Ábrelo, toca el enlace y vuelve aquí (revisa también spam).</p>
+        <div class="acciones">
+            <button type="button" class="primario" id="btnYaVerifique">Ya verifiqué</button>
+            <button type="button" id="btnReenviar">Reenviar correo</button>
+        </div>
+    </section>
+
+    <nav class="menu" id="menu" hidden aria-label="Páginas">
+        <a class="tarjeta" href="https://hugoed2106.github.io/poemas/">
+            <strong>Poemas</strong><span>Leer y calificar la colección</span>
+        </a>
+        <a class="tarjeta" id="enlAdmin" href="https://hugoed2106.github.io/poemas/admin.html" hidden>
+            <strong>Administrar votos</strong><span>Editar calificaciones de los poemas</span>
+        </a>
+        <a class="tarjeta" id="enlPublicar" href="https://hugoed2106.github.io/poemas/publicar-poemas/" hidden>
+            <strong>Publicar poemas</strong><span>Agregar un poema nuevo</span>
+        </a>
+    </nav>
+</div>
+
+<div class="estado" id="estado" role="status" aria-live="polite" hidden></div>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/13.0.0/firebase-app.js";
+    import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut,
+        createUserWithEmailAndPassword, signInWithEmailAndPassword,
+        sendEmailVerification, sendPasswordResetEmail }
+        from "https://www.gstatic.com/firebasejs/13.0.0/firebase-auth.js";
+
+    const auth = getAuth(initializeApp({
+        apiKey: "AIzaSyCM8fjWstKNjL4l4AbG3Z16xiYVl6s-XAA",
+        authDomain: "poemas-jg.firebaseapp.com",
+        projectId: "poemas-jg",
+        storageBucket: "poemas-jg.firebasestorage.app",
+        messagingSenderId: "619654028698",
+        appId: "1:619654028698:web:2d59e97d07a7efd643ee23"
+    }));
+
+    const $ = (q) => document.querySelector(q);
+
+    let temporizador;
+    function estado(texto, tipo = "") {
+        const el = $("#estado");
+        el.textContent = texto;
+        el.className = "estado " + tipo;
+        el.hidden = !texto;
+        clearTimeout(temporizador);
+        if (texto && tipo === "ok") temporizador = setTimeout(() => { el.hidden = true; }, 3000);
+    }
+
+    // Solo decide qué enlaces se muestran. La seguridad real está en las reglas de Firestore.
+    const ADMIN_HASHES = [
+        "3653a6f0d32bea8e7d2cd9cc3f3367794dccf198477932bf823b97ec9b45e731",
+        "8d9f2a2da2c92f7bae013a2318bb982589e8667536b30d8a192f606892f5a6d2"
+    ];
+    async function esAdminCliente(correo) {
+        const datos = new TextEncoder().encode(String(correo || "").trim().toLowerCase());
+        const buf = await crypto.subtle.digest("SHA-256", datos);
+        const hex = [...new Uint8Array(buf)].map((b) => b.toString(16).padStart(2, "0")).join("");
+        return ADMIN_HASHES.includes(hex);
+    }
+
+    const mensajesAuth = {
+        "auth/email-already-in-use": "Ese correo ya tiene una cuenta. Inicia sesión.",
+        "auth/invalid-email": "El correo no es válido.",
+        "auth/weak-password": "La contraseña es muy débil (mínimo 6 caracteres).",
+        "auth/invalid-credential": "Correo o contraseña incorrectos.",
+        "auth/user-not-found": "Correo o contraseña incorrectos.",
+        "auth/wrong-password": "Correo o contraseña incorrectos.",
+        "auth/too-many-requests": "Demasiados intentos. Espera un momento e inténtalo de nuevo.",
+        "auth/operation-not-allowed": "Ese método no está activado.",
+        "auth/unauthorized-domain": "Este dominio no está autorizado en Firebase."
+    };
+    function errorAuth(e) {
+        if (e.code === "auth/popup-closed-by-user" || e.code === "auth/cancelled-popup-request") return;
+        console.error(e);
+        estado(mensajesAuth[e.code] || "No se pudo completar: " + (e.message || e.code), "error");
+    }
+
+    $("#formAcceso").addEventListener("submit", async (ev) => {
+        ev.preventDefault();
+        try { await signInWithEmailAndPassword(auth, $("#accCorreo").value.trim(), $("#accClave").value); }
+        catch (e) { errorAuth(e); }
+    });
+
+    $("#btnRegistro").addEventListener("click", async () => {
+        if (!$("#formAcceso").reportValidity()) return;
+        try {
+            const cred = await createUserWithEmailAndPassword(auth, $("#accCorreo").value.trim(), $("#accClave").value);
+            await sendEmailVerification(cred.user);
+            estado("Cuenta creada. Te enviamos un correo de verificación.", "ok");
+        } catch (e) { errorAuth(e); }
+    });
+
+    $("#btnOlvide").addEventListener("click", async () => {
+        const correo = $("#accCorreo").value.trim();
+        if (!correo) return estado("Escribe tu correo arriba y vuelve a tocar el botón.", "error");
+        try {
+            await sendPasswordResetEmail(auth, correo);
+            estado("Si el correo existe, te enviamos un enlace para cambiar la contraseña.", "ok");
+        } catch (e) { errorAuth(e); }
+    });
+
+    $("#entrar").addEventListener("click", async () => {
+        try { await signInWithPopup(auth, new GoogleAuthProvider()); }
+        catch (e) { errorAuth(e); }
+    });
+
+    $("#btnReenviar").addEventListener("click", async () => {
+        try { await sendEmailVerification(auth.currentUser); estado("Correo reenviado.", "ok"); }
+        catch (e) { errorAuth(e); }
+    });
+
+    $("#btnYaVerifique").addEventListener("click", async () => {
+        try {
+            await auth.currentUser.reload();
+            await auth.currentUser.getIdToken(true);
+            await mostrarSegunUsuario(auth.currentUser);
+            if (!auth.currentUser.emailVerified) estado("Todavía no aparece verificado. Abre el enlace del correo y vuelve a intentar.", "error");
+        } catch (e) { errorAuth(e); }
+    });
+
+    $("#salir").addEventListener("click", () => signOut(auth));
+
+    async function mostrarSegunUsuario(user) {
+        ["#sesion", "#verificar", "#menu", "#usuario"].forEach((q) => { $(q).hidden = true; });
+        if (!user) { $("#sesion").hidden = false; return; }
+        $("#usuario").hidden = false;
+        $("#correo").textContent = user.email;
+        const admin = await esAdminCliente(user.email);
+        // Los administradores deben verificar su correo (las reglas lo exigen).
+        if (admin && !user.emailVerified) {
+            $("#verCorreo").textContent = user.email;
+            $("#verificar").hidden = false;
+            return;
+        }
+        $("#enlAdmin").hidden = !admin;
+        $("#enlPublicar").hidden = !admin;
+        $("#menu").hidden = false;
+    }
+
+    onAuthStateChanged(auth, mostrarSegunUsuario);
+</script>
+</body>
+</html>
