@@ -4,13 +4,22 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="robots" content="noindex">
+    <link rel="icon" href="images/poemas.png">
     <title>Acceso - Poemas</title>
     <style>
         :root {
             --fondo: #14171c; --panel: #1a1e25; --linea: #2a303a; --texto: #e8e6e1;
-            --suave: #8b93a0; --acento: #f5b301; --error: #e5705f; --ok: #7fb88a;
+            --suave: #8b93a0; --acento: #24477A; --error: #e5705f; --ok: #7fb88a;
             --serif: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
             --sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+        }
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --fondo: #14171c; --panel: #1a1e25; --linea: #2a303a; --texto: #e8e6e1;
+                --suave: #8b93a0; --acento: #8FB3E8; --error: #e5705f; --ok: #7fb88a;
+                --serif: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+                --sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+            }
         }
         [hidden] { display: none !important; }
         * { box-sizing: border-box; }
