@@ -90,6 +90,9 @@
         <a class="tarjeta" id="enlPublicar" href="https://hugoed2106.github.io/poemas/publicar-poemas/" hidden>
             <strong>Publicar poemas</strong><span>Agregar un poema nuevo</span>
         </a>
+        <a class="tarjeta" id="enlSolicitar" href="https://hugoed2106.github.io/poemas/solicitar-publicar-poemas/" hidden>
+            <strong>Solicitar publicar poemas</strong><span>Publica tus poemas</span>
+        </a>
     </nav>
 </div>
 
@@ -211,6 +214,7 @@
         }
         $("#enlAdmin").hidden = !admin;
         $("#enlPublicar").hidden = !admin;
+        $("#enlSolicitar").hidden = admin;
         $("#menu").hidden = false;
     }
 
