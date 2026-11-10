@@ -364,3 +364,43 @@ select option:hover {
     white-space: pre-wrap;
     overflow-wrap: anywhere;
 }
+
+.instrucciones {
+    font-family: var(--sans);
+    width: min(100%, 46rem);
+    font-size: .95rem;
+    border-left: 3px solid var(--accent);
+    padding: .2rem 0 .2rem 1rem;
+}
+.instrucciones h2 {
+    font-size: 1rem;
+    margin-bottom: .4rem;
+}
+.instrucciones ol {
+    padding-left: 1.2rem;
+    display: flex;
+    flex-direction: column;
+    gap: .35rem;
+    color: var(--muted);
+}
+.instrucciones strong {
+    color: var(--ink);
+    font-weight: 600;
+}
+.data label, .body label {
+    font-family: var(--sans);
+    font-size: .9rem;
+    font-weight: 600;
+}
+.data small, .body small {
+    font-family: var(--sans);
+    font-size: .8rem;
+    color: var(--muted);
+    max-width: 30rem;
+}
+.data small {
+    max-width: 15rem;
+}
+@media (max-width: 720px) {
+    .data small, .body small { max-width: none; }
+}

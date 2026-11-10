@@ -38,8 +38,60 @@
             </div>
         </section>
 
-        <section class="sesion" id="soloUsuario" hidden>
-            <p>Sesión iniciada como usuario.</p>
+        <section class="sesion" id="soloAdmin" hidden>
+            <p>Iniciaste sesión como administrador. Este formulario es solo para usuarios.</p>
+            <a href="../admin.html">Ir al panel de administración</a>
+        </section>
+
+        <section class="instrucciones" id="instrucciones" hidden>
+            <h2>Cómo completar tu solicitud</h2>
+            <ol>
+                <li>Escribe tu nombre en <strong>Tu nombre (autor)</strong>. Aparecerá en el asunto del correo y como autor de tus poemas.</li>
+                <li>En <strong>Mensaje</strong> cuéntame quién eres, cuántos poemas quieres publicar y cómo prefieres que te responda.</li>
+                <li>Revisa la <strong>vista previa del correo</strong> que aparece abajo: así lo recibiré.</li>
+                <li>Toca <strong>Enviar solicitud</strong> para registrarla en la página, o <strong>Abrir en mi correo</strong> para enviarla desde tu app de correo.</li>
+            </ol>
+        </section>
+
+        <form class="form-poem" id="form" hidden>
+            <div class="data">
+                <label for="author">Tu nombre (autor)</label>
+                <input type="text" name="Autor" id="author" placeholder="Ej.: María Pérez" required autocomplete="name" aria-describedby="ayudaAutor">
+                <small id="ayudaAutor">Se usa en el asunto del correo.</small>
+                <button type="submit">Enviar solicitud</button>
+                <button type="button" class="secundario" id="abrirCorreo">Abrir en mi correo</button>
+            </div>
+            <div class="body">
+                <label for="message">Mensaje</label>
+                <textarea id="message" rows="8" placeholder="Ej.: Soy María, escribo poesía y quisiera publicar 5 poemas. Puedes responderme a este correo." required aria-describedby="ayudaMensaje"></textarea>
+                <small id="ayudaMensaje">Cuéntame quién eres y qué quieres publicar. El saludo y la despedida se agregan solos.</small>
+            </div>
+        </form>
+            <p class="separador">o</p>
+            <button type="button" id="entrar">Iniciar sesión con Google</button>
+        </section>
+
+        <section class="sesion" id="verificar" hidden>
+            <p>Te enviamos un correo de verificación a <strong id="verCorreo"></strong>. Ábrelo, toca el enlace y vuelve aquí (revisa también spam).</p>
+            <div class="acciones">
+                <button type="button" class="primario" id="btnYaVerifique">Ya verifiqué</button>
+                <button type="button" id="btnReenviar">Reenviar correo</button>
+            </div>
+        </section>
+
+        <section class="sesion" id="soloAdmin" hidden>
+            <p>Iniciaste sesión como administrador. Este formulario es solo para usuarios.</p>
+            <a href="../admin.html">Ir al panel de administración</a>
+        </section>
+
+        <section class="instrucciones" id="instrucciones" hidden>
+            <h2>Cómo completar tu solicitud</h2>
+            <ol>
+                <li>Escribe tu nombre en <strong>Tu nombre (autor)</strong>. Aparecerá en el asunto del correo y como autor de tus poemas.</li>
+                <li>En <strong>Mensaje</strong> cuéntame quién eres, cuántos poemas quieres publicar y cómo prefieres que te responda.</li>
+                <li>Revisa la <strong>vista previa del correo</strong> que aparece abajo: así lo recibiré.</li>
+                <li>Toca <strong>Enviar solicitud</strong> para registrarla en la página, o <strong>Abrir en mi correo</strong> para enviarla desde tu app de correo.</li>
+            </ol>
         </section>
 
         <form class="form-poem" id="form" hidden>

@@ -183,7 +183,7 @@ $("#btnYaVerifique").addEventListener("click", async () => {
 $("#salir").addEventListener("click", () => signOut(auth));
 
 async function mostrarSegunUsuario(user) {
-    ["#sesion", "#verificar", "#soloUsuario", "#form", "#vistaPrevia", "#usuario"].forEach((q) => { $(q).hidden = true; });
+    ["#sesion", "#verificar", "#soloAdmin", "#instrucciones", "#form", "#vistaPrevia", "#usuario"].forEach((q) => { $(q).hidden = true; });
     if (!user) {
         $("#sesion").hidden = false;
         return;
@@ -191,18 +191,18 @@ async function mostrarSegunUsuario(user) {
     $("#usuario").hidden = false;
     $("#correo").textContent = user.email;
     const admin = await esAdminCliente(user.email);
-    // Los administradores deben verificar su correo (las reglas lo exigen).
-    if (admin && !user.emailVerified) {
+    if (admin) {
+        $("#soloAdmin").hidden = false;
+        return;
+    }
+    if (!user.emailVerified) {
         $("#verCorreo").textContent = user.email;
         $("#verificar").hidden = false;
         return;
     }
-    if (admin) {
-        $("#form").hidden = false;
-        $("#vistaPrevia").hidden = false;
-    } else {
-        $("#soloUsuario").hidden = false;
-    }
+    $("#instrucciones").hidden = false;
+    $("#form").hidden = false;
+    $("#vistaPrevia").hidden = false;
 }
 
 onAuthStateChanged(auth, mostrarSegunUsuario);
