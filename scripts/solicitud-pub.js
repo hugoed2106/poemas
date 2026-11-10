@@ -27,7 +27,7 @@ const messageInput = $("#message");
 const submitButton = form.querySelector('button[type="submit"]');
 const mailButton = $("#abrirCorreo");
 
-const DESTINO = "elias21hugo@gmail.com";
+const DESTINO = "ADMINISTRADOR";
 const ASUNTO = "Solicitud para publicación de poema de: ";
 
 /* ---------- Mensajes ---------- */
