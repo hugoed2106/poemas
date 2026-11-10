@@ -59,7 +59,6 @@ function armarCorreo() {
 
 function actualizarVista() {
     const c = armarCorreo();
-    $("#vpPara").textContent = c.para;
     $("#vpAsunto").textContent = c.asunto;
     $("#vpCuerpo").textContent = c.cuerpo;
 }

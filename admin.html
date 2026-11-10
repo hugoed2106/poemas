@@ -56,13 +56,13 @@
 
     <section class="sesion" id="soloUsuario" hidden>
         <p>Sesión iniciada como usuario. Esta página de edición de votos es solo para administradores.</p>
-        <p>Si quieres ser administrador da click aquí: <a>Solicitud de administrador</a></p>
+        <p>Si quieres ser administrador da click aquí: <a href="solicitar-publicar-poemas/">Solicitud de administrador</a></p>
     </section>
 
     <section class="sesion" id="correoInstitucional" hidden>
         <p>Sesión iniciada como alumno/maestro. Esta página de edición de votos es solo para administradores.</p>
         <p>Si quieres visualizar el código o la estructura de la página da click aquí: <a href="files-explorer/index.html">Backend de la página</a></p>
-        <p>Si quieres ser administrador da click aquí: <a>Solicitud de administrador</a></p>
+        <p>Si quieres ser administrador da click aquí: <a href="solicitar-publicar-poemas/">Solicitud de administrador</a></p>
     </section>
 
     <main id="panel" hidden>
@@ -128,6 +128,18 @@
                 </label>
                 <button type="submit" class="primario">Agregar poema</button>
             </form>
+        </section>
+
+        <section class="solicitudes">
+            <div class="barra">
+                <div>
+                    <h2>Solicitudes de publicación</h2>
+                    <span id="conteoSol"></span>
+                </div>
+                <button type="button" id="recargarSol">Recargar</button>
+            </div>
+            <ul class="lista" id="listaSol"></ul>
+            <p class="vacio" id="vacioSol" hidden>Todavía no hay solicitudes.</p>
         </section>
     </main>
 </div>
@@ -465,6 +477,83 @@
         }
     });
 
+    /* ---------- Solicitudes de publicación ---------- */
+    const listaSol = $("#listaSol");
+    let solicitudes = [];
+
+    function fechaTexto(f) {
+        const d = f && typeof f.toDate === "function" ? f.toDate() : null;
+        return d ? d.toLocaleString("es-MX", { dateStyle: "medium", timeStyle: "short" }) : "";
+    }
+
+    function crearSolicitud(s) {
+        const li = document.createElement("li");
+        li.className = "solicitud";
+
+        const autor = document.createElement("p");
+        autor.className = "nombre";
+        autor.textContent = s.autor || "(sin nombre)";
+        const meta = document.createElement("p");
+        meta.className = "id";
+        meta.textContent = [s.correo, fechaTexto(s.fecha)].filter(Boolean).join(" · ");
+        const cab = document.createElement("div");
+        cab.className = "solicitudCab";
+        cab.append(autor, meta);
+
+        // textContent: el mensaje lo escribe un usuario, nunca se inserta como HTML.
+        const cuerpo = document.createElement("pre");
+        cuerpo.className = "solicitudCuerpo";
+        cuerpo.textContent = s.mensaje || "";
+
+        const acciones = document.createElement("div");
+        acciones.className = "acciones";
+        if (s.correo) {
+            const responder = document.createElement("a");
+            responder.className = "boton";
+            responder.href = "mailto:" + encodeURIComponent(s.correo).replace("%40", "@") +
+                "?subject=" + encodeURIComponent("Re: " + (s.titulo || "Solicitud de publicación"));
+            responder.textContent = "Responder por correo";
+            acciones.append(responder);
+        }
+        const bBorrar = boton("Borrar", "peligro");
+        bBorrar.addEventListener("click", async () => {
+            if (!confirm(`¿Borrar la solicitud de "${s.autor || "sin nombre"}"?`)) return;
+            try {
+                await deleteDoc(doc(db, "solicitudes", s.id));
+                solicitudes = solicitudes.filter((x) => x.id !== s.id);
+                pintarSolicitudes();
+                estado("Solicitud borrada", "ok");
+            } catch (e) {
+                errorFirestore(e);
+            }
+        });
+        acciones.append(bBorrar);
+
+        li.append(cab, cuerpo, acciones);
+        return li;
+    }
+
+    function pintarSolicitudes() {
+        listaSol.replaceChildren(...solicitudes.map(crearSolicitud));
+        $("#vacioSol").hidden = solicitudes.length > 0;
+        $("#conteoSol").textContent = solicitudes.length
+            ? `${solicitudes.length} solicitud${solicitudes.length === 1 ? "" : "es"}`
+            : "";
+    }
+
+    async function cargarSolicitudes() {
+        try {
+            const snap = await getDocs(collection(db, "solicitudes"));
+            solicitudes = snap.docs
+                .map((d) => ({ ...d.data(), id: d.id }))
+                .sort((a, b) => (b.fecha?.toMillis?.() ?? 0) - (a.fecha?.toMillis?.() ?? 0));
+            pintarSolicitudes();
+        } catch (e) {
+            errorFirestore(e);
+        }
+    }
+    $("#recargarSol").addEventListener("click", cargarSolicitudes);
+
     /* ---------- Sesión ---------- */
     // Solo sirve para decidir qué se muestra. La seguridad real está en las reglas de Firestore.
     // Se guardan hashes (SHA-256) para no dejar los correos admin a la vista en el repositorio público.
@@ -553,6 +642,7 @@
             $("#sesion").hidden = false;
             history.replaceState(null, "", "admin.page");
             lista.replaceChildren();
+            listaSol.replaceChildren();
             return;
         }
         $("#usuario").hidden = false;
@@ -570,6 +660,7 @@
             const nombre = user.email.split("@")[0];
             history.replaceState(null, "", "admin." + encodeURIComponent(nombre));
             cargar();
+            cargarSolicitudes();
         } else {
             if (user.email.includes(".edu.mx")) {
                 const nombre = user.email.split("@")[0];
