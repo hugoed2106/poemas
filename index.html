@@ -14,10 +14,12 @@
             }
             document.addEventListener("DOMContentLoaded", handleHash);
         </script>
+        <title>Poemas</title>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width,initial-scale=1">
-        <title>Poemas</title>
         <meta name="description" content="Colección de poemas de autores.">
+        <meta name="theme-color" content="#0b0d12">
+        <link rel="manifest" href="manifest.json">
         <link rel="icon" href="images/poemas.png">
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -96,5 +98,10 @@
     <script type="module" src="scripts/poemas-publicados.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
     <script src="scripts/viewer.js"></script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js');
+        }
+    </script>
 </body>
 </html>

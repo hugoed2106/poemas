@@ -4,6 +4,8 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="robots" content="noindex">
+    <meta name="theme-color" content="#0b0d12">
+    <link rel="manifest" href="../manifest.json">
     <link rel="icon" href="https://hugoed2106.github.io/poemas/images/poemas.png">
     <title>Acceso - Poemas</title>
     <style>
@@ -219,6 +221,11 @@
     }
 
     onAuthStateChanged(auth, mostrarSegunUsuario);
+</script>
+<script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('sw.js');
+  }
 </script>
 </body>
 </html>
