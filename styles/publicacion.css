@@ -320,3 +320,47 @@ select option:hover {
         bottom: 1rem;
     }
 }
+
+.data button.secundario {
+    background: transparent;
+    color: var(--ink);
+    border: 1px solid var(--accent);
+}
+.correo-previa {
+    font-family: var(--sans);
+    width: min(100%, 46rem);
+    border: 1px solid var(--rule);
+    border-radius: 12px;
+    padding: 1rem 1.2rem;
+    display: flex;
+    flex-direction: column;
+    gap: .8rem;
+}
+.correo-previa h2 {
+    font-size: .8rem;
+    font-weight: 600;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    color: var(--muted);
+}
+.correo-previa dl {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: .3rem .9rem;
+    font-size: .95rem;
+    padding-bottom: .8rem;
+    border-bottom: 1px solid var(--rule);
+}
+.correo-previa dt {
+    color: var(--muted);
+}
+.correo-previa dd {
+    overflow-wrap: anywhere;
+}
+.correo-previa pre {
+    font-family: inherit;
+    font-size: .95rem;
+    line-height: 1.6;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+}

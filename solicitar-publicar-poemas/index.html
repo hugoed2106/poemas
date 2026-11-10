@@ -44,13 +44,25 @@
 
         <form class="form-poem" id="form" hidden>
             <div class="data">
-                <input type="text" name="Autor" id="author" placeholder="Título">
-                <a id="enviarSolicitud"><button type="submit">Enviar</button></a>
+                <input type="text" name="Autor" id="author" placeholder="Tu nombre (autor)" required autocomplete="name">
+                <button type="submit">Enviar solicitud</button>
+                <button type="button" class="secundario" id="abrirCorreo">Abrir en mi correo</button>
             </div>
             <div class="body">
                 <textarea id="message" rows="8" placeholder="Mensaje para el administrador" required></textarea>
             </div>
         </form>
+
+        <section class="correo-previa" id="vistaPrevia" aria-label="Vista previa del correo" hidden>
+            <h2>Vista previa del correo</h2>
+            <dl>
+                <dt>Para</dt>
+                <dd id="vpPara"></dd>
+                <dt>Asunto</dt>
+                <dd id="vpAsunto"></dd>
+            </dl>
+            <pre id="vpCuerpo"></pre>
+        </section>
     </main>
 
     <div class="estado" id="estado" role="status" aria-live="polite" hidden></div>

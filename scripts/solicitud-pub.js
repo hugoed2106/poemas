@@ -22,11 +22,13 @@ const db = getFirestore(app, "default");
 
 const $ = (selector) => document.querySelector(selector);
 const form = $("#form");
-const title = "Solicitud para publicación de poema de: ";
 const authorInput = $("#author");
 const messageInput = $("#message");
-const enviarSolicitudButton = $("#enviarSolicitud");
 const submitButton = form.querySelector('button[type="submit"]');
+const mailButton = $("#abrirCorreo");
+
+const DESTINO = "elias21hugo@gmail.com";
+const ASUNTO = "Solicitud para publicación de poema de: ";
 
 /* ---------- Mensajes ---------- */
 let temporizador;
@@ -39,27 +41,56 @@ function estado(texto, tipo = "") {
     if (texto && tipo === "ok") temporizador = setTimeout(() => { el.hidden = true; }, 3000);
 }
 
-const mensajeCompleto = encodeURIComponent(
-    "Hola, quiero solicitar un espacio en tu página web para publicar mis poemas.\n" +
-    messageInput.value +
-    "\nAdiós, gracias."
-);
+/* ---------- Correo y vista previa ---------- */
+// Se arma cada vez que se necesita, con lo que haya escrito en ese momento.
+function armarCorreo() {
+    const autor = authorInput.value.trim();
+    const mensaje = messageInput.value.trim();
+    return {
+        para: DESTINO,
+        asunto: ASUNTO + autor,
+        cuerpo: "Hola, quiero solicitar un espacio en tu página web para publicar mis poemas.\n\n" +
+            (mensaje ? mensaje + "\n\n" : "") +
+            "Adiós, gracias.",
+        autor,
+        mensaje
+    };
+}
 
-const mail = "mailto:elias21hugo@gmail.com?subject=" + encodeURIComponent(title) + encodeURIComponent(authorInput) + "&body=" + mensajeCompleto;
+function actualizarVista() {
+    const c = armarCorreo();
+    $("#vpPara").textContent = c.para;
+    $("#vpAsunto").textContent = c.asunto;
+    $("#vpCuerpo").textContent = c.cuerpo;
+}
+authorInput.addEventListener("input", actualizarVista);
+messageInput.addEventListener("input", actualizarVista);
+actualizarVista();
+
+mailButton.addEventListener("click", () => {
+    if (!form.reportValidity()) return;
+    const c = armarCorreo();
+    const cuerpo = c.cuerpo.replace(/\r?\n/g, "\r\n");
+    location.href = "mailto:" + c.para +
+        "?subject=" + encodeURIComponent(c.asunto) +
+        "&body=" + encodeURIComponent(cuerpo);
+});
 
 /* ---------- Solicitud ---------- */
 form.addEventListener("submit", async (event) => {
     event.preventDefault();
+    const c = armarCorreo();
     submitButton.disabled = true;
     try {
         const docRef = await addDoc(collection(db, "solicitudes"), {
-            titulo: title.value,
-            autor: authorInput.value,
-            mensaje: mensajeCompleto
+            titulo: c.asunto,
+            autor: c.autor,
+            mensaje: c.cuerpo
         });
         console.log("Documento escrito con ID:", docRef.id);
         estado("Solicitud enviada", "ok");
         form.reset();
+        actualizarVista();
     } catch (e) {
         console.error("Error al escribir el documento: ", e);
         if (e.code === "permission-denied") {
@@ -152,7 +183,7 @@ $("#btnYaVerifique").addEventListener("click", async () => {
 $("#salir").addEventListener("click", () => signOut(auth));
 
 async function mostrarSegunUsuario(user) {
-    ["#sesion", "#verificar", "#soloUsuario", "#form", "#usuario"].forEach((q) => { $(q).hidden = true; });
+    ["#sesion", "#verificar", "#soloUsuario", "#form", "#vistaPrevia", "#usuario"].forEach((q) => { $(q).hidden = true; });
     if (!user) {
         $("#sesion").hidden = false;
         return;
@@ -168,6 +199,7 @@ async function mostrarSegunUsuario(user) {
     }
     if (admin) {
         $("#form").hidden = false;
+        $("#vistaPrevia").hidden = false;
     } else {
         $("#soloUsuario").hidden = false;
     }
