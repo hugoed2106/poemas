@@ -404,3 +404,8 @@ select option:hover {
 @media (max-width: 720px) {
     .data small, .body small { max-width: none; }
 }
+
+.seud {
+    color: var(--accent);
+    text-decoration: none;
+}
