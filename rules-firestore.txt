@@ -1,0 +1,59 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function esAdmin() {
+      return request.auth != null
+        && request.auth.token.email_verified == true
+        && request.auth.token.email in [
+          'hugo.ed2106@gmail.com',
+          'elias21hugo@gmail.com',
+          'lupe29052010@gmail.com'
+        ];
+    }
+
+    function esUser() {
+      return request.auth != null
+        && request.auth.token.email_verified == true;
+    }
+
+    function votoValido() {
+      return request.resource.data.votos == 1
+        && request.resource.data.suma >= 1
+        && request.resource.data.suma <= 5;
+    }
+
+    function sumaVoto() {
+      return request.resource.data.votos == resource.data.votos + 1
+        && request.resource.data.suma - resource.data.suma >= 1
+        && request.resource.data.suma - resource.data.suma <= 5;
+    }
+
+    function solicitudValida() {
+      let d = request.resource.data;
+      return d.keys().hasOnly(['titulo', 'autor', 'mensaje'])
+        && d.titulo is string && d.titulo.size() <= 200
+        && d.autor is string && d.autor.size() > 0 && d.autor.size() <= 100
+        && d.mensaje is string && d.mensaje.size() <= 3000;
+    }
+
+    match /poemas/{poemaId} {
+      allow read: if true;
+      allow create: if esAdmin() || votoValido();
+      allow update: if esAdmin() || sumaVoto();
+      allow delete: if esAdmin();
+
+      allow create, update, delete: if esAdmin();
+    }
+
+    match /poemas-publicados/{id} {
+      allow read: if true;
+      allow create, update, delete: if esAdmin();
+    }
+
+    match /solicitudes/{id} {
+      allow create: if esUser() && solicitudValida();
+      allow read, update, delete: if esAdmin();
+    }
+  }
+}
