@@ -9,6 +9,9 @@
     <meta name="robots" content="noindex">
     <link rel="stylesheet" href="styles/admin.css">
     <title>Administrar votos - Poemas</title>
+    <meta name="theme-color" content="#0b0d12">
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="icon-192.png">
     <link rel="icon" href="images/poemas.png">
 </head>
 <body>
@@ -82,6 +85,7 @@
                     <option value="todos">Todos</option>
                     <option value="he">JG Hugo Elias</option>
                     <option value="mg">AzDor Lupita</option>
+                    <option value="ar">Angela</option>
                     <option value="sin">Sin autor</option>
                 </select>
             </label>
@@ -207,14 +211,14 @@
     }
 
     /* ---------- Estado de la lista ---------- */
-    const AUTORES = { he: "JG Hugo Elias", mg: "AzDor Lupita", sin: "Sin autor" };
+    const AUTORES = { he: "JG Hugo Elias", mg: "AzDor Lupita", ar: "Angela", sin: "Sin autor" };
     let items = [];               // { id, suma, votos, borrador? }
     let enVista = [];             // lo que se ve con el filtro y el orden actuales
     const seleccion = new Set();  // ids marcados (siempre dentro de lo que se ve)
     const vista = { autor: "todos", orden: "nombre-az", texto: "" };
 
-    const autorDe = (id) => (id.endsWith("-he") ? "he" : id.endsWith("-mg") ? "mg" : "sin");
-    const nombreDe = (id) => id.replace(/-(he|mg)$/, "").replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
+    const autorDe = (id) => (id.endsWith("-he") ? "he" : id.endsWith("-mg") ? "mg" : id.endsWith("-ar") ? "ar" : "sin");
+    const nombreDe = (id) => id.replace(/-(he|mg|ar)$/, "").replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
     const promedioDe = (i) => (i.votos > 0 ? i.suma / i.votos : null);
     const txt = (x, y) => x.localeCompare(y, "es");
     const porNombre = (x, y) => txt(nombreDe(x.id), nombreDe(y.id));
@@ -676,6 +680,11 @@
     }
 
     onAuthStateChanged(auth, mostrarSegunUsuario);
+</script>
+<script>
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('sw.js', { scope: './' });
+    }
 </script>
 </body>
 </html>

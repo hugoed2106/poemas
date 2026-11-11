@@ -5,7 +5,10 @@
         <meta name="viewport" content="width=device-width,initial-scale=1">
         <title>Poemas a Yeseli</title>
         <meta name="description" content="Poemas a Yeseli">
-        <link rel="icon" href="../images/poemas.png">
+        <meta name="theme-color" content="#0b0d12">
+    <link rel="manifest" href="../manifest.json">
+    <link rel="apple-touch-icon" href="../icon-192.png">
+    <link rel="icon" href="../images/poemas.png">
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&display=swap">
@@ -448,7 +451,12 @@
             </footer>
         </main>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
-        <script src="../viewer.js"></script>
+        <script src="../scripts/viewer.js"></script>
         <script src="lock.js"></script>
-    </body>
+    <script>
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('../sw.js', { scope: '../' });
+    }
+</script>
+</body>
 </html>

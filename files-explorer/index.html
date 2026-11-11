@@ -5,6 +5,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Explorador de Archivos - Poemas</title>
+    <meta name="theme-color" content="#0b0d12">
+    <link rel="manifest" href="../manifest.json">
+    <link rel="apple-touch-icon" href="../icon-192.png">
     <link rel="icon" href="../images/poemas.png" type="image/x-icon">
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -316,6 +319,11 @@
         // Inicializar el script
         init();
     </script>
+<script>
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('../sw.js', { scope: '../' });
+    }
+</script>
 </body>
 <footer class="text-center text-xs text-[#8b949e] py-4 mt-8 border-t border-[#30363d] w-full">
     <div class="container mx-auto">

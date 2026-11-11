@@ -10,6 +10,11 @@ document.addEventListener('DOMContentLoaded', () => {
             btn: document.getElementById('MG'),
             lista: document.getElementById('pL'),
             poemas: document.getElementById('poemsL')
+        },
+        {
+            btn: document.getElementById('AR'),
+            lista: document.getElementById('pA'),
+            poemas: document.getElementById('poemsA')
         }
     ];
 

@@ -6,6 +6,7 @@
     <meta name="robots" content="noindex">
     <meta name="theme-color" content="#0b0d12">
     <link rel="manifest" href="../manifest.json">
+    <link rel="apple-touch-icon" href="../icon-192.png">
     <link rel="icon" href="https://hugoed2106.github.io/poemas/images/poemas.png">
     <title>Acceso - Poemas</title>
     <style>
@@ -224,7 +225,7 @@
 </script>
 <script>
   if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('sw.js');
+    navigator.serviceWorker.register('../sw.js', { scope: '../' });
   }
 </script>
 </body>

@@ -6,6 +6,9 @@
     <meta name="robots" content="noindex">
     <link rel="stylesheet" href="../styles/publicacion.css">
     <title>Publicar Poemas</title>
+    <meta name="theme-color" content="#0b0d12">
+    <link rel="manifest" href="../manifest.json">
+    <link rel="apple-touch-icon" href="../icon-192.png">
     <link rel="icon" href="https://hugoed2106.github.io/poemas/images/poemas.png">
 </head>
 <body>
@@ -56,7 +59,7 @@
                 </div>
                 <select name="opciones" id="authors" required>
                     <option value="" selected disabled hidden>Selecciona el autor</option>
-                    <option value="HE">JG</option>
+                    <option value="HE">JG Hugo Elias</option>
                     <option value="MG">AzDor Lupita</option>
                     <option value="AR">Angela</option>
                 </select>
@@ -71,5 +74,10 @@
     <div class="estado" id="estado" role="status" aria-live="polite" hidden></div>
 
     <script type="module" src="../scripts/pub.js"></script>
+<script>
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('../sw.js', { scope: '../' });
+    }
+</script>
 </body>
 </html>

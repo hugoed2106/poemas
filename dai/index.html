@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>Poemas a Daiana</title>
     <meta name="description" content="Poemas a Daiana">
+    <meta name="theme-color" content="#0b0d12">
+    <link rel="manifest" href="../manifest.json">
+    <link rel="apple-touch-icon" href="../icon-192.png">
     <link rel="icon" href="../images/poemas.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -1183,4 +1186,9 @@
             </p>
         </footer>
     </main>
-    <script src="lock.js"></script></body></html>
+    <script src="lock.js"></script><script>
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('../sw.js', { scope: '../' });
+    }
+</script>
+</body></html>

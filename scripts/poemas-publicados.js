@@ -209,8 +209,8 @@ async function cargarPoemas() {
 
         document.querySelectorAll(".calificacion").forEach(iniciar);
 
-        // Si entraron con un enlace a un poema (#pG3, #pH12...), ir a él
-        if (/^#p[GH]\d+$/.test(location.hash)) {
+        // Si entraron con un enlace a un poema (#pG3, #pH12, #pA2...), ir a él
+        if (/^#p[GHA]\d+$/.test(location.hash)) {
             document.querySelector(location.hash)?.scrollIntoView();
         }
     } catch (e) {

@@ -20,6 +20,7 @@
         <meta name="description" content="Colección de poemas de autores.">
         <meta name="theme-color" content="#0b0d12">
         <link rel="manifest" href="manifest.json">
+        <link rel="apple-touch-icon" href="icon-192.png">
         <link rel="icon" href="images/poemas.png">
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -106,7 +107,7 @@
     <script src="scripts/viewer.js"></script>
     <script>
         if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('sw.js');
+            navigator.serviceWorker.register('sw.js', { scope: './' });
         }
     </script>
 </body>
