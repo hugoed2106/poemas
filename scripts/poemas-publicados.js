@@ -101,6 +101,7 @@ async function iniciar(contenedor) {
 /* ---------- Poemas desde Firestore ---------- */
 const AUTORES = [
     { codigo: "MG", prefijo: "pG", lista: "#pL", poemas: "#poemsL", conteo: "#MG" },
+    { codigo: "AR", prefijo: "pA", lista: "#pA", poemas: "#poemsA", conteo: "#AR" },
     { codigo: "HE", prefijo: "pH", lista: "#pH", poemas: "#poemsH", conteo: "#HE" }
 ];
 
