@@ -161,3 +161,21 @@ async function mostrarSegunUsuario(user) {
 }
 
 onAuthStateChanged(auth, mostrarSegunUsuario);
+
+const definicion = document.querySelector("#definicion");
+const definicionCuadro = document.querySelector("#definicionCuadro");
+const definicionCerrar = document.querySelector("#definicionCerrar");
+
+function mostrarOcultarDefinicion() {
+    if (definicionCuadro.hidden = true) {
+        definicionCuadro.hidden = false;
+    } else {
+        definicionCuadro.hidden = true;
+    }
+}
+function cerrarDefinicion() {
+    definicionCuadro.hidden = true;
+}
+
+definicion.addEventListener("click", mostrarOcultarDefinicion);
+definicionCerrar.addEventListener("click", cerrarDefinicion);

@@ -405,7 +405,7 @@ select option:hover {
     .data small, .body small { max-width: none; }
 }
 
-.seud {
+.definicion {
     color: var(--accent);
-    text-decoration: none;
+    text-decoration: underline;
 }
