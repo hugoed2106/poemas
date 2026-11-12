@@ -26,7 +26,13 @@ const messageInput = $("#message");
 const submitButton = form.querySelector('button[type="submit"]');
 const mailButton = $("#abrirCorreo");
 
-const DESTINO = "hugo.ed2106@gmail.com";
+const DESTINO = "8d9f2a2da2c92f7bae013a2318bb982589e8667536b30d8a192f606892f5a6d2";
+async function esAdminCliente(correo) {
+    const datos = new TextEncoder().encode(String(correo || "").trim().toLowerCase());
+    const buf = await crypto.subtle.digest("SHA-256", datos);
+    const hex = [...new Uint8Array(buf)].map((b) => b.toString(16).padStart(2, "0")).join("");
+    return DESTINO.includes(hex);
+}
 const ASUNTO = "Solicitud para publicación de poema de: ";
 
 /* ---------- Mensajes ---------- */
