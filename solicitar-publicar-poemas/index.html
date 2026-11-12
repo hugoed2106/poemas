@@ -39,10 +39,10 @@
         <section class="instrucciones" id="instrucciones" hidden>
             <h2>Cómo completar tu solicitud</h2>
             <ol>
-                <li>Escribe tu nombre o <a href="https://www.google.com/search?q=seud%C3%B3nimo" target="_blank">seudónimo</a> en <strong>Tu nombre (autor)</strong>. Aparecerá en el asunto del correo y como autor de tus poemas.</li>
+                <li>Escribe tu nombre o <a href="https://www.google.com/search?q=seud%C3%B3nimo" target="_blank">seudónimo</a> en <strong>Tu nombre (autor)</strong>. Aparecerá como título de tu solicitud y como autor de tus poemas.</li>
                 <li>En <strong>Mensaje</strong> cuéntame quién eres, cuántos poemas quieres publicar y cómo prefieres que te responda.</li>
-                <li>Revisa la <strong>vista previa del correo</strong> que aparece abajo: así lo recibiré.</li>
-                <li>Toca <strong>Enviar solicitud</strong> para registrarla en la página, o <strong>Abrir en mi correo</strong> para enviarla desde tu app de correo.</li>
+                <li>Revisa la <strong>vista previa</strong> que aparece abajo: así la recibiré.</li>
+                <li>Toca <strong>Enviar solicitud</strong> para registrarla en la página.</li>
             </ol>
         </section>
 
@@ -50,7 +50,6 @@
             <div class="data">
                 <input type="text" name="Autor" id="author" placeholder="Tu nombre (autor)" required autocomplete="name">
                 <button type="submit">Enviar solicitud</button>
-                <button type="button" class="secundario" id="abrirCorreo">Abrir en mi correo</button>
             </div>
             <div class="body">
                 <label for="message">Mensaje</label>
@@ -60,10 +59,8 @@
         </form>
 
         <section class="correo-previa" id="vistaPrevia" aria-label="Vista previa del correo" hidden>
-            <h2>Vista previa del correo</h2>
+            <h2>Vista previa de la solicitud</h2>
             <dl>
-                <dt>Para</dt>
-                <dd>ADMINISTRADOR</dd>
                 <dt>Asunto</dt>
                 <dd id="vpAsunto"></dd>
             </dl>

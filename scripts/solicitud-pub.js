@@ -24,15 +24,7 @@ const form = $("#form");
 const authorInput = $("#author");
 const messageInput = $("#message");
 const submitButton = form.querySelector('button[type="submit"]');
-const mailButton = $("#abrirCorreo");
 
-const DESTINO = "8d9f2a2da2c92f7bae013a2318bb982589e8667536b30d8a192f606892f5a6d2";
-async function esAdminCliente(correo) {
-    const datos = new TextEncoder().encode(String(correo || "").trim().toLowerCase());
-    const buf = await crypto.subtle.digest("SHA-256", datos);
-    const hex = [...new Uint8Array(buf)].map((b) => b.toString(16).padStart(2, "0")).join("");
-    return DESTINO.includes(hex);
-}
 const ASUNTO = "Solicitud para publicación de poema de: ";
 
 /* ---------- Mensajes ---------- */
@@ -46,13 +38,12 @@ function estado(texto, tipo = "") {
     if (texto && tipo === "ok") temporizador = setTimeout(() => { el.hidden = true; }, 3000);
 }
 
-/* ---------- Correo y vista previa ---------- */
+/* ---------- Solicitud y vista previa ---------- */
 // Se arma cada vez que se necesita, con lo que haya escrito en ese momento.
-function armarCorreo() {
+function armarSolicitud() {
     const autor = authorInput.value.trim();
     const mensaje = messageInput.value.trim();
     return {
-        para: DESTINO,
         asunto: ASUNTO + autor,
         cuerpo: "Hola, quiero solicitar un espacio en tu página web para publicar mis poemas.\n\n" +
             (mensaje ? mensaje + "\n\n" : "") +
@@ -63,7 +54,7 @@ function armarCorreo() {
 }
 
 function actualizarVista() {
-    const c = armarCorreo();
+    const c = armarSolicitud();
     $("#vpAsunto").textContent = c.asunto;
     $("#vpCuerpo").textContent = c.cuerpo;
 }
@@ -71,19 +62,10 @@ authorInput.addEventListener("input", actualizarVista);
 messageInput.addEventListener("input", actualizarVista);
 actualizarVista();
 
-mailButton.addEventListener("click", () => {
-    if (!form.reportValidity()) return;
-    const c = armarCorreo();
-    const cuerpo = c.cuerpo.replace(/\r?\n/g, "\r\n");
-    location.href = "mailto:" + c.para +
-        "?subject=" + encodeURIComponent(c.asunto) +
-        "&body=" + encodeURIComponent(cuerpo);
-});
-
 /* ---------- Solicitud ---------- */
 form.addEventListener("submit", async (event) => {
     event.preventDefault();
-    const c = armarCorreo();
+    const c = armarSolicitud();
     submitButton.disabled = true;
     try {
         const docRef = await addDoc(collection(db, "solicitudes"), {
