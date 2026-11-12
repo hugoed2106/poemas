@@ -415,7 +415,7 @@ select option:hover {
 .definicionCuadro {
     position: absolute;
     background: var(--bg);
-    margin-top: 200px;
+    margin-top: 20px;
     color: var(--accent);
     font-style: italic;
     border: 1px solid var(--rule);

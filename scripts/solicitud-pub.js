@@ -179,3 +179,10 @@ function cerrarDefinicion() {
 
 definicion.addEventListener("click", mostrarOcultarDefinicion);
 definicionCerrar.addEventListener("click", cerrarDefinicion);
+
+const hoy = new Date();
+
+const opciones = { year: 'numeric', month: 'long', day: 'numeric' };
+const fechaFormateada = hoy.toLocaleDateString('es-ES', opciones);
+
+document.getElementById('fecha').textContent = fechaFormateada;
