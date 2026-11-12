@@ -445,6 +445,8 @@ select option:hover {
     cursor: pointer;
     height: 2rem;
     width: 3rem;
+    margin-top: 1rem;
+    border-radius: 8px;
 }
 .cita {
     font-family: var(--sans);
