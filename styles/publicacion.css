@@ -421,6 +421,9 @@ select option:hover {
     border: 1px solid var(--rule);
     border-radius: 8px;
     padding: 2rem 4rem;
+    width: 80%;
+    margin-left: 10%;
+    margin-right: 10%;
 }
 .definicionCuadro h2 {
     font-family: var(--sans);
