@@ -436,7 +436,7 @@ select option:hover {
     margin: 0;
     text-decoration: none;
 }
-.definicionCerrar {
+#definicionCerrar {
     background: transparent;
     color: var(--muted);
     border: none;
