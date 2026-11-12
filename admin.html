@@ -29,23 +29,7 @@
     </header>
 
     <section class="sesion" id="sesion">
-        <p id="sesionTexto">Inicia sesión con tu correo y contraseña, o con Google si eres administrador.</p>
-        <form id="formAcceso" autocomplete="on" class="acceso">
-            <label class="celda">
-                <span class="rotulo">Correo</span>
-                <input type="email" id="accCorreo" required autocomplete="email" placeholder="tucorreo@ejemplo.com">
-            </label>
-            <label class="celda">
-                <span class="rotulo">Contraseña (mínimo 6 caracteres)</span>
-                <input type="password" id="accClave" required minlength="6" autocomplete="current-password">
-            </label>
-            <div class="acciones">
-                <button type="submit" class="primario" id="btnEntrar">Iniciar sesión</button>
-                <button type="button" id="btnRegistro">Crear cuenta</button>
-            </div>
-            <button type="button" class="enlace" id="btnOlvide">Olvidé mi contraseña</button>
-        </form>
-        <p class="separador">o</p>
+        <p id="sesionTexto">Inicia sesión con Google.</p>
         <button type="button" id="entrar">Iniciar sesión con Google</button>
     </section>
 
@@ -153,8 +137,7 @@
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/13.0.0/firebase-app.js";
     import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut,
-        createUserWithEmailAndPassword, signInWithEmailAndPassword,
-        sendEmailVerification, sendPasswordResetEmail }
+        sendEmailVerification }
         from "https://www.gstatic.com/firebasejs/13.0.0/firebase-auth.js";
     import { getFirestore, collection, getDocs, doc, setDoc, deleteDoc, writeBatch }
         from "https://www.gstatic.com/firebasejs/13.0.0/firebase-firestore.js";
@@ -573,12 +556,6 @@
     }
 
     const mensajesAuth = {
-        "auth/email-already-in-use": "Ese correo ya tiene una cuenta. Inicia sesión.",
-        "auth/invalid-email": "El correo no es válido.",
-        "auth/weak-password": "La contraseña es muy débil (mínimo 8 carácteres).",
-        "auth/invalid-credential": "Correo o contraseña incorrectos.",
-        "auth/user-not-found": "Correo o contraseña incorrectos.",
-        "auth/wrong-password": "Correo o contraseña incorrectos.",
         "auth/too-many-requests": "Demasiados intentos. Espera un momento e inténtalo de nuevo.",
         "auth/operation-not-allowed": "Ese método no está activado.",
         "auth/unauthorized-domain": "Este dominio no está autorizado."
@@ -588,32 +565,6 @@
         console.error(e);
         estado(mensajesAuth[e.code] || "No se pudo completar: " + (e.message || e.code), "error");
     }
-
-    $("#formAcceso").addEventListener("submit", async (ev) => {
-        ev.preventDefault();
-        try {
-            await signInWithEmailAndPassword(auth, $("#accCorreo").value.trim(), $("#accClave").value);
-        } catch (e) { errorAuth(e); }
-    });
-
-    $("#btnRegistro").addEventListener("click", async () => {
-        const form = $("#formAcceso");
-        if (!form.reportValidity()) return;
-        try {
-            const cred = await createUserWithEmailAndPassword(auth, $("#accCorreo").value.trim(), $("#accClave").value);
-            await sendEmailVerification(cred.user);
-            estado("Cuenta creada. Te enviamos un correo de verificación.", "ok");
-        } catch (e) { errorAuth(e); }
-    });
-
-    $("#btnOlvide").addEventListener("click", async () => {
-        const correo = $("#accCorreo").value.trim();
-        if (!correo) return estado("Escribe tu correo arriba y vuelve a tocar el botón.", "error");
-        try {
-            await sendPasswordResetEmail(auth, correo);
-            estado("Si el correo existe, te enviamos un enlace para cambiar la contraseña.", "ok");
-        } catch (e) { errorAuth(e); }
-    });
 
     $("#entrar").addEventListener("click", async () => {
         try { await signInWithPopup(auth, new GoogleAuthProvider()); }

@@ -1,7 +1,6 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/13.0.0/firebase-app.js";
 import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut,
-    createUserWithEmailAndPassword, signInWithEmailAndPassword,
-    sendEmailVerification, sendPasswordResetEmail }
+    sendEmailVerification }
     from "https://www.gstatic.com/firebasejs/13.0.0/firebase-auth.js";
 import { getFirestore, collection, addDoc }
     from "https://www.gstatic.com/firebasejs/13.0.0/firebase-firestore.js";
@@ -117,12 +116,6 @@ async function esAdminCliente(correo) {
 }
 
 const mensajesAuth = {
-    "auth/email-already-in-use": "Ese correo ya tiene una cuenta. Inicia sesión.",
-    "auth/invalid-email": "El correo no es válido.",
-    "auth/weak-password": "La contraseña es muy débil (mínimo 6 caracteres).",
-    "auth/invalid-credential": "Correo o contraseña incorrectos.",
-    "auth/user-not-found": "Correo o contraseña incorrectos.",
-    "auth/wrong-password": "Correo o contraseña incorrectos.",
     "auth/too-many-requests": "Demasiados intentos. Espera un momento e inténtalo de nuevo.",
     "auth/operation-not-allowed": "Ese método no está activado.",
     "auth/unauthorized-domain": "Este dominio no está autorizado."
@@ -132,31 +125,6 @@ function errorAuth(e) {
     console.error(e);
     estado(mensajesAuth[e.code] || "No se pudo completar: " + (e.message || e.code), "error");
 }
-
-$("#formAcceso").addEventListener("submit", async (ev) => {
-    ev.preventDefault();
-    try {
-        await signInWithEmailAndPassword(auth, $("#accCorreo").value.trim(), $("#accClave").value);
-    } catch (e) { errorAuth(e); }
-});
-
-$("#btnRegistro").addEventListener("click", async () => {
-    if (!$("#formAcceso").reportValidity()) return;
-    try {
-        const cred = await createUserWithEmailAndPassword(auth, $("#accCorreo").value.trim(), $("#accClave").value);
-        await sendEmailVerification(cred.user);
-        estado("Cuenta creada. Te enviamos un correo de verificación.", "ok");
-    } catch (e) { errorAuth(e); }
-});
-
-$("#btnOlvide").addEventListener("click", async () => {
-    const correo = $("#accCorreo").value.trim();
-    if (!correo) return estado("Escribe tu correo arriba y vuelve a tocar el botón.", "error");
-    try {
-        await sendPasswordResetEmail(auth, correo);
-        estado("Si el correo existe, te enviamos un enlace para cambiar la contraseña.", "ok");
-    } catch (e) { errorAuth(e); }
-});
 
 $("#entrar").addEventListener("click", async () => {
     try { await signInWithPopup(auth, new GoogleAuthProvider()); }
