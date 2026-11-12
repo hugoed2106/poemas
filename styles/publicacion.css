@@ -420,7 +420,7 @@ select option:hover {
     font-style: italic;
     border: 1px solid var(--rule);
     border-radius: 8px;
-    padding: .2rem .4rem;
+    padding: 2rem 4rem;
 }
 .definicionCuadro h2 {
     font-family: var(--sans);
@@ -441,7 +441,7 @@ select option:hover {
     color: var(--muted);
     border: none;
     font-family: var(--sans);
-    font-size: .8rem;
+    font-size: 1rem;
     cursor: pointer;
 }
 .cita {
