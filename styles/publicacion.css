@@ -427,12 +427,14 @@ select option:hover {
     font-family: var(--sans);
     color: var(--accent);
     margin: 0 0 .2rem 0;
+    text-decoration: none;
 }
 .definicionCuadro p {
     font-family: var(--sans);
-    font-size: .8rem;
+    font-size: .9rem;
     color: var(--muted);
     margin: 0;
+    text-decoration: none;
 }
 .definicionCerrar {
     background: transparent;
