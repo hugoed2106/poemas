@@ -14,7 +14,7 @@
         --ink:#E8EAED;
         --muted:#9AA3B2;
         --rule:#2A2F38;
-        --accent:#8FB3E8
+        --accent: #8FB3E8;
     }
 }
 *{
@@ -437,16 +437,18 @@ select option:hover {
     text-decoration: none;
 }
 #definicionCerrar {
-    background: transparent;
-    color: var(--muted);
+    background: var(--accent);
+    color: var(--bg);
     border: none;
     font-family: var(--sans);
     font-size: 1rem;
     cursor: pointer;
+    height: 2rem;
+    width: 3rem;
 }
 .cita {
     font-family: var(--sans);
-    font-size: .7rem;
+    font-size: 0.6rem;
     color: var(--muted);
     border-left: 3px solid var(--accent);
     padding: .2rem 0 .2rem 1rem;
