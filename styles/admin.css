@@ -7,6 +7,9 @@
     --acento: #f5b301;
     --error: #e5705f;
     --ok: #7fb88a;
+    --jg: #FF7A70;
+    --azdor: #C9A0E8;
+    --angela: #FACC15;
     --serif: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
     --sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   }
@@ -64,9 +67,9 @@
   .cabezaFila { display: flex; align-items: center; gap: .75rem; min-width: 0; }
   .marca { width: 1.15rem; height: 1.15rem; padding: 0; flex: none; accent-color: var(--acento); cursor: pointer; }
   .autor { display: inline-block; margin-top: .25rem; padding: .05rem .5rem; border-radius: 999px; border: 1px solid var(--linea); font: 500 .72rem/1.5 var(--sans); color: var(--suave); }
-  .autor-he { color: var(--acento); border-color: var(--acento); }
-  .autor-mg { color: var(--ok); border-color: var(--ok); }
-  .autor-ar { color: var(--suave); border-color: var(--suave); }
+  .autor-he { color: var(--jg); border-color: var(--jg); }
+  .autor-mg { color: var(--azdor); border-color: var(--azdor); }
+  .autor-ar { color: var(--angela); border-color: var(--angela); }
   .datosPoema p { margin: 0; }
   .nombre { font-weight: 600; }
   .id { font-variant-numeric: tabular-nums; color: var(--suave); }
