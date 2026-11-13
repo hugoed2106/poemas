@@ -59,7 +59,7 @@ history.replaceState(null, "", "admin.page");
     }
 
     /* ---------- Estado de la lista ---------- */
-    const AUTORES = { he: "JG Hugo Elias", mg: "AzDor Lupita", ar: "Angela", sin: "Sin autor" };
+    const AUTORES = { he: "𝑱𝑮", mg: "AzDor Lupita", ar: "Angela", sin: "Sin autor" };
     let items = [];               // { id, suma, votos, borrador? }
     let enVista = [];             // lo que se ve con el filtro y el orden actuales
     const seleccion = new Set();  // ids marcados (siempre dentro de lo que se ve)
