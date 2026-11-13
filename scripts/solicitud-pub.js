@@ -94,7 +94,9 @@ form.addEventListener("submit", async (event) => {
 // Se guardan hashes (SHA-256) para no dejar los correos admin a la vista en el repositorio público.
 const ADMIN_HASHES = [
     "3653a6f0d32bea8e7d2cd9cc3f3367794dccf198477932bf823b97ec9b45e731",
-    "8d9f2a2da2c92f7bae013a2318bb982589e8667536b30d8a192f606892f5a6d2"
+    "8d9f2a2da2c92f7bae013a2318bb982589e8667536b30d8a192f606892f5a6d2",
+    "89b371f3721a815d6db8ada95989cf1ca1808c92b248f2e7dfefd03c390e74e7",
+    "1cdf38a5cec7b70d77ff015a51ae51ff1833648b76af813bfb501ffe5f605606"
 ];
 async function esAdminCliente(correo) {
     const datos = new TextEncoder().encode(String(correo || "").trim().toLowerCase());
