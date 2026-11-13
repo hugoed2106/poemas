@@ -100,7 +100,7 @@ async function iniciar(contenedor) {
 
 /* ---------- Poemas desde Firestore ---------- */
 const AUTORES = [
-    { codigo: "MG", prefijo: "pG", lista: "#pL", poemas: "#poemsL", conteo: "#MG" },
+    { codigo: "MG", prefijo: "pG", lista: "#pG", poemas: "#poemsL", conteo: "#MG" },
     { codigo: "AR", prefijo: "pA", lista: "#pA", poemas: "#poemsA", conteo: "#AR" },
     { codigo: "HE", prefijo: "pH", lista: "#pH", poemas: "#poemsH", conteo: "#HE" }
 ];
@@ -209,13 +209,25 @@ async function cargarPoemas() {
 
         document.querySelectorAll(".calificacion").forEach(iniciar);
 
-        // Si entraron con un enlace a un poema (#pG3, #pH12, #pA2...), ir a él
-        if (/^#p[GHA]\d+$/.test(location.hash)) {
+        // Si entraron con un enlace a un poema (#pG3, #pH12, #pA2...),
+        // mostrar primero su sección y luego ir a él.
+        const m = location.hash.match(/^#(p[GHA])(\d+)$/);
+        if (m) {
+            window.mostrarAutor?.(m[1]);
             document.querySelector(location.hash)?.scrollIntoView();
         }
     } catch (e) {
         console.error("No se pudieron cargar los poemas:", e);
     }
 }
+
+// Enlace a un poema pulsado ya dentro de la página: mostrar su sección e ir a él.
+window.addEventListener("hashchange", () => {
+    const m = location.hash.match(/^#(p[GHA])(\d+)$/);
+    if (m) {
+        window.mostrarAutor?.(m[1]);
+        document.querySelector(location.hash)?.scrollIntoView();
+    }
+});
 
 cargarPoemas();
