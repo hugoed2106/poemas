@@ -4,6 +4,9 @@
   --muted:#667085; 
   --rule:#DDE1E6; 
   --accent:#24477A;
+  --jg:#C8102E;
+  --azdor:#A86FD1;
+  --angela: #D9A400;
   --serif:"Newsreader",Georgia,"Times New Roman",serif;
   --sans:"Hanken Grotesk",system-ui,-apple-system,"Segoe UI",sans-serif;
   --pad:clamp(1.25rem,5vw,3rem);
@@ -14,7 +17,10 @@
     --ink:#E8EAED;
     --muted:#9AA3B2;
     --rule:#2A2F38;
-    --accent:#8FB3E8
+    --accent:#8FB3E8;
+    --jg:#FF7A70;
+    --azdor:#C9A0E8;
+    --angela: #FACC15;
   }
 }
 *{
@@ -159,6 +165,34 @@ h1{
 .toc a:hover{
   background-size:100% 1px;
   color:var(--accent)
+}
+/* Colores por autor: JG en rojo, AzDor en lila */
+.toc .authors a#HE{
+  color:var(--jg)
+}
+.toc .authors a#HE:hover{
+  color:var(--jg);
+  background-image:linear-gradient(var(--jg),var(--jg))
+}
+.toc .authors a#MG{
+  color:var(--azdor)
+}
+.toc .authors a#MG:hover{
+  color:var(--azdor);
+  background-image:linear-gradient(var(--azdor),var(--azdor))
+}
+.toc .authors a#AR{
+  color:var(--angela)
+}
+.toc .authors a#AR:hover{
+  color:var(--angela);
+  background-image:linear-gradient(var(--angela),var(--angela))
+}
+#poemsH .poem-head h2{
+  color:var(--jg)
+}
+#poemsL .poem-head h2{
+  color:var(--azdor)
 }
 .toc .authors{
   padding-bottom:1.5rem;
