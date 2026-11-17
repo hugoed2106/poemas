@@ -100,9 +100,9 @@ async function iniciar(contenedor) {
 
 /* ---------- Poemas desde Firestore ---------- */
 const AUTORES = [
-    { codigo: "MG", prefijo: "pG", lista: "#pG", poemas: "#poemsL", conteo: "#MG" },
-    { codigo: "AR", prefijo: "pA", lista: "#pA", poemas: "#poemsA", conteo: "#AR" },
-    { codigo: "HE", prefijo: "pH", lista: "#pH", poemas: "#poemsH", conteo: "#HE" }
+    { codigo: "MG", prefijo: "pG", lista: "#pG", poemas: "#poemsL", conteo: "#MG", nombre: "AzDor Lupita" },
+    { codigo: "AR", prefijo: "pA", lista: "#pA", poemas: "#poemsA", conteo: "#AR", nombre: "Angela" },
+    { codigo: "HE", prefijo: "pH", lista: "#pH", poemas: "#poemsH", conteo: "#HE", nombre: "𝑱𝑮" }
 ];
 
 // "Fácil, pero difícil" + "HE" -> "facil-pero-dificil-he" (el NFD también convierte la ñ en n)
@@ -184,6 +184,7 @@ function crearArticulo(p, prefijo, n, codigo) {
 
 async function cargarPoemas() {
     try {
+        const conteos = {};
         for (const a of AUTORES) {
             const snap = await getDocs(
                 query(collection(db, "poemas-publicados"), where("autor", "==", a.codigo))
@@ -205,7 +206,20 @@ async function cargarPoemas() {
 
             const spanConteo = document.querySelector(a.conteo)?.nextElementSibling;
             if (spanConteo) spanConteo.textContent = `Poemas: ${lista.length}`;
+            conteos[a.codigo] = lista.length;
+
+            // Si un autor no tiene poemas, ocultar su entrada del índice.
+            if (lista.length === 0) {
+                document.querySelector(a.conteo)?.closest("li")?.style.setProperty("display", "none");
+            }
         }
+
+        // Línea de autores del encabezado: solo los que tienen poemas.
+        const visibles = ["HE", "MG", "AR"]
+            .filter((codigo) => (conteos[codigo] || 0) > 0)
+            .map((codigo) => AUTORES.find((a) => a.codigo === codigo).nombre);
+        const lineaAutores = document.querySelector(".hero .by");
+        if (lineaAutores && visibles.length) lineaAutores.textContent = visibles.join(", ");
 
         document.querySelectorAll(".calificacion").forEach(iniciar);
 
