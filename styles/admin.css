@@ -139,3 +139,20 @@
   .solicitudCuerpo { margin: 0; font: inherit; font-size: .95rem; white-space: pre-wrap; overflow-wrap: anywhere; background: var(--panel); border: 1px solid var(--linea); border-radius: 6px; padding: .6rem .75rem; }
   a.boton { font-size: .9rem; padding: .45rem .9rem; border-radius: 6px; border: 1px solid var(--linea); color: var(--texto); text-decoration: none; }
   a.boton:hover { border-color: var(--suave); }
+
+  .menu { display: flex; flex-wrap: wrap; gap: .5rem; flex-basis: 100%; margin-top: .75rem; }
+  .menu button[aria-current="true"] { background: var(--acento); border-color: var(--acento); color: #1a1405; font-weight: 600; }
+
+  .seccion { margin-top: .5rem; }
+  .conteo { color: var(--suave); font-size: .9rem; margin: .5rem 0 0; }
+
+  .poema { display: flex; flex-direction: column; gap: .6rem; padding: 1rem .85rem; border-bottom: 1px solid var(--linea); border-left: 3px solid transparent; }
+  .poema.cambiado { border-left-color: var(--acento); background: var(--panel); }
+  .poemaCabeza { display: grid; grid-template-columns: minmax(0, 1fr) 10rem auto; gap: .75rem; align-items: center; }
+  .poema textarea { font: inherit; width: 100%; min-height: 9rem; resize: vertical; padding: .5rem .6rem; border-radius: 6px; border: 1px solid var(--linea); background: var(--fondo); color: var(--texto); line-height: 1.6; }
+  .poema textarea:hover { border-color: var(--suave); }
+  .poema .nota { margin: 0; font-size: .8rem; color: var(--suave); }
+
+  @media (max-width: 680px) {
+    .poemaCabeza { grid-template-columns: 1fr; }
+  }

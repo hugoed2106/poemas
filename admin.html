@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="robots" content="noindex">
     <link rel="stylesheet" href="styles/admin.css">
-    <title>Administrar votos - Poemas</title>
+    <title>Administrar - Poemas</title>
     <meta name="theme-color" content="#0b0d12">
     <link rel="manifest" href="manifest.json">
     <link rel="apple-touch-icon" href="icon-192.png">
@@ -17,12 +17,17 @@
     <header class="cabecera">
         <div>
             <a class="volver" href="./">Volver a los poemas</a>
-            <h1>Administrar votos</h1>
+            <h1>Administrar poemas</h1>
         </div>
         <div class="usuario" id="usuario" hidden>
             <span id="correo"></span>
             <a href="https://hugoed2106.github.io/poemas/admin.html"><button type="button" id="salir">Cerrar sesión</button></a>
         </div>
+        <nav class="menu" id="menu" hidden aria-label="Secciones de administración">
+            <button type="button" data-seccion="calificaciones" aria-current="true">Calificaciones</button>
+            <button type="button" data-seccion="solicitudes" aria-current="false">Solicitudes</button>
+            <button type="button" data-seccion="poemas" aria-current="false">Poemas</button>
+        </nav>
     </header>
 
     <section class="sesion" id="sesion">
@@ -50,6 +55,7 @@
     </section>
 
     <main id="panel" hidden>
+      <section id="seccion-calificaciones" class="seccion">
         <div class="barra">
             <span>Edita la suma y los votos de cada poema. El promedio se calcula solo.</span>
             <button type="button" id="recargar">Recargar</button>
@@ -114,7 +120,9 @@
                 <button type="submit" class="primario">Agregar poema</button>
             </form>
         </section>
+      </section>
 
+      <section id="seccion-solicitudes" class="seccion" hidden>
         <section class="solicitudes">
             <div class="barra">
                 <div>
@@ -126,6 +134,43 @@
             <ul class="lista" id="listaSol"></ul>
             <p class="vacio" id="vacioSol" hidden>Todavía no hay solicitudes.</p>
         </section>
+      </section>
+
+      <section id="seccion-poemas" class="seccion" hidden>
+        <div class="barra">
+            <span>Edita el título, la fecha y el cuerpo de cada poema publicado. Los cambios se ven en la página al recargarla.</span>
+            <button type="button" id="recargarPoemas">Recargar</button>
+        </div>
+
+        <div class="controles">
+            <label class="celda">
+                <span class="rotulo">Buscar</span>
+                <input type="search" id="buscarPoema" placeholder="Título o palabras del poema" autocomplete="off">
+            </label>
+            <label class="celda">
+                <span class="rotulo">Autor</span>
+                <select id="filtroAutorPoema">
+                    <option value="todos">Todos</option>
+                    <option value="HE">𝑱𝑮</option>
+                    <option value="MG">AzDor Lupita</option>
+                    <option value="AR">Angela</option>
+                </select>
+            </label>
+            <label class="celda">
+                <span class="rotulo">Ordenar por</span>
+                <select id="ordenPoema">
+                    <option value="fecha-desc">Fecha: más reciente primero</option>
+                    <option value="fecha-asc">Fecha: más antiguo primero</option>
+                    <option value="titulo-az">Título (A–Z)</option>
+                    <option value="titulo-za">Título (Z–A)</option>
+                </select>
+            </label>
+        </div>
+
+        <p class="conteo" id="conteoPoemas"></p>
+        <ul class="lista" id="listaPoemas"></ul>
+        <p class="vacio" id="vacioPoemas" hidden></p>
+      </section>
     </main>
 </div>
 

@@ -4,7 +4,7 @@ history.replaceState(null, "", "admin.page");
     import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut,
         sendEmailVerification }
         from "https://www.gstatic.com/firebasejs/13.0.0/firebase-auth.js";
-    import { getFirestore, collection, getDocs, doc, setDoc, deleteDoc, writeBatch }
+    import { getFirestore, collection, getDocs, getDoc, doc, setDoc, deleteDoc, writeBatch }
         from "https://www.gstatic.com/firebasejs/13.0.0/firebase-firestore.js";
 
     const firebaseConfig = {
@@ -406,6 +406,198 @@ history.replaceState(null, "", "admin.page");
     }
     $("#recargarSol").addEventListener("click", cargarSolicitudes);
 
+    /* ---------- Secciones y menú ---------- */
+    const SECCIONES = ["calificaciones", "solicitudes", "poemas"];
+    let seccionActual = localStorage.getItem("admin-seccion") || "calificaciones";
+    if (!SECCIONES.includes(seccionActual)) seccionActual = "calificaciones";
+
+    function mostrarSeccion(nombre) {
+        seccionActual = nombre;
+        localStorage.setItem("admin-seccion", nombre);
+        SECCIONES.forEach((n) => { $("#seccion-" + n).hidden = n !== nombre; });
+        document.querySelectorAll("#menu button").forEach((b) => {
+            b.setAttribute("aria-current", String(b.dataset.seccion === nombre));
+        });
+        if (nombre === "poemas") cargarPoemas();
+    }
+    document.querySelectorAll("#menu button").forEach((b) => {
+        b.addEventListener("click", () => mostrarSeccion(b.dataset.seccion));
+    });
+
+    /* ---------- Editar poemas publicados ---------- */
+    const listaPoemas = $("#listaPoemas");
+    const AUTORES_PUB = { HE: "𝑱𝑮", MG: "AzDor Lupita", AR: "Angela" };
+    let poemasPub = [];             // { id, titulo, fecha, poema, autor, nuevo?, especial? }
+    let poemasCargados = false;
+    let poemasCargando = false;
+    const vistaPoemas = { autor: "todos", orden: "fecha-desc", texto: "" };
+
+    // "Fácil, pero difícil" + "HE" -> "facil-pero-dificil-he" (igual que en poemas-publicados.js).
+    // El identificador de los votos se arma con el título, así que al cambiar el título hay que moverlos.
+    function crearDataPoema(titulo, codigo) {
+        const base = titulo
+            .toLowerCase()
+            .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+            .trim()
+            .replace(/\s+/g, "-")
+            .replace(/[^a-z0-9-]/g, "")
+            .replace(/-+/g, "-")
+            .replace(/^-|-$/g, "");
+        return `${base}-${codigo.toLowerCase()}`;
+    }
+
+    async function migrarVotos(viejoId, nuevoId) {
+        const viejo = await getDoc(doc(db, "poemas", viejoId));
+        if (!viejo.exists()) return;
+        const nuevo = await getDoc(doc(db, "poemas", nuevoId));
+        if (nuevo.exists()) {
+            estado("El nuevo título ya tiene votos; los votos anteriores se quedaron con el identificador viejo.", "error");
+            return;
+        }
+        await setDoc(doc(db, "poemas", nuevoId), viejo.data());
+        await deleteDoc(doc(db, "poemas", viejoId));
+        const item = items.find((i) => i.id === viejoId);
+        if (item) { item.id = nuevoId; pintar(); }
+    }
+
+    function crearEditorPoema(p) {
+        const li = document.createElement("li");
+        li.className = "poema";
+        li.dataset.id = p.id;
+
+        const titulo = document.createElement("input");
+        titulo.type = "text";
+        titulo.value = p.titulo;
+        titulo.maxLength = 200;
+        titulo.setAttribute("aria-label", "Título");
+
+        const fecha = document.createElement("input");
+        fecha.type = "date";
+        fecha.value = p.fecha || "";
+        fecha.setAttribute("aria-label", "Fecha");
+
+        const etiqueta = document.createElement("span");
+        etiqueta.className = "autor autor-" + String(p.autor || "").toLowerCase();
+        etiqueta.textContent = AUTORES_PUB[p.autor] || p.autor || "";
+
+        const cabeza = document.createElement("div");
+        cabeza.className = "poemaCabeza";
+        cabeza.append(titulo, fecha, etiqueta);
+
+        const cuerpo = document.createElement("textarea");
+        cuerpo.value = p.poema || "";
+        cuerpo.rows = 8;
+        cuerpo.setAttribute("aria-label", "Cuerpo del poema");
+
+        const nota = document.createElement("p");
+        nota.className = "nota";
+        nota.textContent = "Si cambias el título, sus votos se mueven al nuevo identificador.";
+
+        const acciones = document.createElement("div");
+        acciones.className = "acciones";
+        const bGuardar = boton("Guardar cambios", "primario");
+        const bBorrar = boton("Borrar poema", "peligro");
+        acciones.append(bGuardar, bBorrar);
+
+        function refrescar() {
+            const cambio = titulo.value !== p.titulo || fecha.value !== (p.fecha || "") || cuerpo.value !== (p.poema || "");
+            li.classList.toggle("cambiado", cambio);
+            bGuardar.disabled = !cambio;
+        }
+        [titulo, fecha, cuerpo].forEach((el) => el.addEventListener("input", refrescar));
+
+        bGuardar.addEventListener("click", async () => {
+            const nuevoTitulo = titulo.value.trim();
+            const nuevaFecha = fecha.value;
+            const nuevoCuerpo = cuerpo.value;
+            if (!nuevoTitulo) return estado("El título no puede estar vacío.", "error");
+            if (!/^\d{4}-\d{2}-\d{2}$/.test(nuevaFecha)) return estado("La fecha debe tener el formato AAAA-MM-DD.", "error");
+            bGuardar.disabled = true;
+            try {
+                await setDoc(doc(db, "poemas-publicados", p.id),
+                    { titulo: nuevoTitulo, fecha: nuevaFecha, poema: nuevoCuerpo }, { merge: true });
+                const viejoId = crearDataPoema(p.titulo, p.autor);
+                const nuevoId = crearDataPoema(nuevoTitulo, p.autor);
+                if (viejoId !== nuevoId) await migrarVotos(viejoId, nuevoId);
+                p.titulo = nuevoTitulo;
+                p.fecha = nuevaFecha;
+                p.poema = nuevoCuerpo;
+                pintarPoemas();
+                estado(`Guardado: ${nuevoTitulo}`, "ok");
+            } catch (e) {
+                refrescar();
+                errorFirestore(e);
+            }
+        });
+
+        bBorrar.addEventListener("click", async () => {
+            if (!confirm(`¿Borrar el poema "${p.titulo}"? También se borrarán sus votos.`)) return;
+            try {
+                const idVotos = crearDataPoema(p.titulo, p.autor);
+                await deleteDoc(doc(db, "poemas-publicados", p.id));
+                await deleteDoc(doc(db, "poemas", idVotos));
+                poemasPub = poemasPub.filter((x) => x.id !== p.id);
+                items = items.filter((i) => i.id !== idVotos);
+                pintarPoemas();
+                pintar();
+                estado(`Borrado: ${p.titulo}`, "ok");
+            } catch (e) {
+                errorFirestore(e);
+            }
+        });
+
+        li.append(cabeza, cuerpo, nota, acciones);
+        refrescar();
+        return li;
+    }
+
+    function calcularVistaPoemas() {
+        const t = vistaPoemas.texto.trim().toLowerCase();
+        return poemasPub
+            .filter((p) => (vistaPoemas.autor === "todos" || p.autor === vistaPoemas.autor)
+                && (!t || p.titulo.toLowerCase().includes(t) || (p.poema || "").toLowerCase().includes(t)))
+            .sort((x, y) => {
+                if (vistaPoemas.orden === "fecha-desc") return (y.fecha || "").localeCompare(x.fecha || "") || txt(x.titulo, y.titulo);
+                if (vistaPoemas.orden === "fecha-asc") return (x.fecha || "").localeCompare(y.fecha || "") || txt(x.titulo, y.titulo);
+                if (vistaPoemas.orden === "titulo-az") return txt(x.titulo, y.titulo);
+                return txt(y.titulo, x.titulo);
+            });
+    }
+
+    function pintarPoemas() {
+        const enVista = calcularVistaPoemas();
+        listaPoemas.replaceChildren(...enVista.map(crearEditorPoema));
+        const vacio = $("#vacioPoemas");
+        vacio.hidden = enVista.length > 0;
+        vacio.textContent = poemasPub.length
+            ? "Ningún poema coincide con el filtro."
+            : "Todavía no hay poemas publicados.";
+        $("#conteoPoemas").textContent = `${enVista.length} de ${poemasPub.length} poemas`;
+    }
+
+    async function cargarPoemas(forzar) {
+        if (poemasCargando) return;
+        if (poemasCargados && !forzar) return;
+        poemasCargando = true;
+        estado("Cargando poemas...");
+        try {
+            const snap = await getDocs(collection(db, "poemas-publicados"));
+            poemasPub = snap.docs.map((d) => ({ id: d.id, ...d.data(), titulo: d.data().titulo || "Sin título" }));
+            poemasCargados = true;
+            pintarPoemas();
+            estado("");
+        } catch (e) {
+            errorFirestore(e);
+        } finally {
+            poemasCargando = false;
+        }
+    }
+
+    $("#buscarPoema").addEventListener("input", (e) => { vistaPoemas.texto = e.target.value; pintarPoemas(); });
+    $("#filtroAutorPoema").addEventListener("change", (e) => { vistaPoemas.autor = e.target.value; pintarPoemas(); });
+    $("#ordenPoema").addEventListener("change", (e) => { vistaPoemas.orden = e.target.value; pintarPoemas(); });
+    $("#recargarPoemas").addEventListener("click", () => cargarPoemas(true));
+
     /* ---------- Sesión ---------- */
     // Solo sirve para decidir qué se muestra. La seguridad real está en las reglas de Firestore.
     // Se guardan hashes (SHA-256) para no dejar los correos admin a la vista en el repositorio público.
@@ -458,13 +650,16 @@ history.replaceState(null, "", "admin.page");
     $("#recargar").addEventListener("click", cargar);
 
     async function mostrarSegunUsuario(user) {
-        const ocultarTodo = () => ["#sesion", "#verificar", "#soloUsuario", "#panel", "#usuario"].forEach((q) => { $(q).hidden = true; });
+        const ocultarTodo = () => ["#sesion", "#verificar", "#soloUsuario", "#panel", "#menu", "#usuario"].forEach((q) => { $(q).hidden = true; });
         ocultarTodo();
         if (!user) {
             $("#sesion").hidden = false;
             history.replaceState(null, "", "admin.page");
             lista.replaceChildren();
             listaSol.replaceChildren();
+            listaPoemas.replaceChildren();
+            poemasPub = [];
+            poemasCargados = false;
             return;
         }
         $("#usuario").hidden = false;
@@ -479,10 +674,12 @@ history.replaceState(null, "", "admin.page");
         }
         if (admin) {
             $("#panel").hidden = false;
+            $("#menu").hidden = false;
             const nombre = user.email.split("@")[0];
             history.replaceState(null, "", "admin." + encodeURIComponent(nombre));
             cargar();
             cargarSolicitudes();
+            mostrarSeccion(seccionActual);
         } else {
             if (user.email.includes(".edu.mx")) {
                 const nombre = user.email.split("@")[0];
