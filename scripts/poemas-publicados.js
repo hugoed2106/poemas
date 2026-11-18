@@ -1,18 +1,5 @@
-import { initializeApp } from "https://www.gstatic.com/firebasejs/13.0.0/firebase-app.js";
-import { getFirestore, doc, getDoc, setDoc, increment, collection, getDocs, query, where }
-    from "https://www.gstatic.com/firebasejs/13.0.0/firebase-firestore.js";
-
-const firebaseConfig = {
-    apiKey: "AIzaSyCM8fjWstKNjL4l4AbG3Z16xiYVl6s-XAA",
-    authDomain: "poemas-jg.firebaseapp.com",
-    projectId: "poemas-jg",
-    storageBucket: "poemas-jg.firebasestorage.app",
-    messagingSenderId: "619654028698",
-    appId: "1:619654028698:web:2d59e97d07a7efd643ee23",
-    measurementId: "G-QHE41GVRSH"
-};
-
-const db = getFirestore(initializeApp(firebaseConfig), "default");
+import { db, doc, getDoc, setDoc, increment, collection, getDocs, query, where,
+    crearDataPoema, formatearFecha, esNuevo, ordenarAutores } from "./firestore.js";
 
 /* ---------- Calificación con estrellas ---------- */
 async function iniciar(contenedor) {
@@ -100,26 +87,10 @@ async function iniciar(contenedor) {
 
 /* ---------- Poemas desde Firestore ---------- */
 const AUTORES = [
-    { codigo: "MG", prefijo: "pG", lista: "#pG", poemas: "#poemsL", conteo: "#MG", nombre: "AzDor Lupita" },
+    { codigo: "HE", prefijo: "pH", lista: "#pH", poemas: "#poemsH", conteo: "#HE", nombre: "𝑱𝑮" },
     { codigo: "AR", prefijo: "pA", lista: "#pA", poemas: "#poemsA", conteo: "#AR", nombre: "Angela" },
-    { codigo: "HE", prefijo: "pH", lista: "#pH", poemas: "#poemsH", conteo: "#HE", nombre: "𝑱𝑮" }
+    { codigo: "MG", prefijo: "pG", lista: "#pG", poemas: "#poemsL", conteo: "#MG", nombre: "AzDor Lupita" }
 ];
-
-// "Fácil, pero difícil" + "HE" -> "facil-pero-dificil-he" (el NFD también convierte la ñ en n)
-function crearDataPoema(titulo, codigo) {
-    const base = titulo
-        .toLowerCase()
-        .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
-        .trim()
-        .replace(/\s+/g, "-")
-        .replace(/[^a-z0-9-]/g, "")
-        .replace(/-+/g, "-")
-        .replace(/^-|-$/g, "");
-    return `${base}-${codigo.toLowerCase()}`;
-}
-
-// "2026-11-03" -> "03/11/2026"
-const formatearFecha = (iso) => iso.split("-").reverse().join("/");
 
 function etiqueta(clase, texto) {
     const s = document.createElement("span");
@@ -135,7 +106,7 @@ function crearItemIndice(p, prefijo, n) {
     a.href = `#${prefijo}${n}`;
     a.textContent = p.titulo;
     li.append(a);
-    if (p.nuevo) li.append(etiqueta("new", "nuevo"));
+    if (esNuevo(p.fecha)) li.append(etiqueta("new", "nuevo"));
     if (p.especial) li.append(etiqueta("special", "especial"));
     li.append(etiqueta("d", formatearFecha(p.fecha)));
     return li;
@@ -157,7 +128,7 @@ function crearArticulo(p, prefijo, n, codigo) {
     const time = document.createElement("time");
     time.textContent = formatearFecha(p.fecha);
     meta.append(time);
-    if (p.nuevo) meta.append(etiqueta("new", "nuevo"));
+    if (esNuevo(p.fecha)) meta.append(etiqueta("new", "nuevo"));
     if (p.especial) meta.append(etiqueta("special", "especial"));
 
     const cal = document.createElement("div");
@@ -215,9 +186,10 @@ async function cargarPoemas() {
         }
 
         // Línea de autores del encabezado: solo los que tienen poemas.
-        const visibles = ["HE", "MG", "AR"]
-            .filter((codigo) => (conteos[codigo] || 0) > 0)
-            .map((codigo) => AUTORES.find((a) => a.codigo === codigo).nombre);
+        // JG primero (autor principal) y los demás de la A a la Z.
+        const visibles = ordenarAutores(AUTORES)
+            .filter((a) => (conteos[a.codigo] || 0) > 0)
+            .map((a) => a.nombre);
         const lineaAutores = document.querySelector(".hero .by");
         if (lineaAutores && visibles.length) lineaAutores.textContent = visibles.join(", ");
 

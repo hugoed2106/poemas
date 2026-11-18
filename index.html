@@ -13,16 +13,6 @@
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&display=swap">
         <link rel="stylesheet" href="styles/site.css">
-        <style>
-            /* Estrella parcial del promedio: --p la pone el JS (10% ... 100%) */
-            .estrellas button.semiactiva {
-                background: linear-gradient(to right, gray var(--p, 100%), transparent var(--p, 100%));
-                -webkit-background-clip: text;
-                background-clip: text;
-                color: transparent;
-                -webkit-text-fill-color: transparent;
-            }
-        </style>
     </head>
 <body>
     <div class="bar">
@@ -48,7 +38,7 @@
     <main id="top" class="wrap">
         <header class="hero">
             <h1>Poemas</h1>
-            <p class="by">𝑱𝑮, AzDor Lupita, Angela</p>
+            <p class="by">𝑱𝑮, Angela, AzDor Lupita</p>
         </header>
         <nav id="indice" class="toc" aria-label="Índice">
             <ol class="authors">
@@ -57,22 +47,22 @@
                     <span class="d">Poemas: 0</span>
                 </li>
                 <li>
-                    <a href="#pG" id="MG" class="asj">AzDor Lupita</a>
-                    <span class="d">Poemas: 0</span>
-                </li>
-                <li>
                     <a href="#pA" id="AR" class="asj">Angela</a>
                     <span class="d">Poemas: 0</span>
                 </li>
+                <li>
+                    <a href="#pG" id="MG" class="asj">AzDor Lupita</a>
+                    <span class="d">Poemas: 0</span>
+                </li>
             </ol>
-            <ol id="pG"></ol>
             <ol id="pH"></ol>
             <ol id="pA"></ol>
+            <ol id="pG"></ol>
             <script src="scripts/indice1.js"></script>
         </nav>
-        <div class="poems" id="poemsL"></div>
         <div class="poems" id="poemsH"></div>
         <div class="poems" id="poemsA"></div>
+        <div class="poems" id="poemsL"></div>
         <footer class="foot">
             <p>
                 <a href="links/">Links para Autores</a>
@@ -89,6 +79,7 @@
         </footer>
     </main>
 
+    <script type="module" src="scripts/firestore.js"></script>
     <script type="module" src="scripts/poemas-publicados.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
     <script src="scripts/viewer.js"></script>

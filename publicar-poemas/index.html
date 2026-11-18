@@ -13,6 +13,12 @@
 </head>
 <body>
     <main>
+        <header class="cabecera-form">
+            <a class="volver" href="../admin.html">Volver al panel</a>
+            <h1>Publicar un poema</h1>
+            <p>La etiqueta «nuevo» se pone sola según la fecha del poema (mes actual o anterior).</p>
+        </header>
+
         <div class="usuario" id="usuario" hidden>
             <span id="correo"></span>
             <button type="button" id="salir">Cerrar sesión</button>
@@ -37,32 +43,34 @@
 
         <form class="form-poem" id="form" hidden>
             <div class="data">
-                <input type="text" name="Título" id="title" placeholder="Título">
-                <input type="date" name="Fecha" id="date" placeholder="Fecha" required>
-                <div class="Checkbox">
-                    <input type="checkbox" name="nuevo" id="new">
-                    <p>Nuevo</p>
-                </div>
-                <div class="Checkbox">
-                    <input type="checkbox" name="special" id="special">
-                    <p>Special</p>
-                </div>
+                <label for="title">Título</label>
+                <input type="text" name="Título" id="title" placeholder="Título del poema" required maxlength="200" autocomplete="off">
+                <label for="date">Fecha</label>
+                <input type="date" name="Fecha" id="date" required>
+                <label for="authors">Autor</label>
                 <select name="opciones" id="authors" required>
                     <option value="" selected disabled hidden>Selecciona el autor</option>
                     <option value="HE">𝑱𝑮</option>
-                    <option value="MG">AzDor Lupita</option>
                     <option value="AR">Angela</option>
+                    <option value="MG">AzDor Lupita</option>
                 </select>
-                <button type="submit">Enviar</button>
+                <div class="Checkbox">
+                    <input type="checkbox" name="special" id="special">
+                    <label for="special">Especial</label>
+                </div>
+                <button type="submit">Publicar poema</button>
             </div>
             <div class="body">
-                <textarea id="poem" rows="8" placeholder="Cuerpo del Poema" required></textarea>
+                <label for="poem">Cuerpo del poema</label>
+                <textarea id="poem" rows="8" placeholder="Escribe el poema aquí..." required></textarea>
+                <small id="contador"></small>
             </div>
         </form>
     </main>
 
     <div class="estado" id="estado" role="status" aria-live="polite" hidden></div>
 
+    <script type="module" src="../scripts/firestore.js"></script>
     <script type="module" src="../scripts/pub.js"></script>
 <script>
     if ('serviceWorker' in navigator) {

@@ -1,8 +1,11 @@
-const CACHE = 'poemas-v1';
+const CACHE = 'poemas-v2';
 const CORE = [
   './index.html',
   './styles/site.css',
   './scripts/nav-links.js',
+  './scripts/indice1.js',
+  './scripts/firestore.js',
+  './scripts/poemas-publicados.js',
   './manifest.json',
   './icon-192.png',
   './icon-512.png'

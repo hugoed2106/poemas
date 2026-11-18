@@ -1,38 +1,15 @@
 history.replaceState(null, "", "admin.page");
 
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/13.0.0/firebase-app.js";
-    import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut,
-        sendEmailVerification }
-        from "https://www.gstatic.com/firebasejs/13.0.0/firebase-auth.js";
-    import { getFirestore, collection, getDocs, getDoc, doc, setDoc, deleteDoc, writeBatch }
-        from "https://www.gstatic.com/firebasejs/13.0.0/firebase-firestore.js";
-
-    const firebaseConfig = {
-        apiKey: "AIzaSyCM8fjWstKNjL4l4AbG3Z16xiYVl6s-XAA",
-        authDomain: "poemas-jg.firebaseapp.com",
-        projectId: "poemas-jg",
-        storageBucket: "poemas-jg.firebasestorage.app",
-        messagingSenderId: "619654028698",
-        appId: "1:619654028698:web:2d59e97d07a7efd643ee23"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const db = getFirestore(app, "default");
+    import { auth, db, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut,
+        sendEmailVerification, collection, getDocs, getDoc, doc, setDoc, deleteDoc, writeBatch,
+        crearDataPoema, esAdminCliente, errorAuth, crearEstado }
+        from "./firestore.js";
 
     const $ = (selector) => document.querySelector(selector);
     const lista = $("#lista");
 
     /* ---------- Mensajes ---------- */
-    let temporizador;
-    function estado(texto, tipo = "") {
-        const el = $("#estado");
-        el.textContent = texto;
-        el.className = "estado " + tipo;
-        el.hidden = !texto;
-        clearTimeout(temporizador);
-        if (texto && tipo === "ok") temporizador = setTimeout(() => { el.hidden = true; }, 3000);
-    }
+    const estado = crearEstado($("#estado"));
 
     function errorFirestore(e) {
         console.error(e);
@@ -79,12 +56,15 @@ history.replaceState(null, "", "admin.page");
         if (py === null) return -1;
         return (px - py) * dir || porNombre(x, y);
     };
+    // JG es el autor principal: va primero; los demás se ordenan de la A a la Z.
+    const ordenAutor = (a, b) => (a === "he" ? -1 : b === "he" ? 1 : txt(AUTORES[a], AUTORES[b]));
+
     const ORDENES = {
         "nombre-az": porNombre,
         "nombre-za": (x, y) => porNombre(y, x),
         "id-az": (x, y) => txt(x.id, y.id),
         "id-za": (x, y) => txt(y.id, x.id),
-        "autor": (x, y) => txt(AUTORES[autorDe(x.id)], AUTORES[autorDe(y.id)]) || porNombre(x, y),
+        "autor": (x, y) => ordenAutor(autorDe(x.id), autorDe(y.id)) || porNombre(x, y),
         "calif-desc": porCalif(-1),
         "calif-asc": porCalif(1),
         "votos-desc": (x, y) => y.votos - x.votos || porNombre(x, y),
@@ -329,85 +309,9 @@ history.replaceState(null, "", "admin.page");
         }
     });
 
-    /* ---------- Solicitudes de publicación ---------- */
-    const listaSol = $("#listaSol");
-    let solicitudes = [];
-
-    function fechaTexto(f) {
-        const d = f && typeof f.toDate === "function" ? f.toDate() : null;
-        return d ? d.toLocaleString("es-MX", { dateStyle: "medium", timeStyle: "short" }) : "";
-    }
-
-    function crearSolicitud(s) {
-        const li = document.createElement("li");
-        li.className = "solicitud";
-
-        const autor = document.createElement("p");
-        autor.className = "nombre";
-        autor.textContent = s.autor || "(sin nombre)";
-        const meta = document.createElement("p");
-        meta.className = "id";
-        meta.textContent = [s.correo, fechaTexto(s.fecha)].filter(Boolean).join(" · ");
-        const cab = document.createElement("div");
-        cab.className = "solicitudCab";
-        cab.append(autor, meta);
-
-        // textContent: el mensaje lo escribe un usuario, nunca se inserta como HTML.
-        const cuerpo = document.createElement("pre");
-        cuerpo.className = "solicitudCuerpo";
-        cuerpo.textContent = s.mensaje || "";
-
-        const acciones = document.createElement("div");
-        acciones.className = "acciones";
-        if (s.correo) {
-            const responder = document.createElement("a");
-            responder.className = "boton";
-            responder.href = "mailto:" + encodeURIComponent(s.correo).replace("%40", "@") +
-                "?subject=" + encodeURIComponent("Re: " + (s.titulo || "Solicitud de publicación"));
-            responder.textContent = "Responder por correo";
-            acciones.append(responder);
-        }
-        const bBorrar = boton("Borrar", "peligro");
-        bBorrar.addEventListener("click", async () => {
-            if (!confirm(`¿Borrar la solicitud de "${s.autor || "sin nombre"}"?`)) return;
-            try {
-                await deleteDoc(doc(db, "solicitudes", s.id));
-                solicitudes = solicitudes.filter((x) => x.id !== s.id);
-                pintarSolicitudes();
-                estado("Solicitud borrada", "ok");
-            } catch (e) {
-                errorFirestore(e);
-            }
-        });
-        acciones.append(bBorrar);
-
-        li.append(cab, cuerpo, acciones);
-        return li;
-    }
-
-    function pintarSolicitudes() {
-        listaSol.replaceChildren(...solicitudes.map(crearSolicitud));
-        $("#vacioSol").hidden = solicitudes.length > 0;
-        $("#conteoSol").textContent = solicitudes.length
-            ? `${solicitudes.length} solicitud${solicitudes.length === 1 ? "" : "es"}`
-            : "";
-    }
-
-    async function cargarSolicitudes() {
-        try {
-            const snap = await getDocs(collection(db, "solicitudes"));
-            solicitudes = snap.docs
-                .map((d) => ({ ...d.data(), id: d.id }))
-                .sort((a, b) => (b.fecha?.toMillis?.() ?? 0) - (a.fecha?.toMillis?.() ?? 0));
-            pintarSolicitudes();
-        } catch (e) {
-            errorFirestore(e);
-        }
-    }
-    $("#recargarSol").addEventListener("click", cargarSolicitudes);
 
     /* ---------- Secciones y menú ---------- */
-    const SECCIONES = ["calificaciones", "solicitudes", "poemas"];
+    const SECCIONES = ["calificaciones", "poemas"];
     let seccionActual = localStorage.getItem("admin-seccion") || "calificaciones";
     if (!SECCIONES.includes(seccionActual)) seccionActual = "calificaciones";
 
@@ -431,20 +335,6 @@ history.replaceState(null, "", "admin.page");
     let poemasCargados = false;
     let poemasCargando = false;
     const vistaPoemas = { autor: "todos", orden: "fecha-desc", texto: "" };
-
-    // "Fácil, pero difícil" + "HE" -> "facil-pero-dificil-he" (igual que en poemas-publicados.js).
-    // El identificador de los votos se arma con el título, así que al cambiar el título hay que moverlos.
-    function crearDataPoema(titulo, codigo) {
-        const base = titulo
-            .toLowerCase()
-            .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
-            .trim()
-            .replace(/\s+/g, "-")
-            .replace(/[^a-z0-9-]/g, "")
-            .replace(/-+/g, "-")
-            .replace(/^-|-$/g, "");
-        return `${base}-${codigo.toLowerCase()}`;
-    }
 
     async function migrarVotos(viejoId, nuevoId) {
         const viejo = await getDoc(doc(db, "poemas", viejoId));
@@ -600,41 +490,17 @@ history.replaceState(null, "", "admin.page");
 
     /* ---------- Sesión ---------- */
     // Solo sirve para decidir qué se muestra. La seguridad real está en las reglas de Firestore.
-    // Se guardan hashes (SHA-256) para no dejar los correos admin a la vista en el repositorio público.
-    const ADMIN_HASHES = [
-        "3653a6f0d32bea8e7d2cd9cc3f3367794dccf198477932bf823b97ec9b45e731",
-        "8d9f2a2da2c92f7bae013a2318bb982589e8667536b30d8a192f606892f5a6d2",
-        "89b371f3721a815d6db8ada95989cf1ca1808c92b248f2e7dfefd03c390e74e7",
-        "1cdf38a5cec7b70d77ff015a51ae51ff1833648b76af813bfb501ffe5f605606"
-    ];
-    async function esAdminCliente(correo) {
-        const datos = new TextEncoder().encode(String(correo || "").trim().toLowerCase());
-        const buf = await crypto.subtle.digest("SHA-256", datos);
-        const hex = [...new Uint8Array(buf)].map((b) => b.toString(16).padStart(2, "0")).join("");
-        return ADMIN_HASHES.includes(hex);
-    }
-
-    const mensajesAuth = {
-        "auth/too-many-requests": "Demasiados intentos. Espera un momento e inténtalo de nuevo.",
-        "auth/operation-not-allowed": "Ese método no está activado.",
-        "auth/unauthorized-domain": "Este dominio no está autorizado."
-    };
-    function errorAuth(e) {
-        if (e.code === "auth/popup-closed-by-user" || e.code === "auth/cancelled-popup-request") return;
-        console.error(e);
-        estado(mensajesAuth[e.code] || "No se pudo completar: " + (e.message || e.code), "error");
-    }
 
     $("#entrar").addEventListener("click", async () => {
         try { await signInWithPopup(auth, new GoogleAuthProvider()); }
-        catch (e) { errorAuth(e); }
+        catch (e) { errorAuth(e, estado); }
     });
 
     $("#btnReenviar").addEventListener("click", async () => {
         try {
             await sendEmailVerification(auth.currentUser);
             estado("Correo reenviado.", "ok");
-        } catch (e) { errorAuth(e); }
+        } catch (e) { errorAuth(e, estado); }
     });
 
     $("#btnYaVerifique").addEventListener("click", async () => {
@@ -643,7 +509,7 @@ history.replaceState(null, "", "admin.page");
             await auth.currentUser.getIdToken(true); // refresca email_verified para las reglas
             await mostrarSegunUsuario(auth.currentUser);
             if (!auth.currentUser.emailVerified) estado("Todavía no aparece verificado. Abre el enlace del correo y vuelve a intentar.", "error");
-        } catch (e) { errorAuth(e); }
+        } catch (e) { errorAuth(e, estado); }
     });
 
     $("#salir").addEventListener("click", () => signOut(auth));
@@ -656,7 +522,6 @@ history.replaceState(null, "", "admin.page");
             $("#sesion").hidden = false;
             history.replaceState(null, "", "admin.page");
             lista.replaceChildren();
-            listaSol.replaceChildren();
             listaPoemas.replaceChildren();
             poemasPub = [];
             poemasCargados = false;
@@ -678,7 +543,6 @@ history.replaceState(null, "", "admin.page");
             const nombre = user.email.split("@")[0];
             history.replaceState(null, "", "admin." + encodeURIComponent(nombre));
             cargar();
-            cargarSolicitudes();
             mostrarSeccion(seccionActual);
         } else {
             if (user.email.includes(".edu.mx")) {

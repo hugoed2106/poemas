@@ -28,9 +28,11 @@
   .contenedor { max-width: 880px; margin: 0 auto; padding: 1.5rem 1.25rem 6rem; }
 
   .cabecera {
+    position: sticky; top: 0; z-index: 10;
     display: flex; flex-wrap: wrap; gap: 1rem;
     align-items: baseline; justify-content: space-between;
-    padding-bottom: 1.25rem; border-bottom: 1px solid var(--linea);
+    padding: 1rem 0 1.25rem; background: var(--fondo);
+    border-bottom: 1px solid var(--linea);
   }
   h1 { font: 400 1.9rem/1.2 var(--serif); margin: 0; }
   .volver { font-size: .9rem; display: inline-block; margin-bottom: .5rem; }
@@ -53,7 +55,7 @@
 
   .barra { display: flex; justify-content: space-between; align-items: center; margin: 1.5rem 0 .75rem; color: var(--suave); font-size: .9rem; }
 
-  ul.lista { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--linea); }
+  ul.lista { list-style: none; margin: 0; padding: 0; }
   .fila {
     display: grid;
     grid-template-columns: minmax(0, 1fr) 5.5rem 5.5rem 4.5rem auto;
@@ -94,7 +96,6 @@
   .seleccion { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem 1rem; padding: .6rem .85rem; border-top: 1px solid var(--linea); border-bottom: 1px solid var(--linea); font-size: .9rem; color: var(--suave); }
   .seleccion .marcaTodo { display: flex; align-items: center; gap: .5rem; cursor: pointer; }
   .seleccion #conteo { margin-left: auto; }
-  ul.lista { border-top: 0; }
 
   .vacio { color: var(--suave); padding: 2rem 0; }
 
@@ -124,26 +125,16 @@
     .nuevo form { grid-template-columns: 1fr 1fr; }
     .nuevo form .celda:first-child { grid-column: 1 / -1; }
     .nuevo form button { grid-column: 1 / -1; }
+    .poemaCabeza { grid-template-columns: 1fr; }
   }
   
-  .acceso { display: flex; flex-direction: column; gap: .9rem; }
-  .acceso .acciones { flex-wrap: wrap; }
-  button.enlace { align-self: flex-start; border: 0; padding: 0; color: var(--suave); text-decoration: underline; }
-  button.enlace:hover:not(:disabled) { color: var(--texto); }
-  .separador { text-align: center; margin: 1.25rem 0 !important; }
-  
-  .solicitudes { margin-top: 3rem; }
-  .solicitudes h2 { font: 400 1.25rem/1.3 var(--serif); margin: 0; color: var(--texto); }
-  .solicitud { display: flex; flex-direction: column; gap: .6rem; padding: .9rem 1rem .9rem .85rem; border-bottom: 1px solid var(--linea); }
-  .solicitudCab p { margin: 0; }
-  .solicitudCuerpo { margin: 0; font: inherit; font-size: .95rem; white-space: pre-wrap; overflow-wrap: anywhere; background: var(--panel); border: 1px solid var(--linea); border-radius: 6px; padding: .6rem .75rem; }
-  a.boton { font-size: .9rem; padding: .45rem .9rem; border-radius: 6px; border: 1px solid var(--linea); color: var(--texto); text-decoration: none; }
-  a.boton:hover { border-color: var(--suave); }
-
   .menu { display: flex; flex-wrap: wrap; gap: .5rem; flex-basis: 100%; margin-top: .75rem; }
   .menu button[aria-current="true"] { background: var(--acento); border-color: var(--acento); color: #1a1405; font-weight: 600; }
+  .menu a { font-size: .9rem; padding: .45rem .9rem; border-radius: 6px; border: 1px solid var(--linea); color: var(--texto); text-decoration: none; }
+  .menu a:hover { border-color: var(--suave); }
 
-  .seccion { margin-top: .5rem; }
+  .seccion { margin-top: 1rem; background: var(--panel); border: 1px solid var(--linea); border-radius: 12px; padding: 1.25rem 1.25rem 1.5rem; }
+  .seccion h2 { font: 400 1.35rem/1.3 var(--serif); margin: 0 0 .25rem; }
   .conteo { color: var(--suave); font-size: .9rem; margin: .5rem 0 0; }
 
   .poema { display: flex; flex-direction: column; gap: .6rem; padding: 1rem .85rem; border-bottom: 1px solid var(--linea); border-left: 3px solid transparent; }
@@ -152,7 +143,3 @@
   .poema textarea { font: inherit; width: 100%; min-height: 9rem; resize: vertical; padding: .5rem .6rem; border-radius: 6px; border: 1px solid var(--linea); background: var(--fondo); color: var(--texto); line-height: 1.6; }
   .poema textarea:hover { border-color: var(--suave); }
   .poema .nota { margin: 0; font-size: .8rem; color: var(--suave); }
-
-  @media (max-width: 680px) {
-    .poemaCabeza { grid-template-columns: 1fr; }
-  }

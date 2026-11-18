@@ -1,54 +1,45 @@
-import { initializeApp } from "https://www.gstatic.com/firebasejs/13.0.0/firebase-app.js";
-import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut,
-    sendEmailVerification }
-    from "https://www.gstatic.com/firebasejs/13.0.0/firebase-auth.js";
-import { getFirestore, collection, addDoc }
-    from "https://www.gstatic.com/firebasejs/13.0.0/firebase-firestore.js";
-
-const firebaseConfig = {
-    apiKey: "AIzaSyCM8fjWstKNjL4l4AbG3Z16xiYVl6s-XAA",
-    authDomain: "poemas-jg.firebaseapp.com",
-    projectId: "poemas-jg",
-    storageBucket: "poemas-jg.firebasestorage.app",
-    messagingSenderId: "619654028698",
-    appId: "1:619654028698:web:2d59e97d07a7efd643ee23",
-    measurementId: "G-QHE41GVRSH"
-};
-
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore(app, "default");
+import { auth, db, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut,
+    sendEmailVerification, collection, addDoc,
+    esAdminCliente, errorAuth, crearEstado } from "./firestore.js";
 
 const $ = (selector) => document.querySelector(selector);
 const form = $("#form");
 const titleInput = $("#title");
 const dateInput = $("#date");
-const newCheckbox = $("#new");
 const specialCheckbox = $("#special");
 const authorSelect = $("#authors");
 const poemInput = $("#poem");
 const submitButton = form.querySelector('button[type="submit"]');
 
-/* ---------- Mensajes ---------- */
-let temporizador;
-function estado(texto, tipo = "") {
-    const el = $("#estado");
-    el.textContent = texto;
-    el.className = "estado " + tipo;
-    el.hidden = !texto;
-    clearTimeout(temporizador);
-    if (texto && tipo === "ok") temporizador = setTimeout(() => { el.hidden = true; }, 3000);
+// La fecha empieza en hoy; la etiqueta «nuevo» se calcula sola desde la fecha.
+if (!dateInput.value) dateInput.value = new Date().toISOString().slice(0, 10);
+
+/* ---------- Contador de caracteres ---------- */
+const contador = $("#contador");
+function actualizarContador() {
+    if (!contador) return;
+    const texto = poemInput.value;
+    const lineas = texto ? texto.split("\n").length : 0;
+    contador.textContent = `${texto.length} caracteres · ${lineas} ${lineas === 1 ? "línea" : "líneas"}`;
 }
+poemInput.addEventListener("input", actualizarContador);
+actualizarContador();
+
+/* ---------- Mensajes ---------- */
+const estado = crearEstado($("#estado"));
 
 /* ---------- Publicar poema ---------- */
 form.addEventListener("submit", async (event) => {
     event.preventDefault();
     submitButton.disabled = true;
     try {
+        const titulo = titleInput.value.trim();
+        if (!titulo) return estado("Escribe el título del poema.", "error");
+        if (!dateInput.value) return estado("Elige la fecha del poema.", "error");
+        if (!poemInput.value.trim()) return estado("Escribe el cuerpo del poema.", "error");
         const docRef = await addDoc(collection(db, "poemas-publicados"), {
-            titulo: titleInput.value,
+            titulo,
             fecha: dateInput.value,
-            nuevo: newCheckbox.checked,
             especial: specialCheckbox.checked,
             autor: authorSelect.value,
             poema: poemInput.value
@@ -56,6 +47,8 @@ form.addEventListener("submit", async (event) => {
         console.log("Documento escrito con ID:", docRef.id);
         estado("Poema publicado", "ok");
         form.reset();
+        dateInput.value = new Date().toISOString().slice(0, 10);
+        actualizarContador();
     } catch (e) {
         console.error("Error al escribir el documento: ", e);
         if (e.code === "permission-denied") {
@@ -70,41 +63,17 @@ form.addEventListener("submit", async (event) => {
 
 /* ---------- Sesión ---------- */
 // Solo sirve para decidir qué se muestra. La seguridad real está en las reglas de Firestore.
-// Se guardan hashes (SHA-256) para no dejar los correos admin a la vista en el repositorio público.
-const ADMIN_HASHES = [
-    "3653a6f0d32bea8e7d2cd9cc3f3367794dccf198477932bf823b97ec9b45e731",
-    "8d9f2a2da2c92f7bae013a2318bb982589e8667536b30d8a192f606892f5a6d2",
-    "89b371f3721a815d6db8ada95989cf1ca1808c92b248f2e7dfefd03c390e74e7",
-    "1cdf38a5cec7b70d77ff015a51ae51ff1833648b76af813bfb501ffe5f605606"
-];
-async function esAdminCliente(correo) {
-    const datos = new TextEncoder().encode(String(correo || "").trim().toLowerCase());
-    const buf = await crypto.subtle.digest("SHA-256", datos);
-    const hex = [...new Uint8Array(buf)].map((b) => b.toString(16).padStart(2, "0")).join("");
-    return ADMIN_HASHES.includes(hex);
-}
-
-const mensajesAuth = {
-    "auth/too-many-requests": "Demasiados intentos. Espera un momento e inténtalo de nuevo.",
-    "auth/operation-not-allowed": "Ese método no está activado.",
-    "auth/unauthorized-domain": "Este dominio no está autorizado."
-};
-function errorAuth(e) {
-    if (e.code === "auth/popup-closed-by-user" || e.code === "auth/cancelled-popup-request") return;
-    console.error(e);
-    estado(mensajesAuth[e.code] || "No se pudo completar: " + (e.message || e.code), "error");
-}
 
 $("#entrar").addEventListener("click", async () => {
     try { await signInWithPopup(auth, new GoogleAuthProvider()); }
-    catch (e) { errorAuth(e); }
+    catch (e) { errorAuth(e, estado); }
 });
 
 $("#btnReenviar").addEventListener("click", async () => {
     try {
         await sendEmailVerification(auth.currentUser);
         estado("Correo reenviado.", "ok");
-    } catch (e) { errorAuth(e); }
+    } catch (e) { errorAuth(e, estado); }
 });
 
 $("#btnYaVerifique").addEventListener("click", async () => {
@@ -113,7 +82,7 @@ $("#btnYaVerifique").addEventListener("click", async () => {
         await auth.currentUser.getIdToken(true); // refresca email_verified para las reglas
         await mostrarSegunUsuario(auth.currentUser);
         if (!auth.currentUser.emailVerified) estado("Todavía no aparece verificado. Abre el enlace del correo y vuelve a intentar.", "error");
-    } catch (e) { errorAuth(e); }
+    } catch (e) { errorAuth(e, estado); }
 });
 
 $("#salir").addEventListener("click", () => signOut(auth));
