@@ -59,6 +59,7 @@
                     <label for="special">Especial</label>
                 </div>
                 <button type="submit">Publicar poema</button>
+                <button type="button" id="guardarBorrador" class="secundario">Guardar borrador</button>
             </div>
             <div class="body">
                 <label for="poem">Cuerpo del poema</label>
@@ -66,6 +67,13 @@
                 <small id="contador"></small>
             </div>
         </form>
+
+    <section class="borradores" id="borradores" hidden>
+        <h2>Borradores</h2>
+        <p>Poemas guardados sin publicar. Al publicarlos se borran de aquí.</p>
+        <ul id="listaBorradores"></ul>
+        <p id="vacioBorradores" hidden>Todavía no hay borradores.</p>
+    </section>
     </main>
 
     <div class="estado" id="estado" role="status" aria-live="polite" hidden></div>

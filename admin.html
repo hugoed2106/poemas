@@ -26,6 +26,7 @@
         <nav class="menu" id="menu" hidden aria-label="Secciones de administración">
             <button type="button" data-seccion="calificaciones" aria-current="true">Calificaciones</button>
             <button type="button" data-seccion="poemas" aria-current="false">Poemas</button>
+            <button type="button" data-seccion="autores" aria-current="false">Autores</button>
         </nav>
     </header>
 
@@ -157,6 +158,39 @@
         <p class="conteo" id="conteoPoemas"></p>
         <ul class="lista" id="listaPoemas"></ul>
         <p class="vacio" id="vacioPoemas" hidden></p>
+      </section>
+
+      <section id="seccion-autores" class="seccion" hidden>
+        <h2>Autores</h2>
+        <div class="barra">
+            <span>Los autores salen de la colección «autores» de Firestore. Un color no se puede repetir mientras queden colores libres.</span>
+            <button type="button" id="recargarAutores">Recargar</button>
+        </div>
+        <ul class="lista" id="listaAutores"></ul>
+        <p class="vacio" id="vacioAutores" hidden></p>
+
+        <section class="nuevo">
+            <h2>Agregar un autor</h2>
+            <form id="formAutor" autocomplete="off">
+                <label class="celda">
+                    <span class="rotulo">Identificador (id en Firestore)</span>
+                    <input type="text" id="autorId" required maxlength="30" placeholder="ej. mg">
+                </label>
+                <label class="celda">
+                    <span class="rotulo">Nombre</span>
+                    <input type="text" id="autorNombre" required maxlength="100" placeholder="AzDor Lupita">
+                </label>
+                <label class="celda">
+                    <span class="rotulo">Código de sus poemas</span>
+                    <input type="text" id="autorCodigo" required maxlength="10" placeholder="MG">
+                </label>
+                <label class="celda">
+                    <span class="rotulo">Color</span>
+                    <select id="autorColor"></select>
+                </label>
+                <button type="submit" class="primario">Agregar autor</button>
+            </form>
+        </section>
       </section>
     </main>
 </div>

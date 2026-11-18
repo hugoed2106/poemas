@@ -55,5 +55,30 @@ service cloud.firestore {
       allow create: if esUser() && solicitudValida();
       allow read, update, delete: if esAdmin();
     }
+
+    // Autores: los lee todo el mundo (la página principal muestra sus nombres
+    // y colores); solo los admins los crean, editan o borran.
+    match /autores/{id} {
+      allow read: if true;
+      allow create, update, delete: if esAdmin();
+    }
+
+    // Borradores: solo los admins los ven y los usan.
+    match /borradores/{id} {
+      allow read, create, update, delete: if esAdmin();
+    }
+
+    // Visitas: cualquier visitante suma 1 al abrir un poema; solo los admins
+    // pueden leer el conteo. La suma solo puede crecer de 1 en 1 y solo se
+    // pueden escribir los campos de la visita.
+    match /visitas/{id} {
+      allow read: if esAdmin();
+      allow create: if request.resource.data.keys().hasOnly(['visitas', 'titulo', 'autor', 'fecha'])
+        && request.resource.data.visitas == 1
+        && request.resource.data.titulo is string
+        && request.resource.data.autor is string;
+      allow update: if request.resource.data.diff(resource.data).affectedKeys().hasOnly(['visitas', 'titulo', 'autor', 'fecha'])
+        && request.resource.data.visitas == resource.data.visitas + 1;
+    }
   }
 }

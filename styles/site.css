@@ -4,9 +4,6 @@
   --muted:#667085; 
   --rule:#DDE1E6; 
   --accent:#24477A;
-  --jg:#C8102E;
-  --azdor:#A86FD1;
-  --angela:#D9A400;
   --serif:"Newsreader",Georgia,"Times New Roman",serif;
   --sans:"Hanken Grotesk",system-ui,-apple-system,"Segoe UI",sans-serif;
   --pad:clamp(1.25rem,5vw,3rem);
@@ -18,9 +15,6 @@
     --muted:#9AA3B2;
     --rule:#2A2F38;
     --accent:#8FB3E8;
-    --jg:#FF7A70;
-    --azdor:#C9A0E8;
-    --angela:#FACC15
   }
 }
 *{
@@ -163,36 +157,24 @@ h1{
   background-size:100% 1px;
   color:var(--accent)
 }
-/* Colores por autor: JG en rojo, AzDor en lila */
-.toc .authors a#HE{
-  color:var(--jg)
+/* Color por autor: cada sección pone --autor-claro/--autor-oscuro en línea */
+.autor-tema{
+  --autor:var(--autor-claro)
 }
-.toc .authors a#HE:hover{
-  color:var(--jg);
-  background-image:linear-gradient(var(--jg),var(--jg))
+@media (prefers-color-scheme:dark){
+  .autor-tema{
+    --autor:var(--autor-oscuro)
+  }
 }
-.toc .authors a#MG{
-  color:var(--azdor)
+.toc .authors a{
+  color:var(--autor)
 }
-.toc .authors a#MG:hover{
-  color:var(--azdor);
-  background-image:linear-gradient(var(--azdor),var(--azdor))
+.toc .authors a:hover{
+  color:var(--autor);
+  background-image:linear-gradient(var(--autor),var(--autor))
 }
-.toc .authors a#AR{
-  color:var(--angela)
-}
-.toc .authors a#AR:hover{
-  color:var(--angela);
-  background-image:linear-gradient(var(--angela),var(--angela))
-}
-#poemsH .poem-head h2{
-  color:var(--jg)
-}
-#poemsL .poem-head h2{
-  color:var(--azdor)
-}
-#poemsA .poem-head h2{
-  color:var(--angela)
+.poems .poem-head h2{
+  color:var(--autor)
 }
 .toc .authors{
   padding-bottom:1.5rem;
@@ -449,4 +431,29 @@ h1{
 .calificacion .info{
   font-size:.9rem;
   color:#666
+}
+
+/* Compartir un poema por WhatsApp o copiando su enlace */
+.compartir{
+  display:flex;
+  gap:.5rem;
+  flex-wrap:wrap;
+  justify-content:center;
+  margin-top:1rem
+}
+.compartir a,
+.compartir button{
+  font:600 .85rem/1 var(--sans);
+  padding:.55rem .9rem;
+  border-radius:999px;
+  border:1px solid var(--rule);
+  background:transparent;
+  color:var(--ink);
+  cursor:pointer;
+  text-decoration:none
+}
+.compartir a:hover,
+.compartir button:hover{
+  border-color:var(--accent);
+  color:var(--accent)
 }

@@ -443,6 +443,21 @@ select option:hover {
 }
 /* ---------- Encabezado y tarjeta del formulario ---------- */
 .cabecera-form { width: min(100%, 46rem); }
+
+/* ---------- Borradores ---------- */
+.data button.secundario { background: transparent; color: var(--ink); border: 1px solid var(--accent); }
+.borradores { font-family: var(--sans); width: min(100%, 46rem); }
+.borradores h2 { font: 400 1.35rem/1.3 var(--serif); margin: 0 0 .25rem; }
+.borradores > p { font-size: .95rem; color: var(--muted); margin: 0 0 .75rem; }
+.borradores ul { list-style: none; display: flex; flex-direction: column; }
+.borrador { display: flex; gap: .75rem; align-items: center; padding: .8rem 0; border-bottom: 1px solid var(--rule); }
+.borrador .datos { flex: 1; min-width: 0; }
+.borrador .nombre { font-weight: 600; color: var(--ink); margin: 0; }
+.borrador .meta { font-size: .85rem; color: var(--muted); margin: .15rem 0 0; }
+.borrador .acciones { display: flex; gap: .5rem; flex-wrap: wrap; justify-content: flex-end; }
+.borrador button { font: inherit; font-size: .9rem; padding: .45rem .8rem; border-radius: 8px; border: 1px solid var(--accent); background: transparent; color: var(--ink); cursor: pointer; }
+.borrador button.primario { background: var(--accent); color: var(--bg); border: none; }
+.borrador button.peligro { color: #b3261e; border-color: #b3261e; }
 .cabecera-form h1 { font: 400 1.9rem/1.2 var(--serif); margin: 0 0 .25rem; }
 .cabecera-form p { font-family: var(--sans); font-size: .95rem; color: var(--muted); margin: 0; }
 .cabecera-form .volver { font-family: var(--sans); font-size: .9rem; color: var(--accent); text-decoration: none; display: inline-block; margin-bottom: .75rem; }

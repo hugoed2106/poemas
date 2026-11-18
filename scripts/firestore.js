@@ -12,7 +12,7 @@
 
 import { initializeApp, getApp, getApps } from "https://www.gstatic.com/firebasejs/13.0.0/firebase-app.js";
 import { getAuth } from "https://www.gstatic.com/firebasejs/13.0.0/firebase-auth.js";
-import { getFirestore } from "https://www.gstatic.com/firebasejs/13.0.0/firebase-firestore.js";
+import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/13.0.0/firebase-firestore.js";
 
 export const firebaseConfig = {
     apiKey: "AIzaSyCM8fjWstKNjL4l4AbG3Z16xiYVl6s-XAA",
@@ -75,6 +75,80 @@ export function ordenarAutores(autores) {
         if (b.codigo === "HE") return 1;
         return String(a.nombre || "").localeCompare(String(b.nombre || ""), "es");
     });
+}
+
+// Paleta de colores con nombre: el documento del autor guarda el nombre
+// ("Rojo", "Lila"...), y aquí vive su tono en tema claro y en tema oscuro.
+export const COLORES_AUTORES = [
+    { nombre: "Rojo", claro: "#C8102E", oscuro: "#FF7A70" },
+    { nombre: "Naranja", claro: "#C2410C", oscuro: "#FB923C" },
+    { nombre: "Amarillo", claro: "#D9A400", oscuro: "#FACC15" },
+    { nombre: "Verde", claro: "#15803D", oscuro: "#4ADE80" },
+    { nombre: "Azul", claro: "#1D4ED8", oscuro: "#60A5FA" },
+    { nombre: "Morado", claro: "#7E22CE", oscuro: "#C084FC" },
+    { nombre: "Lila", claro: "#A86FD1", oscuro: "#C9A0E8" },
+    { nombre: "Rosa", claro: "#DB2777", oscuro: "#F472B6" }
+];
+export function colorDeAutor(nombre) {
+    return COLORES_AUTORES.find((c) => c.nombre === nombre) || COLORES_AUTORES[0];
+}
+
+// Código de poema (HE/MG/AR) -> documento en la colección "autores" (jg/mg/ar).
+// Los autores nuevos usan su id en mayúsculas como código.
+export const MAPA_CODIGO_AUTOR = { HE: "jg", MG: "mg", AR: "ar" };
+// Enlaces profundos ya en uso: no cambian aunque se edite el nombre del autor.
+export const PREFIJOS_AUTOR = { HE: "pH", MG: "pG", AR: "pA" };
+
+// Autores base, por si su documento no existe aún en Firestore.
+export const AUTORES_BASE = [
+    { codigo: "HE", nombre: "𝑱𝑮", color: "Rojo" },
+    { codigo: "MG", nombre: "AzDor Lupita", color: "Lila" },
+    { codigo: "AR", nombre: "Angela", color: "Amarillo" }
+];
+
+// Lee la colección "autores" y la mezcla con los base: cada autor queda
+// { id, codigo, nombre, color } con el color ya resuelto a { nombre, claro, oscuro }.
+export async function cargarAutores() {
+    const porCodigo = new Map();
+    for (const base of AUTORES_BASE) {
+        porCodigo.set(base.codigo, { id: MAPA_CODIGO_AUTOR[base.codigo], ...base });
+    }
+    try {
+        const snap = await getDocs(collection(db, "autores"));
+        snap.docs.forEach((d) => {
+            const datos = d.data();
+            const codigo = String(datos.Codigo || "").toUpperCase()
+                || Object.keys(MAPA_CODIGO_AUTOR).find((c) => MAPA_CODIGO_AUTOR[c] === d.id)
+                || d.id.toUpperCase();
+            porCodigo.set(codigo, {
+                id: d.id,
+                codigo,
+                nombre: datos.Nombre || datos.nombre || d.id,
+                color: datos.Color || datos.color || "Rojo"
+            });
+        });
+    } catch (e) {
+        console.error("No se pudieron cargar los autores:", e);
+    }
+    return [...porCodigo.values()].map((a) => ({ ...a, color: colorDeAutor(a.color) }));
+}
+
+// Prefijo del enlace profundo (#pH12): el ya usado, o la primera letra libre del código.
+export function prefijoDeAutor(codigo, usados) {
+    if (PREFIJOS_AUTOR[codigo]) {
+        usados.add(PREFIJOS_AUTOR[codigo]);
+        return PREFIJOS_AUTOR[codigo];
+    }
+    for (const letra of String(codigo || "").toUpperCase()) {
+        const p = "p" + letra;
+        if (!usados.has(p)) {
+            usados.add(p);
+            return p;
+        }
+    }
+    const p = "p" + String(codigo || "X").toUpperCase();
+    usados.add(p);
+    return p;
 }
 
 /* ---------- Administradores ---------- */

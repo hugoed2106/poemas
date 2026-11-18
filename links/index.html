@@ -85,6 +85,9 @@
         <a class="tarjeta" id="enlSolicitudes" href="https://hugoed2106.github.io/poemas/solicitudes/" hidden>
             <strong>Solicitudes</strong><span>Revisar solicitudes de publicación</span>
         </a>
+        <a class="tarjeta" id="enlEstadisticas" href="https://hugoed2106.github.io/poemas/estadisticas/" hidden>
+            <strong>Estadísticas</strong><span>Cuántas veces se abre cada poema</span>
+        </a>
         <a class="tarjeta" id="enlSolicitar" href="https://hugoed2106.github.io/poemas/solicitar-publicar-poemas/" hidden>
             <strong>Solicitar publicar poemas</strong><span>Publica tus poemas</span>
         </a>
@@ -139,6 +142,7 @@
         $("#enlAdmin").hidden = !admin;
         $("#enlPublicar").hidden = !admin;
         $("#enlSolicitudes").hidden = !admin;
+        $("#enlEstadisticas").hidden = !admin;
         $("#enlSolicitar").hidden = admin;
         $("#menu").hidden = false;
     }

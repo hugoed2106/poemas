@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="noindex">
+    <link rel="stylesheet" href="../styles/estadisticas.css">
+    <title>Estadísticas - Poemas</title>
+    <meta name="theme-color" content="#0b0d12">
+    <link rel="manifest" href="../manifest.json">
+    <link rel="apple-touch-icon" href="../icon-192.png">
+    <link rel="icon" href="../images/poemas.png">
+</head>
+<body>
+<div class="contenedor">
+
+    <header class="cabecera">
+        <div>
+            <a class="volver" href="../links/">Volver a los enlaces</a>
+            <h1>Estadísticas</h1>
+        </div>
+        <div class="usuario" id="usuario" hidden>
+            <span id="correo"></span>
+            <button type="button" id="salir">Cerrar sesión</button>
+        </div>
+    </header>
+
+    <section class="sesion" id="sesion">
+        <p id="sesionTexto">Inicia sesión con Google.</p>
+        <button type="button" id="entrar">Iniciar sesión con Google</button>
+    </section>
+
+    <section class="sesion" id="verificar" hidden>
+        <p>Te enviamos un correo de verificación a <strong id="verCorreo"></strong>. Ábrelo, toca el enlace y vuelve aquí (revisa también spam).</p>
+        <div class="acciones">
+            <button type="button" class="primario" id="btnYaVerifique">Ya verifiqué</button>
+            <button type="button" id="btnReenviar">Reenviar correo</button>
+        </div>
+    </section>
+
+    <section class="sesion" id="soloUsuario" hidden>
+        <p>Sesión iniciada como usuario. Esta página es solo para administradores.</p>
+        <p>Si quieres ser administrador da click aquí: <a href="../solicitar-publicar-poemas/">Solicitud de administrador</a></p>
+    </section>
+
+    <section class="sesion" id="correoInstitucional" hidden>
+        <p>Sesión iniciada como alumno/maestro. Esta página es solo para administradores.</p>
+        <p>Si quieres ser administrador da click aquí: <a href="../solicitar-publicar-poemas/">Solicitud de administrador</a></p>
+    </section>
+
+    <main id="panel" hidden>
+        <div class="barra">
+            <span id="resumenEst"></span>
+            <button type="button" id="recargarEst">Recargar</button>
+        </div>
+        <p class="nota">Se cuenta una visita por sesión cada vez que se abre un poema, desde el índice o desde un enlace directo.</p>
+        <ul class="lista" id="listaEst"></ul>
+        <p class="vacio" id="vacioEst" hidden>Todavía no hay visitas registradas.</p>
+    </main>
+</div>
+
+<div class="estado" id="estado" role="status" aria-live="polite" hidden></div>
+
+<script type="module" src="../scripts/firestore.js"></script>
+<script type="module" src="../scripts/estadisticas.js"></script>
+</body>
+</html>
