@@ -107,8 +107,9 @@ function crearItemIndice(p, prefijo, n) {
 }
 
 // Botones para compartir un poema: WhatsApp y copiar su enlace directo.
+// El enlace es la raíz del sitio + el ancla, sin "index.html".
 function crearCompartir(titulo, nombreAutor, idArticulo) {
-    const url = location.href.split("#")[0] + "#" + idArticulo;
+    const url = location.href.split("#")[0].replace(/\/index\.html?$/i, "/") + "#" + idArticulo;
     const div = document.createElement("div");
     div.className = "compartir";
 
