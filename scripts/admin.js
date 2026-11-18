@@ -2,7 +2,7 @@ history.replaceState(null, "", "admin.page");
 
     import { auth, db, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut,
         sendEmailVerification, collection, getDocs, getDoc, doc, setDoc, deleteDoc, writeBatch,
-        query, where, crearDataPoema, esAdminCliente, errorAuth, crearEstado, COLORES_AUTORES, cargarAutores }
+        query, where, crearDataPoema, esAdminCliente, esAdminPrincipal, errorAuth, crearEstado, COLORES_AUTORES, cargarAutores }
         from "./firestore.js";
 
     const $ = (selector) => document.querySelector(selector);
@@ -508,6 +508,15 @@ history.replaceState(null, "", "admin.page");
     $("#recargarPoemas").addEventListener("click", () => cargarPoemas(true));
 
     /* ---------- Autores ---------- */
+    // Solo los dos primeros admins pueden agregar y eliminar autores.
+    // Editar el nombre, el color o el código lo puede cualquier admin.
+    let esPrincipal = false;
+
+    function aplicarPermisosAutores() {
+        $("#formAutor").closest(".nuevo").hidden = !esPrincipal;
+        $("#notaAutores").hidden = esPrincipal;
+    }
+
     // Mapa para las listas y las píldoras de autor de todo el admin.
     async function cargarMapaAutores() {
         try {
@@ -608,16 +617,17 @@ history.replaceState(null, "", "admin.page");
         acciones.className = "acciones";
 
         if (!a.guardado) {
-            const bGuardar = boton("Guardar en Firestore", "primario");
-            bGuardar.addEventListener("click", () => guardarAutorBase(a));
-            acciones.append(bGuardar);
+            if (esPrincipal) {
+                const bGuardar = boton("Guardar en Firestore", "primario");
+                bGuardar.addEventListener("click", () => guardarAutorBase(a));
+                acciones.append(bGuardar);
+            }
             li.append(muestra, datos, acciones);
             return li;
         }
 
         const bEditar = boton("Editar", "");
-        const bBorrar = boton("Borrar", "peligro");
-        acciones.append(bEditar, bBorrar);
+        acciones.append(bEditar);
         li.append(muestra, datos, acciones);
 
         bEditar.addEventListener("click", () => {
@@ -674,27 +684,31 @@ history.replaceState(null, "", "admin.page");
             });
         });
 
-        bBorrar.addEventListener("click", async () => {
-            let n = 0;
-            try {
-                const snap = await getDocs(query(collection(db, "poemas-publicados"), where("autor", "==", a.codigo)));
-                n = snap.size;
-            } catch (e) { console.error(e); }
-            const aviso = n > 0
-                ? `¿Borrar al autor "${a.nombre}"? Tiene ${n} poema${n === 1 ? "" : "s"}: los poemas NO se borran, solo el autor.`
-                : `¿Borrar al autor "${a.nombre}"?`;
-            if (!confirm(aviso)) return;
-            try {
-                await deleteDoc(doc(db, "autores", a.id));
-                await cargarAutoresAdmin(true);
-                await cargarMapaAutores();
-                pintar();
-                pintarPoemas();
-                estado(`Autor borrado: ${a.nombre}`, "ok");
-            } catch (e) {
-                errorFirestore(e);
-            }
-        });
+        if (esPrincipal) {
+            const bBorrar = boton("Borrar", "peligro");
+            acciones.append(bBorrar);
+            bBorrar.addEventListener("click", async () => {
+                let n = 0;
+                try {
+                    const snap = await getDocs(query(collection(db, "poemas-publicados"), where("autor", "==", a.codigo)));
+                    n = snap.size;
+                } catch (e) { console.error(e); }
+                const aviso = n > 0
+                    ? `¿Borrar al autor "${a.nombre}"? Tiene ${n} poema${n === 1 ? "" : "s"}: los poemas NO se borran, solo el autor.`
+                    : `¿Borrar al autor "${a.nombre}"?`;
+                if (!confirm(aviso)) return;
+                try {
+                    await deleteDoc(doc(db, "autores", a.id));
+                    await cargarAutoresAdmin(true);
+                    await cargarMapaAutores();
+                    pintar();
+                    pintarPoemas();
+                    estado(`Autor borrado: ${a.nombre}`, "ok");
+                } catch (e) {
+                    errorFirestore(e);
+                }
+            });
+        }
 
         return li;
     }
@@ -797,6 +811,7 @@ history.replaceState(null, "", "admin.page");
             listaPoemas.replaceChildren();
             poemasPub = [];
             poemasCargados = false;
+            esPrincipal = false;
             return;
         }
         $("#usuario").hidden = false;
@@ -814,6 +829,8 @@ history.replaceState(null, "", "admin.page");
             $("#menu").hidden = false;
             const nombre = user.email.split("@")[0];
             history.replaceState(null, "", "admin." + encodeURIComponent(nombre));
+            esPrincipal = await esAdminPrincipal(user.email);
+            aplicarPermisosAutores();
             await cargarMapaAutores();
             cargar();
             mostrarSeccion(seccionActual);

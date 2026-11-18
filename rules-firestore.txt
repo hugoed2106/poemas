@@ -17,6 +17,17 @@ service cloud.firestore {
         && request.auth.token.email_verified == true;
     }
 
+    // Los dos administradores principales (los dos primeros correos).
+    // Al publicar las reglas, pon aquí sus dos correos.
+    function esAdminPrincipal() {
+      return request.auth != null
+        && request.auth.token.email_verified == true
+        && request.auth.token.email in [
+          'primer.admin@email',
+          'segundo.admin@email'
+        ];
+    }
+
     function votoValido() {
       return request.resource.data.votos == 1
         && request.resource.data.suma >= 1
@@ -57,10 +68,12 @@ service cloud.firestore {
     }
 
     // Autores: los lee todo el mundo (la página principal muestra sus nombres
-    // y colores); solo los admins los crean, editan o borran.
+    // y colores). Editar puede cualquier admin; agregar y eliminar solo los
+    // dos administradores principales.
     match /autores/{id} {
       allow read: if true;
-      allow create, update, delete: if esAdmin();
+      allow update: if esAdmin();
+      allow create, delete: if esAdminPrincipal();
     }
 
     // Borradores: solo los admins los ven y los usan.

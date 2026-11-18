@@ -161,11 +161,19 @@ export const ADMIN_HASHES = [
     "89b371f3721a815d6db8ada95989cf1ca1808c92b248f2e7dfefd03c390e74e7",
     "1cdf38a5cec7b70d77ff015a51ae51ff1833648b76af813bfb501ffe5f605606"
 ];
-export async function esAdminCliente(correo) {
+// Solo los dos primeros pueden agregar y eliminar autores.
+export const ADMIN_PRINCIPAL_HASHES = ADMIN_HASHES.slice(0, 2);
+
+async function hashCorreo(correo) {
     const datos = new TextEncoder().encode(String(correo || "").trim().toLowerCase());
     const buf = await crypto.subtle.digest("SHA-256", datos);
-    const hex = [...new Uint8Array(buf)].map((b) => b.toString(16).padStart(2, "0")).join("");
-    return ADMIN_HASHES.includes(hex);
+    return [...new Uint8Array(buf)].map((b) => b.toString(16).padStart(2, "0")).join("");
+}
+export async function esAdminCliente(correo) {
+    return ADMIN_HASHES.includes(await hashCorreo(correo));
+}
+export async function esAdminPrincipal(correo) {
+    return ADMIN_PRINCIPAL_HASHES.includes(await hashCorreo(correo));
 }
 
 export const mensajesAuth = {

@@ -72,6 +72,7 @@
   .autor-fila .datos { flex: 1; min-width: 0; }
   .autor-fila .datos p { margin: 0; }
   .autor-fila .edicion { display: grid; gap: .6rem; flex: 1; min-width: 0; }
+  #notaAutores { color: var(--suave); font-size: .9rem; margin: 0 0 1rem; }
   .datosPoema p { margin: 0; }
   .nombre { font-weight: 600; }
   .id { font-variant-numeric: tabular-nums; color: var(--suave); }
