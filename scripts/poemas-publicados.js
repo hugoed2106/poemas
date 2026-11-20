@@ -106,13 +106,13 @@ function crearItemIndice(p, prefijo, n) {
     return li;
 }
 
-// Botones para compartir un poema: WhatsApp, Instagram (mensajes) y copiar su enlace.
+// Botones para compartir un poema: WhatsApp, compartir en otros lados y copiar su enlace.
 // El enlace es la raíz del sitio + el ancla, sin "index.html".
-// Instagram no tiene un equivalente a wa.me: no hay URL que abra un DM con el
-// texto ya escrito. Por eso el botón de Instagram usa la Web Share API
-// (navigator.share): en el celular abre la hoja de compartir del sistema y ahí
-// el visitante elige Instagram > Direct y a quién mandárselo. Si el navegador
-// no tiene esa opción, copia el enlace para pegarlo en IG a mano.
+// El botón "Compartir en otros lados" usa la Web Share API (navigator.share):
+// en el celular abre la hoja de compartir del sistema y ahí el visitante elige
+// Instagram, Telegram, Messenger u otra app. Instagram no tiene un equivalente
+// a wa.me: no hay URL que abra un DM con el texto ya escrito. Si el navegador
+// no tiene esa opción, copia el enlace para pegarlo a mano donde quiera.
 async function copiarTexto(texto) {
     try {
         await navigator.clipboard.writeText(texto);
@@ -141,10 +141,11 @@ function crearCompartir(titulo, nombreAutor, idArticulo) {
     wa.rel = "noopener";
     wa.textContent = "WhatsApp";
 
-    const ig = document.createElement("button");
-    ig.type = "button";
-    ig.textContent = "Instagram";
-    ig.addEventListener("click", async () => {
+    const compartir = document.createElement("button");
+    compartir.type = "button";
+    compartir.textContent = "Compartir en otros lados";
+    compartir.title = "Comparte este poema en Instagram, Telegram, Messenger y otras apps";
+    compartir.addEventListener("click", async () => {
         // Ojo: Instagram pega el campo url después del texto, así que el texto
         // NO debe llevar la URL o sale dos veces en el DM.
         const datos = { title: `«${titulo}» de ${nombreAutor}`, text: `Lee «${titulo}» de ${nombreAutor}`, url };
@@ -158,8 +159,8 @@ function crearCompartir(titulo, nombreAutor, idArticulo) {
             }
         }
         await copiarTexto(url);
-        ig.textContent = "¡Copiado! Pégalo en IG";
-        setTimeout(() => { ig.textContent = "Instagram"; }, 2500);
+        compartir.textContent = "¡Copiado! Pégalo donde quieras";
+        setTimeout(() => { compartir.textContent = "Compartir en otros lados"; }, 2500);
     });
 
     const copiar = document.createElement("button");
@@ -171,7 +172,7 @@ function crearCompartir(titulo, nombreAutor, idArticulo) {
         setTimeout(() => { copiar.textContent = "Copiar enlace"; }, 2000);
     });
 
-    div.append(wa, ig, copiar);
+    div.append(wa, compartir, copiar);
     return div;
 }
 

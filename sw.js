@@ -1,4 +1,4 @@
-const CACHE = 'poemas-v4';
+const CACHE = 'poemas-v5';
 const CORE = [
   './index.html',
   './styles/site.css',
