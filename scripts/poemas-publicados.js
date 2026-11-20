@@ -141,10 +141,16 @@ function crearCompartir(titulo, nombreAutor, idArticulo) {
     wa.rel = "noopener";
     wa.textContent = "WhatsApp";
 
+    // Botón gráfico (sin texto visible): flecha saliendo de una caja, estilo iOS.
+    // El texto queda solo en aria-label / title, para lectores de pantalla y hover.
+    const ICONO_COMPARTIR = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>';
+    const ICONO_CHECK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>';
     const compartir = document.createElement("button");
     compartir.type = "button";
-    compartir.textContent = "Compartir en otros lados";
-    compartir.title = "Comparte este poema en Instagram, Telegram, Messenger y otras apps";
+    compartir.className = "icono";
+    compartir.setAttribute("aria-label", "Compartir en otros lados");
+    compartir.title = "Compartir en otros lados";
+    compartir.innerHTML = ICONO_COMPARTIR;
     compartir.addEventListener("click", async () => {
         // Ojo: Instagram pega el campo url después del texto, así que el texto
         // NO debe llevar la URL o sale dos veces en el DM.
@@ -159,8 +165,8 @@ function crearCompartir(titulo, nombreAutor, idArticulo) {
             }
         }
         await copiarTexto(url);
-        compartir.textContent = "¡Copiado! Pégalo donde quieras";
-        setTimeout(() => { compartir.textContent = "Compartir en otros lados"; }, 2500);
+        compartir.innerHTML = ICONO_CHECK;
+        setTimeout(() => { compartir.innerHTML = ICONO_COMPARTIR; }, 2500);
     });
 
     const copiar = document.createElement("button");

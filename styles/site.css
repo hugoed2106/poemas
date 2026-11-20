@@ -457,3 +457,15 @@ h1{
   border-color:var(--accent);
   color:var(--accent)
 }
+/* Botón gráfico de compartir: solo el icono, sin texto visible */
+.compartir button.icono{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  padding:.55rem .8rem
+}
+.compartir button.icono svg{
+  display:block;
+  width:18px;
+  height:18px
+}
