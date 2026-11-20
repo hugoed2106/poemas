@@ -106,38 +106,70 @@ function crearItemIndice(p, prefijo, n) {
     return li;
 }
 
-// Botones para compartir un poema: WhatsApp y copiar su enlace directo.
+// Botones para compartir un poema: WhatsApp, Instagram (mensajes) y copiar su enlace.
 // El enlace es la raíz del sitio + el ancla, sin "index.html".
+// Instagram no tiene un equivalente a wa.me: no hay URL que abra un DM con el
+// texto ya escrito. Por eso el botón de Instagram usa la Web Share API
+// (navigator.share): en el celular abre la hoja de compartir del sistema y ahí
+// el visitante elige Instagram > Direct y a quién mandárselo. Si el navegador
+// no tiene esa opción, copia el enlace para pegarlo en IG a mano.
+async function copiarTexto(texto) {
+    try {
+        await navigator.clipboard.writeText(texto);
+        return true;
+    } catch (e) {
+        const t = document.createElement("textarea");
+        t.value = texto;
+        document.body.append(t);
+        t.select();
+        let ok = false;
+        try { ok = document.execCommand("copy"); } catch (_) { /* sin portapapeles */ }
+        t.remove();
+        return ok;
+    }
+}
+
 function crearCompartir(titulo, nombreAutor, idArticulo) {
     const url = location.href.split("#")[0].replace(/\/index\.html?$/i, "/") + "#" + idArticulo;
+    const texto = `Lee «${titulo}» de ${nombreAutor}: ${url}`;
     const div = document.createElement("div");
     div.className = "compartir";
 
     const wa = document.createElement("a");
-    wa.href = "https://wa.me/?text=" + encodeURIComponent(`Lee «${titulo}» de ${nombreAutor}: ${url}`);
+    wa.href = "https://wa.me/?text=" + encodeURIComponent(texto);
     wa.target = "_blank";
     wa.rel = "noopener";
     wa.textContent = "WhatsApp";
+
+    const ig = document.createElement("button");
+    ig.type = "button";
+    ig.textContent = "Instagram";
+    ig.addEventListener("click", async () => {
+        const datos = { title: `«${titulo}» de ${nombreAutor}`, text: texto, url };
+        if (navigator.share && (!navigator.canShare || navigator.canShare(datos))) {
+            try {
+                await navigator.share(datos);
+                return;
+            } catch (e) {
+                if (e && e.name === "AbortError") return; // el usuario cerró la hoja
+                // Si falló por otra razón, caemos al respaldo de copiar.
+            }
+        }
+        await copiarTexto(url);
+        ig.textContent = "¡Copiado! Pégalo en IG";
+        setTimeout(() => { ig.textContent = "Instagram"; }, 2500);
+    });
 
     const copiar = document.createElement("button");
     copiar.type = "button";
     copiar.textContent = "Copiar enlace";
     copiar.addEventListener("click", async () => {
-        try {
-            await navigator.clipboard.writeText(url);
-        } catch (e) {
-            const t = document.createElement("textarea");
-            t.value = url;
-            document.body.append(t);
-            t.select();
-            try { document.execCommand("copy"); } catch (_) { /* sin portapapeles */ }
-            t.remove();
-        }
+        await copiarTexto(url);
         copiar.textContent = "¡Copiado!";
         setTimeout(() => { copiar.textContent = "Copiar enlace"; }, 2000);
     });
 
-    div.append(wa, copiar);
+    div.append(wa, ig, copiar);
     return div;
 }
 

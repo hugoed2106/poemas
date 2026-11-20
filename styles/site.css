@@ -433,7 +433,7 @@ h1{
   color:#666
 }
 
-/* Compartir un poema por WhatsApp o copiando su enlace */
+/* Compartir un poema por WhatsApp, Instagram (mensajes) o copiando su enlace */
 .compartir{
   display:flex;
   gap:.5rem;
