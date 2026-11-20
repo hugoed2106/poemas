@@ -145,7 +145,9 @@ function crearCompartir(titulo, nombreAutor, idArticulo) {
     ig.type = "button";
     ig.textContent = "Instagram";
     ig.addEventListener("click", async () => {
-        const datos = { title: `«${titulo}» de ${nombreAutor}`, text: texto, url };
+        // Ojo: Instagram pega el campo url después del texto, así que el texto
+        // NO debe llevar la URL o sale dos veces en el DM.
+        const datos = { title: `«${titulo}» de ${nombreAutor}`, text: `Lee «${titulo}» de ${nombreAutor}`, url };
         if (navigator.share && (!navigator.canShare || navigator.canShare(datos))) {
             try {
                 await navigator.share(datos);
